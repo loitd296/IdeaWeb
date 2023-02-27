@@ -2,9 +2,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace IdeaWeb.Models
 {
-    public class Closure_Date
+    public class CloseDateAcedamic
     {
-        public int Id { get; set; }
+        public string? Id { get; set; }
         public string? Name { get; set; }
 
         [DataType(DataType.Date)]
