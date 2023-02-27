@@ -18,5 +18,7 @@ public class Ideas{
     public ICollection<Rating>? ratings {get;set;}
 
     public ICollection<Comment>? comments {get;set;}
+
+    public User? userId {get; set;}
     
 }

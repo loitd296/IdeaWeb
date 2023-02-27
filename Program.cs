@@ -1,9 +1,22 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
+using IdeaWeb.Data;
+
+
+
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDbContext<IdeaWebContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("IdeaWebContext")));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
+
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

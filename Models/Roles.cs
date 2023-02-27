@@ -5,6 +5,8 @@ public class Roles{
 
     public string? name {get;set;}
 
-    public UserRole? userId {get;set;}
+    public ICollection<UserRole>? userRoles {get;set;}
+
+
     
 }
