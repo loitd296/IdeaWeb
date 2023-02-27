@@ -7,10 +7,8 @@ namespace IdeaWeb.Models
         public string? Id { get; set; }
 
         [DataType(DataType.Date)]
-        public Ideas? IDIdea { get; set; } //Link
-        public string? Content { get; set; } 
-
-        public int Status { get; set; }
+        public DateTime Date_Upload { get; set; } //Link
+        public string? DataLink { get; set; } 
 
         public Ideas? ideasId {get;set;}
     }

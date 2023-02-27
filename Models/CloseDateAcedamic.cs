@@ -8,10 +8,10 @@ namespace IdeaWeb.Models
         public string? Name { get; set; }
 
         [DataType(DataType.Date)]
-        public DateTime Date_Upload { get; set; }
-        public string? Content { get; set; }
+        public DateTime? CloseDate { get; set; }
+        [DataType(DataType.Date)]
 
-        public int Status { get; set; }
+        public DataType? CloseDatePostIdea { get; set; }
 
         public ICollection<Ideas>? ideas {get;set;}
     }
