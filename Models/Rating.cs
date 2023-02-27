@@ -9,6 +9,10 @@ namespace IdeaWeb.Models
 
         public int Dislike { get; set; }
         public int like { get; set; }
+
+        public Ideas? ideasId {get;set;} 
+
+        public User? userId {get;set;}
         
     }
 }

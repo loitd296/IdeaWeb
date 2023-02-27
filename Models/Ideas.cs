@@ -11,6 +11,12 @@ public class Ideas{
 
     public DateTime? date_Upload {get;set;}
 
-    
+    public Category? categoryId  {get;set;}
+
+    public ICollection<Document>? documents {get;set;}
+
+    public ICollection<Rating>? ratings {get;set;}
+
+    public ICollection<Comment>? comments {get;set;}
     
 }

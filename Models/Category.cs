@@ -9,6 +9,8 @@ namespace IdeaWeb.Models
 
         public int Status { get; set; }
         public int Deleted_Status { get; set; }
+
+        public ICollection<Ideas>? ideas {get;set;}
         
     }
 }

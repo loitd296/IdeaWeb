@@ -12,5 +12,7 @@ namespace IdeaWeb.Models
         public string? Content { get; set; }
 
         public int Status { get; set; }
+
+        public ICollection<Ideas>? ideas {get;set;}
     }
 }

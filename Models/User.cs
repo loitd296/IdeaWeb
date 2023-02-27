@@ -16,5 +16,9 @@ public class User{
     public Department? departmentId {get;set;}
 
     public UserRole? userRoles {get;set;}
+
+    public ICollection<Rating>? ratings {get;set;}
+
+    public ICollection<Comment>? comments {get;set;}
     
 }
