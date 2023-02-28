@@ -8,8 +8,8 @@ namespace IdeaWeb.Models
 
         [DataType(DataType.Date)]
         public DateTime Date_Upload { get; set; } //Link
-        public string? DataLink { get; set; }
+        public string? DataLink { get; set; } 
 
-        public Idea? ideaId { get; set; }
+        public Ideas? ideasId {get;set;}
     }
 }

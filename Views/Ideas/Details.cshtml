@@ -1,0 +1,42 @@
+@model IdeaWeb.Models.Idea
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Idea</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.name)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.like_Count)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.like_Count)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.dislike_Count)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.dislike_Count)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.date_Upload)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.date_Upload)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

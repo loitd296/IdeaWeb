@@ -19,9 +19,9 @@ public class IdeaWebContext : DbContext
     public DbSet<IdeaWeb.Models.Comment> Comment { get; set; }
     public DbSet<IdeaWeb.Models.Department> Department { get; set; }
     public DbSet<IdeaWeb.Models.Document> Document { get; set; }
-    public DbSet<IdeaWeb.Models.Idea> Idea { get; set; }
+    public DbSet<IdeaWeb.Models.Ideas> Idea { get; set; }
     public DbSet<IdeaWeb.Models.Rating> Rating { get; set; }
-    public DbSet<IdeaWeb.Models.Role> Role { get; set; }
+    public DbSet<IdeaWeb.Models.Roles> Role { get; set; }
     public DbSet<IdeaWeb.Models.User> User { get; set; }
     public DbSet<IdeaWeb.Models.UserRole> UserRole { get; set; }
 

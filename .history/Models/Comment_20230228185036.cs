@@ -12,8 +12,8 @@ namespace IdeaWeb.Models
 
         public int Status { get; set; }
 
-        public Idea? ideaId { get; set; }
+        public Ideas? ideasId {get; set;}
 
-        public User? userId { get; set; }
+        public User? userId {get;set;}
     }
 }

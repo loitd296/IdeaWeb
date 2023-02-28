@@ -1,7 +1,13 @@
 namespace IdeaWeb.Models;
-public class Department
+public class Role
 {
+
     public string? id { get; set; }
+
     public string? name { get; set; }
-    public ICollection<User>? users { get; set; }
+
+    public ICollection<UserRole>? userRoles { get; set; }
+
+
+
 }
