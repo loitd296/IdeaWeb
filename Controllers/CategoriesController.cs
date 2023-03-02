@@ -22,7 +22,7 @@ namespace IdeaWeb.Controllers
         // GET: Categories
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Category.ToListAsync());
+            return View();//await _context.Category.ToListAsync());
         }
 
         // GET: Categories/Details/5
