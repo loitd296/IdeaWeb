@@ -12,33 +12,45 @@
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.name)
+            @Html.DisplayNameFor(model => model.Name)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.name)
+            @Html.DisplayFor(model => model.Name)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.like_Count)
+            @Html.DisplayNameFor(model => model.Like_Count)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.like_Count)
+            @Html.DisplayFor(model => model.Like_Count)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.dislike_Count)
+            @Html.DisplayNameFor(model => model.Dislike_Count)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.dislike_Count)
+            @Html.DisplayFor(model => model.Dislike_Count)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.date_Upload)
+            @Html.DisplayNameFor(model => model.Date_Upload)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.date_Upload)
+            @Html.DisplayFor(model => model.Date_Upload)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Category)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Category.Id)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.User)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.User.id)
         </dd>
     </dl>
     
     <form asp-action="Delete">
-        <input type="hidden" asp-for="id" />
+        <input type="hidden" asp-for="Id" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
         <a asp-action="Index">Back to List</a>
     </form>

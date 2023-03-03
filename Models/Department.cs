@@ -1,7 +1,12 @@
-namespace IdeaWeb.Models;
-public class Department
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+
+namespace IdeaWeb.Models
 {
-    public int id { get; set; }
-    public string? name { get; set; }
-    public ICollection<User>? users { get; set; }
+    public class Department
+    {
+        public int Id { get; set; }
+        public string? Name { get; set; }
+        public ICollection<User>? Users { get; set; }
+    }
 }

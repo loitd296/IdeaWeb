@@ -13,6 +13,40 @@ public class IdeaWebContext : DbContext
         : base(options)
     {
     }
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<User>()
+            .HasMany(u => u.comments)
+            .WithOne(c => c.user)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<User>()
+            .HasMany(u => u.ratings)
+            .WithOne(r => r.user)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<User>()
+            .HasMany(u => u.Ideas)
+            .WithOne(i => i.User)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<User>()
+            .HasMany(u => u.userRoles)
+            .WithOne(ur => ur.user)
+            .OnDelete(DeleteBehavior.Cascade);
+        
+        modelBuilder.Entity<User>()
+            .HasMany(u => u.ratings)
+            .WithOne(r => r.user)
+            .HasForeignKey(r => r.userId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        // Configure other relationships
+
+        base.OnModelCreating(modelBuilder);
+    }
+   
+    
 
     public DbSet<IdeaWeb.Models.Category> Category { get; set; }
     public DbSet<IdeaWeb.Models.CloseDateAcedamic> CloseDateAcedamic { get; set; }

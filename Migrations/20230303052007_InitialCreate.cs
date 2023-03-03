@@ -34,7 +34,7 @@ namespace IdeaWeb.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CloseDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    CloseDatePostIdea = table.Column<int>(type: "int", nullable: true)
+                    CloseDatePostIdea = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -45,13 +45,13 @@ namespace IdeaWeb.Migrations
                 name: "Department",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Department", x => x.id);
+                    table.PrimaryKey("PK_Department", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -79,50 +79,53 @@ namespace IdeaWeb.Migrations
                     email = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     password = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     flag = table.Column<int>(type: "int", nullable: false),
-                    departmentIdid = table.Column<int>(type: "int", nullable: true)
+                    DepartmentId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_User", x => x.id);
                     table.ForeignKey(
-                        name: "FK_User_Department_departmentIdid",
-                        column: x => x.departmentIdid,
+                        name: "FK_User_Department_DepartmentId",
+                        column: x => x.DepartmentId,
                         principalTable: "Department",
-                        principalColumn: "id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Idea",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    like_Count = table.Column<int>(type: "int", nullable: true),
-                    dislike_Count = table.Column<int>(type: "int", nullable: true),
-                    date_Upload = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    categoryIdId = table.Column<int>(type: "int", nullable: true),
-                    userIdid = table.Column<int>(type: "int", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Like_Count = table.Column<int>(type: "int", nullable: true),
+                    Dislike_Count = table.Column<int>(type: "int", nullable: true),
+                    Date_Upload = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CategoryId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
                     CloseDateAcedamicId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Idea", x => x.id);
+                    table.PrimaryKey("PK_Idea", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Idea_Category_categoryIdId",
-                        column: x => x.categoryIdId,
+                        name: "FK_Idea_Category_CategoryId",
+                        column: x => x.CategoryId,
                         principalTable: "Category",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Idea_CloseDateAcedamic_CloseDateAcedamicId",
                         column: x => x.CloseDateAcedamicId,
                         principalTable: "CloseDateAcedamic",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Idea_User_userIdid",
-                        column: x => x.userIdid,
+                        name: "FK_Idea_User_UserId",
+                        column: x => x.UserId,
                         principalTable: "User",
-                        principalColumn: "id");
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -131,22 +134,24 @@ namespace IdeaWeb.Migrations
                 {
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    userIdid = table.Column<int>(type: "int", nullable: true),
-                    roleIdid = table.Column<int>(type: "int", nullable: true)
+                    userId = table.Column<int>(type: "int", nullable: false),
+                    roleId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_UserRole", x => x.id);
                     table.ForeignKey(
-                        name: "FK_UserRole_Role_roleIdid",
-                        column: x => x.roleIdid,
+                        name: "FK_UserRole_Role_roleId",
+                        column: x => x.roleId,
                         principalTable: "Role",
-                        principalColumn: "id");
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_UserRole_User_userIdid",
-                        column: x => x.userIdid,
+                        name: "FK_UserRole_User_userId",
+                        column: x => x.userId,
                         principalTable: "User",
-                        principalColumn: "id");
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -158,22 +163,24 @@ namespace IdeaWeb.Migrations
                     Date_Upload = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Status = table.Column<int>(type: "int", nullable: false),
-                    ideaIdid = table.Column<int>(type: "int", nullable: true),
-                    userIdid = table.Column<int>(type: "int", nullable: true)
+                    ideaId = table.Column<int>(type: "int", nullable: false),
+                    userId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Comment", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Comment_Idea_ideaIdid",
-                        column: x => x.ideaIdid,
+                        name: "FK_Comment_Idea_ideaId",
+                        column: x => x.ideaId,
                         principalTable: "Idea",
-                        principalColumn: "id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Comment_User_userIdid",
-                        column: x => x.userIdid,
+                        name: "FK_Comment_User_userId",
+                        column: x => x.userId,
                         principalTable: "User",
-                        principalColumn: "id");
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -184,16 +191,17 @@ namespace IdeaWeb.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Date_Upload = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DataLink = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ideaIdid = table.Column<int>(type: "int", nullable: true)
+                    IdeaId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Document", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Document_Idea_ideaIdid",
-                        column: x => x.ideaIdid,
+                        name: "FK_Document_Idea_IdeaId",
+                        column: x => x.IdeaId,
                         principalTable: "Idea",
-                        principalColumn: "id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -202,46 +210,47 @@ namespace IdeaWeb.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    IDidea = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Dislike = table.Column<int>(type: "int", nullable: false),
                     like = table.Column<int>(type: "int", nullable: false),
-                    ideaIdid = table.Column<int>(type: "int", nullable: true),
-                    userIdid = table.Column<int>(type: "int", nullable: true)
+                    IdeaId = table.Column<int>(type: "int", nullable: false),
+                    userId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Rating", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Rating_Idea_ideaIdid",
-                        column: x => x.ideaIdid,
+                        name: "FK_Rating_Idea_IdeaId",
+                        column: x => x.IdeaId,
                         principalTable: "Idea",
-                        principalColumn: "id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Rating_User_userIdid",
-                        column: x => x.userIdid,
+                        name: "FK_Rating_User_userId",
+                        column: x => x.userId,
                         principalTable: "User",
-                        principalColumn: "id");
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Comment_ideaIdid",
+                name: "IX_Comment_ideaId",
                 table: "Comment",
-                column: "ideaIdid");
+                column: "ideaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Comment_userIdid",
+                name: "IX_Comment_userId",
                 table: "Comment",
-                column: "userIdid");
+                column: "userId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Document_ideaIdid",
+                name: "IX_Document_IdeaId",
                 table: "Document",
-                column: "ideaIdid");
+                column: "IdeaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Idea_categoryIdId",
+                name: "IX_Idea_CategoryId",
                 table: "Idea",
-                column: "categoryIdId");
+                column: "CategoryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Idea_CloseDateAcedamicId",
@@ -249,34 +258,34 @@ namespace IdeaWeb.Migrations
                 column: "CloseDateAcedamicId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Idea_userIdid",
+                name: "IX_Idea_UserId",
                 table: "Idea",
-                column: "userIdid");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Rating_ideaIdid",
+                name: "IX_Rating_IdeaId",
                 table: "Rating",
-                column: "ideaIdid");
+                column: "IdeaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Rating_userIdid",
+                name: "IX_Rating_userId",
                 table: "Rating",
-                column: "userIdid");
+                column: "userId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_User_departmentIdid",
+                name: "IX_User_DepartmentId",
                 table: "User",
-                column: "departmentIdid");
+                column: "DepartmentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserRole_roleIdid",
+                name: "IX_UserRole_roleId",
                 table: "UserRole",
-                column: "roleIdid");
+                column: "roleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserRole_userIdid",
+                name: "IX_UserRole_userId",
                 table: "UserRole",
-                column: "userIdid");
+                column: "userId");
         }
 
         /// <inheritdoc />

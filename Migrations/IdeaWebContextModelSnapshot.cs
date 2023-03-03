@@ -55,8 +55,8 @@ namespace IdeaWeb.Migrations
                     b.Property<DateTime?>("CloseDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("CloseDatePostIdea")
-                        .HasColumnType("int");
+                    b.Property<DateTime?>("CloseDatePostIdea")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -83,33 +83,33 @@ namespace IdeaWeb.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ideaIdid")
+                    b.Property<int>("ideaId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("userIdid")
+                    b.Property<int>("userId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ideaIdid");
+                    b.HasIndex("ideaId");
 
-                    b.HasIndex("userIdid");
+                    b.HasIndex("userId");
 
                     b.ToTable("Comment");
                 });
 
             modelBuilder.Entity("IdeaWeb.Models.Department", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("name")
+                    b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("id");
+                    b.HasKey("Id");
 
                     b.ToTable("Department");
                 });
@@ -128,52 +128,52 @@ namespace IdeaWeb.Migrations
                     b.Property<DateTime>("Date_Upload")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("ideaIdid")
+                    b.Property<int>("IdeaId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ideaIdid");
+                    b.HasIndex("IdeaId");
 
                     b.ToTable("Document");
                 });
 
             modelBuilder.Entity("IdeaWeb.Models.Idea", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
 
                     b.Property<int?>("CloseDateAcedamicId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("categoryIdId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("date_Upload")
+                    b.Property<DateTime?>("Date_Upload")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("dislike_Count")
+                    b.Property<int?>("Dislike_Count")
                         .HasColumnType("int");
 
-                    b.Property<int?>("like_Count")
+                    b.Property<int?>("Like_Count")
                         .HasColumnType("int");
 
-                    b.Property<string>("name")
+                    b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("userIdid")
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.HasKey("id");
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
 
                     b.HasIndex("CloseDateAcedamicId");
 
-                    b.HasIndex("categoryIdId");
-
-                    b.HasIndex("userIdid");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Idea");
                 });
@@ -189,23 +189,20 @@ namespace IdeaWeb.Migrations
                     b.Property<int>("Dislike")
                         .HasColumnType("int");
 
-                    b.Property<string>("IDidea")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("ideaIdid")
+                    b.Property<int>("IdeaId")
                         .HasColumnType("int");
 
                     b.Property<int>("like")
                         .HasColumnType("int");
 
-                    b.Property<int?>("userIdid")
+                    b.Property<int>("userId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ideaIdid");
+                    b.HasIndex("IdeaId");
 
-                    b.HasIndex("userIdid");
+                    b.HasIndex("userId");
 
                     b.ToTable("Rating");
                 });
@@ -234,7 +231,7 @@ namespace IdeaWeb.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
 
-                    b.Property<int?>("departmentIdid")
+                    b.Property<int>("DepartmentId")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("dob")
@@ -257,7 +254,7 @@ namespace IdeaWeb.Migrations
 
                     b.HasKey("id");
 
-                    b.HasIndex("departmentIdid");
+                    b.HasIndex("DepartmentId");
 
                     b.ToTable("User");
                 });
@@ -270,125 +267,145 @@ namespace IdeaWeb.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
 
-                    b.Property<int?>("roleIdid")
+                    b.Property<int>("roleId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("userIdid")
+                    b.Property<int>("userId")
                         .HasColumnType("int");
 
                     b.HasKey("id");
 
-                    b.HasIndex("roleIdid");
+                    b.HasIndex("roleId");
 
-                    b.HasIndex("userIdid");
+                    b.HasIndex("userId");
 
                     b.ToTable("UserRole");
                 });
 
             modelBuilder.Entity("IdeaWeb.Models.Comment", b =>
                 {
-                    b.HasOne("IdeaWeb.Models.Idea", "ideaId")
+                    b.HasOne("IdeaWeb.Models.Idea", "idea")
+                        .WithMany("Comments")
+                        .HasForeignKey("ideaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("IdeaWeb.Models.User", "user")
                         .WithMany("comments")
-                        .HasForeignKey("ideaIdid");
+                        .HasForeignKey("userId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
-                    b.HasOne("IdeaWeb.Models.User", "userId")
-                        .WithMany("comments")
-                        .HasForeignKey("userIdid");
+                    b.Navigation("idea");
 
-                    b.Navigation("ideaId");
-
-                    b.Navigation("userId");
+                    b.Navigation("user");
                 });
 
             modelBuilder.Entity("IdeaWeb.Models.Document", b =>
                 {
-                    b.HasOne("IdeaWeb.Models.Idea", "ideaId")
-                        .WithMany("documents")
-                        .HasForeignKey("ideaIdid");
+                    b.HasOne("IdeaWeb.Models.Idea", "Idea")
+                        .WithMany("Documents")
+                        .HasForeignKey("IdeaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("ideaId");
+                    b.Navigation("Idea");
                 });
 
             modelBuilder.Entity("IdeaWeb.Models.Idea", b =>
                 {
+                    b.HasOne("IdeaWeb.Models.Category", "Category")
+                        .WithMany("Ideas")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("IdeaWeb.Models.CloseDateAcedamic", null)
-                        .WithMany("ideas")
+                        .WithMany("Ideas")
                         .HasForeignKey("CloseDateAcedamicId");
 
-                    b.HasOne("IdeaWeb.Models.Category", "categoryId")
-                        .WithMany("ideas")
-                        .HasForeignKey("categoryIdId");
-
-                    b.HasOne("IdeaWeb.Models.User", "userId")
+                    b.HasOne("IdeaWeb.Models.User", "User")
                         .WithMany("Ideas")
-                        .HasForeignKey("userIdid");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("categoryId");
+                    b.Navigation("Category");
 
-                    b.Navigation("userId");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("IdeaWeb.Models.Rating", b =>
                 {
-                    b.HasOne("IdeaWeb.Models.Idea", "ideaId")
+                    b.HasOne("IdeaWeb.Models.Idea", "Idea")
+                        .WithMany("Ratings")
+                        .HasForeignKey("IdeaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("IdeaWeb.Models.User", "user")
                         .WithMany("ratings")
-                        .HasForeignKey("ideaIdid");
+                        .HasForeignKey("userId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
-                    b.HasOne("IdeaWeb.Models.User", "userId")
-                        .WithMany("ratings")
-                        .HasForeignKey("userIdid");
+                    b.Navigation("Idea");
 
-                    b.Navigation("ideaId");
-
-                    b.Navigation("userId");
+                    b.Navigation("user");
                 });
 
             modelBuilder.Entity("IdeaWeb.Models.User", b =>
                 {
-                    b.HasOne("IdeaWeb.Models.Department", "departmentId")
-                        .WithMany("users")
-                        .HasForeignKey("departmentIdid");
+                    b.HasOne("IdeaWeb.Models.Department", "Department")
+                        .WithMany("Users")
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("departmentId");
+                    b.Navigation("Department");
                 });
 
             modelBuilder.Entity("IdeaWeb.Models.UserRole", b =>
                 {
-                    b.HasOne("IdeaWeb.Models.Role", "roleId")
+                    b.HasOne("IdeaWeb.Models.Role", "roles")
                         .WithMany("userRoles")
-                        .HasForeignKey("roleIdid");
+                        .HasForeignKey("roleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("IdeaWeb.Models.User", "userId")
+                    b.HasOne("IdeaWeb.Models.User", "user")
                         .WithMany("userRoles")
-                        .HasForeignKey("userIdid");
+                        .HasForeignKey("userId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("roleId");
+                    b.Navigation("roles");
 
-                    b.Navigation("userId");
+                    b.Navigation("user");
                 });
 
             modelBuilder.Entity("IdeaWeb.Models.Category", b =>
                 {
-                    b.Navigation("ideas");
+                    b.Navigation("Ideas");
                 });
 
             modelBuilder.Entity("IdeaWeb.Models.CloseDateAcedamic", b =>
                 {
-                    b.Navigation("ideas");
+                    b.Navigation("Ideas");
                 });
 
             modelBuilder.Entity("IdeaWeb.Models.Department", b =>
                 {
-                    b.Navigation("users");
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("IdeaWeb.Models.Idea", b =>
                 {
-                    b.Navigation("comments");
+                    b.Navigation("Comments");
 
-                    b.Navigation("documents");
+                    b.Navigation("Documents");
 
-                    b.Navigation("ratings");
+                    b.Navigation("Ratings");
                 });
 
             modelBuilder.Entity("IdeaWeb.Models.Role", b =>

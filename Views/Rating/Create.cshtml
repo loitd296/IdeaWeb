@@ -13,11 +13,6 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="IDidea" class="control-label"></label>
-                <input asp-for="IDidea" class="form-control" />
-                <span asp-validation-for="IDidea" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="Dislike" class="control-label"></label>
                 <input asp-for="Dislike" class="form-control" />
                 <span asp-validation-for="Dislike" class="text-danger"></span>
@@ -26,6 +21,14 @@
                 <label asp-for="like" class="control-label"></label>
                 <input asp-for="like" class="form-control" />
                 <span asp-validation-for="like" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IdeaId" class="control-label"></label>
+                <select asp-for="IdeaId" class ="form-control" asp-items="ViewBag.IdeaId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="userId" class="control-label"></label>
+                <select asp-for="userId" class ="form-control" asp-items="ViewBag.userId"></select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

@@ -22,7 +22,8 @@ namespace IdeaWeb.Controllers
         // GET: Idea
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Idea.ToListAsync());
+            var ideaWebContext = _context.Idea.Include(i => i.Category).Include(i => i.User);
+            return View(await ideaWebContext.ToListAsync());
         }
 
         // GET: Idea/Details/5
@@ -34,7 +35,9 @@ namespace IdeaWeb.Controllers
             }
 
             var idea = await _context.Idea
-                .FirstOrDefaultAsync(m => m.id == id);
+                .Include(i => i.Category)
+                .Include(i => i.User)
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (idea == null)
             {
                 return NotFound();
@@ -46,6 +49,8 @@ namespace IdeaWeb.Controllers
         // GET: Idea/Create
         public IActionResult Create()
         {
+            ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Id");
+            ViewData["UserId"] = new SelectList(_context.User, "id", "id");
             return View();
         }
 
@@ -54,7 +59,7 @@ namespace IdeaWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,name,like_Count,dislike_Count,date_Upload")] Idea idea)
+        public async Task<IActionResult> Create([Bind("Id,Name,Like_Count,Dislike_Count,Date_Upload,CategoryId,UserId")] Idea idea)
         {
             if (ModelState.IsValid)
             {
@@ -62,6 +67,8 @@ namespace IdeaWeb.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Id", idea.CategoryId);
+            ViewData["UserId"] = new SelectList(_context.User, "id", "id", idea.UserId);
             return View(idea);
         }
 
@@ -78,6 +85,8 @@ namespace IdeaWeb.Controllers
             {
                 return NotFound();
             }
+            ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Id", idea.CategoryId);
+            ViewData["UserId"] = new SelectList(_context.User, "id", "id", idea.UserId);
             return View(idea);
         }
 
@@ -86,9 +95,9 @@ namespace IdeaWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id,name,like_Count,dislike_Count,date_Upload")] Idea idea)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Like_Count,Dislike_Count,Date_Upload,CategoryId,UserId")] Idea idea)
         {
-            if (id != idea.id)
+            if (id != idea.Id)
             {
                 return NotFound();
             }
@@ -102,7 +111,7 @@ namespace IdeaWeb.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!IdeaExists(idea.id))
+                    if (!IdeaExists(idea.Id))
                     {
                         return NotFound();
                     }
@@ -113,6 +122,8 @@ namespace IdeaWeb.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Id", idea.CategoryId);
+            ViewData["UserId"] = new SelectList(_context.User, "id", "id", idea.UserId);
             return View(idea);
         }
 
@@ -125,7 +136,9 @@ namespace IdeaWeb.Controllers
             }
 
             var idea = await _context.Idea
-                .FirstOrDefaultAsync(m => m.id == id);
+                .Include(i => i.Category)
+                .Include(i => i.User)
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (idea == null)
             {
                 return NotFound();
@@ -147,7 +160,7 @@ namespace IdeaWeb.Controllers
 
         private bool IdeaExists(int id)
         {
-            return _context.Idea.Any(e => e.id == id);
+            return _context.Idea.Any(e => e.Id == id);
         }
     }
 }

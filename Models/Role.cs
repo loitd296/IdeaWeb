@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 namespace IdeaWeb.Models;
 public class Role
 {

@@ -1,4 +1,7 @@
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace IdeaWeb.Models
 {
@@ -10,6 +13,8 @@ namespace IdeaWeb.Models
         public DateTime Date_Upload { get; set; } //Link
         public string? DataLink { get; set; }
 
-        public Idea? ideaId { get; set; }
+        public int IdeaId { get; set; }
+
+        public Idea? Idea { get; set; }
     }
 }

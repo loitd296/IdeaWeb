@@ -1,4 +1,8 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace IdeaWeb.Models
 {
@@ -12,8 +16,14 @@ namespace IdeaWeb.Models
 
         public int Status { get; set; }
 
-        public Idea? ideaId { get; set; }
+        public int ideaId { get; set; }
 
-        public User? userId { get; set; }
+        public Idea? idea { get; set; }
+
+        public int userId { get; set; }
+
+       [ForeignKey("userId")]
+        public User? user { get; set; }
+       
     }
 }

@@ -22,7 +22,8 @@ namespace IdeaWeb.Controllers
         // GET: Comment
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Comment.ToListAsync());
+            var ideaWebContext = _context.Comment.Include(c => c.idea).Include(c => c.user);
+            return View(await ideaWebContext.ToListAsync());
         }
 
         // GET: Comment/Details/5
@@ -34,6 +35,8 @@ namespace IdeaWeb.Controllers
             }
 
             var comment = await _context.Comment
+                .Include(c => c.idea)
+                .Include(c => c.user)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (comment == null)
             {
@@ -46,6 +49,8 @@ namespace IdeaWeb.Controllers
         // GET: Comment/Create
         public IActionResult Create()
         {
+            ViewData["ideaId"] = new SelectList(_context.Idea, "Id", "Id");
+            ViewData["userId"] = new SelectList(_context.User, "id", "id");
             return View();
         }
 
@@ -54,7 +59,7 @@ namespace IdeaWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Date_Upload,Content,Status")] Comment comment)
+        public async Task<IActionResult> Create([Bind("Id,Date_Upload,Content,Status,ideaId,userId")] Comment comment)
         {
             if (ModelState.IsValid)
             {
@@ -62,6 +67,8 @@ namespace IdeaWeb.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["ideaId"] = new SelectList(_context.Idea, "Id", "Id", comment.ideaId);
+            ViewData["userId"] = new SelectList(_context.User, "id", "id", comment.userId);
             return View(comment);
         }
 
@@ -78,6 +85,8 @@ namespace IdeaWeb.Controllers
             {
                 return NotFound();
             }
+            ViewData["ideaId"] = new SelectList(_context.Idea, "Id", "Id", comment.ideaId);
+            ViewData["userId"] = new SelectList(_context.User, "id", "id", comment.userId);
             return View(comment);
         }
 
@@ -86,7 +95,7 @@ namespace IdeaWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Date_Upload,Content,Status")] Comment comment)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Date_Upload,Content,Status,ideaId,userId")] Comment comment)
         {
             if (id != comment.Id)
             {
@@ -113,6 +122,8 @@ namespace IdeaWeb.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["ideaId"] = new SelectList(_context.Idea, "Id", "Id", comment.ideaId);
+            ViewData["userId"] = new SelectList(_context.User, "id", "id", comment.userId);
             return View(comment);
         }
 
@@ -125,6 +136,8 @@ namespace IdeaWeb.Controllers
             }
 
             var comment = await _context.Comment
+                .Include(c => c.idea)
+                .Include(c => c.user)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (comment == null)
             {

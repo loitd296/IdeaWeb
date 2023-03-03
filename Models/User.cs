@@ -1,3 +1,6 @@
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace IdeaWeb.Models;
 public class User
 {
@@ -16,7 +19,9 @@ public class User
 
     public int flag {get; set;} = 0;
 
-    public Department? departmentId { get; set; }
+    public int DepartmentId { get; set; }
+
+    public Department? Department { get; set; }
 
     public ICollection<UserRole>? userRoles { get; set; }
 

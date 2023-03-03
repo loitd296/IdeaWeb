@@ -22,7 +22,8 @@ namespace IdeaWeb.Controllers
         // GET: UserRole
         public async Task<IActionResult> Index()
         {
-            return View(await _context.UserRole.ToListAsync());
+            var ideaWebContext = _context.UserRole.Include(u => u.roles).Include(u => u.user);
+            return View(await ideaWebContext.ToListAsync());
         }
 
         // GET: UserRole/Details/5
@@ -34,6 +35,8 @@ namespace IdeaWeb.Controllers
             }
 
             var userRole = await _context.UserRole
+                .Include(u => u.roles)
+                .Include(u => u.user)
                 .FirstOrDefaultAsync(m => m.id == id);
             if (userRole == null)
             {
@@ -46,6 +49,8 @@ namespace IdeaWeb.Controllers
         // GET: UserRole/Create
         public IActionResult Create()
         {
+            ViewData["roleId"] = new SelectList(_context.Role, "id", "id");
+            ViewData["userId"] = new SelectList(_context.User, "id", "id");
             return View();
         }
 
@@ -54,7 +59,7 @@ namespace IdeaWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id")] UserRole userRole)
+        public async Task<IActionResult> Create([Bind("id,userId,roleId")] UserRole userRole)
         {
             if (ModelState.IsValid)
             {
@@ -62,6 +67,8 @@ namespace IdeaWeb.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["roleId"] = new SelectList(_context.Role, "id", "id", userRole.roleId);
+            ViewData["userId"] = new SelectList(_context.User, "id", "id", userRole.userId);
             return View(userRole);
         }
 
@@ -78,6 +85,8 @@ namespace IdeaWeb.Controllers
             {
                 return NotFound();
             }
+            ViewData["roleId"] = new SelectList(_context.Role, "id", "id", userRole.roleId);
+            ViewData["userId"] = new SelectList(_context.User, "id", "id", userRole.userId);
             return View(userRole);
         }
 
@@ -86,7 +95,7 @@ namespace IdeaWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id")] UserRole userRole)
+        public async Task<IActionResult> Edit(int id, [Bind("id,userId,roleId")] UserRole userRole)
         {
             if (id != userRole.id)
             {
@@ -113,6 +122,8 @@ namespace IdeaWeb.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["roleId"] = new SelectList(_context.Role, "id", "id", userRole.roleId);
+            ViewData["userId"] = new SelectList(_context.User, "id", "id", userRole.userId);
             return View(userRole);
         }
 
@@ -125,6 +136,8 @@ namespace IdeaWeb.Controllers
             }
 
             var userRole = await _context.UserRole
+                .Include(u => u.roles)
+                .Include(u => u.user)
                 .FirstOrDefaultAsync(m => m.id == id);
             if (userRole == null)
             {

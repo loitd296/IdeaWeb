@@ -22,7 +22,8 @@ namespace IdeaWeb.Controllers
         // GET: Document
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Document.ToListAsync());
+            var ideaWebContext = _context.Document.Include(d => d.Idea);
+            return View(await ideaWebContext.ToListAsync());
         }
 
         // GET: Document/Details/5
@@ -34,6 +35,7 @@ namespace IdeaWeb.Controllers
             }
 
             var document = await _context.Document
+                .Include(d => d.Idea)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (document == null)
             {
@@ -46,6 +48,7 @@ namespace IdeaWeb.Controllers
         // GET: Document/Create
         public IActionResult Create()
         {
+            ViewData["IdeaId"] = new SelectList(_context.Idea, "Id", "Id");
             return View();
         }
 
@@ -54,7 +57,7 @@ namespace IdeaWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Date_Upload,DataLink")] Document document)
+        public async Task<IActionResult> Create([Bind("Id,Date_Upload,DataLink,IdeaId")] Document document)
         {
             if (ModelState.IsValid)
             {
@@ -62,6 +65,7 @@ namespace IdeaWeb.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["IdeaId"] = new SelectList(_context.Idea, "Id", "Id", document.IdeaId);
             return View(document);
         }
 
@@ -78,6 +82,7 @@ namespace IdeaWeb.Controllers
             {
                 return NotFound();
             }
+            ViewData["IdeaId"] = new SelectList(_context.Idea, "Id", "Id", document.IdeaId);
             return View(document);
         }
 
@@ -86,7 +91,7 @@ namespace IdeaWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Date_Upload,DataLink")] Document document)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Date_Upload,DataLink,IdeaId")] Document document)
         {
             if (id != document.Id)
             {
@@ -113,6 +118,7 @@ namespace IdeaWeb.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["IdeaId"] = new SelectList(_context.Idea, "Id", "Id", document.IdeaId);
             return View(document);
         }
 
@@ -125,6 +131,7 @@ namespace IdeaWeb.Controllers
             }
 
             var document = await _context.Document
+                .Include(d => d.Idea)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (document == null)
             {

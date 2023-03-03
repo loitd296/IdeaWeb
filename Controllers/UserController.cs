@@ -22,7 +22,8 @@ namespace IdeaWeb.Controllers
         // GET: User
         public async Task<IActionResult> Index()
         {
-            return View(await _context.User.ToListAsync());
+            var ideaWebContext = _context.User.Include(u => u.Department);
+            return View(await ideaWebContext.ToListAsync());
         }
 
         // GET: User/Details/5
@@ -34,6 +35,7 @@ namespace IdeaWeb.Controllers
             }
 
             var user = await _context.User
+                .Include(u => u.Department)
                 .FirstOrDefaultAsync(m => m.id == id);
             if (user == null)
             {
@@ -46,6 +48,7 @@ namespace IdeaWeb.Controllers
         // GET: User/Create
         public IActionResult Create()
         {
+            ViewData["DepartmentId"] = new SelectList(_context.Department, "Id", "Id");
             return View();
         }
 
@@ -54,7 +57,7 @@ namespace IdeaWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,name,phone,dob,email,password,flag")] User user)
+        public async Task<IActionResult> Create([Bind("id,name,phone,dob,email,password,flag,DepartmentId")] User user)
         {
             if (ModelState.IsValid)
             {
@@ -62,6 +65,7 @@ namespace IdeaWeb.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["DepartmentId"] = new SelectList(_context.Department, "Id", "Id", user.DepartmentId);
             return View(user);
         }
 
@@ -78,6 +82,7 @@ namespace IdeaWeb.Controllers
             {
                 return NotFound();
             }
+            ViewData["DepartmentId"] = new SelectList(_context.Department, "Id", "Id", user.DepartmentId);
             return View(user);
         }
 
@@ -86,7 +91,7 @@ namespace IdeaWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id,name,phone,dob,email,password,flag")] User user)
+        public async Task<IActionResult> Edit(int id, [Bind("id,name,phone,dob,email,password,flag,DepartmentId")] User user)
         {
             if (id != user.id)
             {
@@ -113,6 +118,7 @@ namespace IdeaWeb.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["DepartmentId"] = new SelectList(_context.Department, "Id", "Id", user.DepartmentId);
             return View(user);
         }
 
@@ -125,6 +131,7 @@ namespace IdeaWeb.Controllers
             }
 
             var user = await _context.User
+                .Include(u => u.Department)
                 .FirstOrDefaultAsync(m => m.id == id);
             if (user == null)
             {

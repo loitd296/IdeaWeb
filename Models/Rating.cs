@@ -1,18 +1,25 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace IdeaWeb.Models
 {
     public class Rating
     {
         public int Id { get; set; }
-        public string? IDidea { get; set; } //Link
 
         public int Dislike { get; set; }
         public int like { get; set; }
 
-        public Idea? ideaId { get; set; }
+        public int IdeaId { get; set; }
 
-        public User? userId { get; set; }
+        public Idea? Idea { get; set; }
+
+        public int userId { get; set; }
+
+        public User? user { get; set; }
+
 
     }
 }

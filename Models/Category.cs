@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace IdeaWeb.Models
 {
@@ -8,6 +9,6 @@ namespace IdeaWeb.Models
         public string? Name { get; set; }
         public int Status { get; set; }
         public int Deleted_Status { get; set; }
-        public ICollection<Idea>? ideas { get; set; }
+        public ICollection<Idea>? Ideas { get; set; }
     }
 }

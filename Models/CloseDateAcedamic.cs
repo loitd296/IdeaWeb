@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace IdeaWeb.Models
 {
@@ -9,7 +10,7 @@ namespace IdeaWeb.Models
         [DataType(DataType.Date)]
         public DateTime? CloseDate { get; set; }
         [DataType(DataType.Date)]
-        public DataType? CloseDatePostIdea { get; set; }
-        public ICollection<Idea>? ideas { get; set; }
+        public DateTime? CloseDatePostIdea { get; set; }
+        public ICollection<Idea>? Ideas { get; set; }
     }
 }

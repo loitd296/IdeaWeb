@@ -22,7 +22,8 @@ namespace IdeaWeb.Controllers
         // GET: Rating
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Rating.ToListAsync());
+            var ideaWebContext = _context.Rating.Include(r => r.Idea).Include(r => r.user);
+            return View(await ideaWebContext.ToListAsync());
         }
 
         // GET: Rating/Details/5
@@ -34,6 +35,8 @@ namespace IdeaWeb.Controllers
             }
 
             var rating = await _context.Rating
+                .Include(r => r.Idea)
+                .Include(r => r.user)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (rating == null)
             {
@@ -46,6 +49,8 @@ namespace IdeaWeb.Controllers
         // GET: Rating/Create
         public IActionResult Create()
         {
+            ViewData["IdeaId"] = new SelectList(_context.Idea, "Id", "Id");
+            ViewData["userId"] = new SelectList(_context.User, "id", "id");
             return View();
         }
 
@@ -54,7 +59,7 @@ namespace IdeaWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,IDidea,Dislike,like")] Rating rating)
+        public async Task<IActionResult> Create([Bind("Id,Dislike,like,IdeaId,userId")] Rating rating)
         {
             if (ModelState.IsValid)
             {
@@ -62,6 +67,8 @@ namespace IdeaWeb.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["IdeaId"] = new SelectList(_context.Idea, "Id", "Id", rating.IdeaId);
+            ViewData["userId"] = new SelectList(_context.User, "id", "id", rating.userId);
             return View(rating);
         }
 
@@ -78,6 +85,8 @@ namespace IdeaWeb.Controllers
             {
                 return NotFound();
             }
+            ViewData["IdeaId"] = new SelectList(_context.Idea, "Id", "Id", rating.IdeaId);
+            ViewData["userId"] = new SelectList(_context.User, "id", "id", rating.userId);
             return View(rating);
         }
 
@@ -86,7 +95,7 @@ namespace IdeaWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,IDidea,Dislike,like")] Rating rating)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Dislike,like,IdeaId,userId")] Rating rating)
         {
             if (id != rating.Id)
             {
@@ -113,6 +122,8 @@ namespace IdeaWeb.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["IdeaId"] = new SelectList(_context.Idea, "Id", "Id", rating.IdeaId);
+            ViewData["userId"] = new SelectList(_context.User, "id", "id", rating.userId);
             return View(rating);
         }
 
@@ -125,6 +136,8 @@ namespace IdeaWeb.Controllers
             }
 
             var rating = await _context.Rating
+                .Include(r => r.Idea)
+                .Include(r => r.user)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (rating == null)
             {

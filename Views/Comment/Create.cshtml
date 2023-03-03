@@ -28,6 +28,14 @@
                 <span asp-validation-for="Status" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="ideaId" class="control-label"></label>
+                <select asp-for="ideaId" class ="form-control" asp-items="ViewBag.ideaId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="userId" class="control-label"></label>
+                <select asp-for="userId" class ="form-control" asp-items="ViewBag.userId"></select>
+            </div>
+            <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
