@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using IdeaWeb.Data;
 
 
-
+ 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<IdeaWebContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("IdeaWebContext")));
@@ -27,6 +27,7 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseDefaultFiles();
 app.UseStaticFiles();
 
 app.UseRouting();
@@ -37,4 +38,4 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-app.Run();
+app.Run(); 

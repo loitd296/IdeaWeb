@@ -4,7 +4,7 @@ namespace IdeaWeb.Models
 {
     public class Document
     {
-        public string? Id { get; set; }
+        public int Id { get; set; }
 
         [DataType(DataType.Date)]
         public DateTime Date_Upload { get; set; } //Link

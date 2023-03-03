@@ -4,7 +4,7 @@ namespace IdeaWeb.Models
 {
     public class CloseDateAcedamic
     {
-        public string? Id { get; set; }
+        public int Id { get; set; }
         public string? Name { get; set; }
         [DataType(DataType.Date)]
         public DateTime? CloseDate { get; set; }

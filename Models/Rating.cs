@@ -4,7 +4,7 @@ namespace IdeaWeb.Models
 {
     public class Rating
     {
-        public string? Id { get; set; }
+        public int Id { get; set; }
         public string? IDidea { get; set; } //Link
 
         public int Dislike { get; set; }
