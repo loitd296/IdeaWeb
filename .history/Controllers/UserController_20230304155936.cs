@@ -156,7 +156,17 @@ namespace IdeaWeb.Controllers
         {
             return _context.User.Any(e => e.id == id);
         }
-        public IActionResult Login() { return View(); }
-        public IActionResult Register() { return View(); }
+    }
+    public IActionResult Login()
+    {
+        ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Id");
+        ViewData["UserId"] = new SelectList(_context.User, "id", "id");
+        return View();
+    }
+    public IActionResult Create()
+    {
+        ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Id");
+        ViewData["UserId"] = new SelectList(_context.User, "id", "id");
+        return View();
     }
 }

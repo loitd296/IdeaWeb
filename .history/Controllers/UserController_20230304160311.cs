@@ -156,7 +156,13 @@ namespace IdeaWeb.Controllers
         {
             return _context.User.Any(e => e.id == id);
         }
-        public IActionResult Login() { return View(); }
-        public IActionResult Register() { return View(); }
+        public IActionResult Login()
+        {
+            return View();
+        }
+        public IActionResult Register()
+        {
+            return View();
+        }
     }
 }
