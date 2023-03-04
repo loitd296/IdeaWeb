@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IdeaWeb.Migrations
 {
     [DbContext(typeof(IdeaWebContext))]
-    [Migration("20230303052007_InitialCreate")]
+    [Migration("20230303083007_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
