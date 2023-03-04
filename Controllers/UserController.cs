@@ -7,6 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using IdeaWeb.Data;
 using IdeaWeb.Models;
+using System.Net;
+using System.Net.Mail;
+using IdeaWeb.Untils;
+
+
 
 namespace IdeaWeb.Controllers
 {
@@ -48,7 +53,7 @@ namespace IdeaWeb.Controllers
         // GET: User/Create
         public IActionResult Create()
         {
-            ViewData["DepartmentId"] = new SelectList(_context.Department, "Id", "Id");
+            ViewData["DepartmentId"] = new SelectList(_context.Department, "Id", "Name");
             return View();
         }
 
@@ -66,6 +71,31 @@ namespace IdeaWeb.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["DepartmentId"] = new SelectList(_context.Department, "Id", "Id", user.DepartmentId);
+            return View(user);
+        }
+        public IActionResult RegisterAccount()
+        {
+            ViewData["DepartmentId"] = new SelectList(_context.Department, "Id", "Name");
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RegisterAccount([Bind("id,name,phone,dob,email,password,flag,DepartmentId")] User user)
+        {   
+            if (ModelState.IsValid)
+            {   
+                Send send = new Send();
+                _context.Add(user);
+                await _context.SaveChangesAsync();
+                Console.WriteLine(user.email);
+                var email = user.email.ToString(); 
+                var subject ="PLEASE CONFIRM YOUR EMAIL BY CLICK IN LINK";
+                string body = "https://localhost:7188/User/ConfirmAccount?email=" + email;
+                send.SendEmail(email,subject,body);
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["DepartmentId"] = new SelectList(_context.Department, "Id", "Id", user.DepartmentId);
+            
             return View(user);
         }
 
@@ -122,6 +152,23 @@ namespace IdeaWeb.Controllers
             return View(user);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> ConfirmAccount(String email){
+            var user = await _context.User.FirstOrDefaultAsync(u => u.email == email);
+            string message = "";
+            if (user != null && user.flag == 0)
+            {       
+                user.flag = 1;
+                _context.Update(user);
+                await _context.SaveChangesAsync();
+            }
+            else if(user == null){
+                message = "Your email does not create";
+            }   
+            ViewBag.message = message;
+            return View();
+        }
+
         // GET: User/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -156,5 +203,6 @@ namespace IdeaWeb.Controllers
         {
             return _context.User.Any(e => e.id == id);
         }
+
     }
 }
