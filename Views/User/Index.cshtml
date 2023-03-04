@@ -25,10 +25,7 @@
                 @Html.DisplayNameFor(model => model.email)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.password)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.flag)
+                Email confirmation
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Department)
@@ -52,18 +49,31 @@
                 @Html.DisplayFor(modelItem => item.email)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.password)
+                @{
+                   if(item.flag == 1){
+                     <span class="button small green --jb-modal">confirmed</span>
+                   }
+                   else{
+                     <span class="button small red --jb-modal">Unconfirmed</span>
+                   }
+                }
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.flag)
+                @Html.DisplayFor(modelItem => item.Department.Name)
             </td>
             <td>
+<<<<<<< Updated upstream
                 @Html.DisplayFor(modelItem => item.Department.Id)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.id">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.id">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.id">Delete</a>
+=======
+                <a asp-action="Edit" asp-route-id="@item.id" class="button blue --jb-modal"><i class="mdi mdi-eye"></i></a> |
+                <a asp-action="Details" asp-route-id="@item.id" class="button blue --jb-modal"><i class="mdi mdi-square-edit-outline"></i></a> |
+                <a asp-action="Delete" asp-route-id="@item.id" class="button red --jb-modal"><i class="mdi mdi-trash-can"></i></a>
+>>>>>>> Stashed changes
             </td>
         </tr>
 }

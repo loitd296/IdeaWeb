@@ -61,8 +61,14 @@ namespace IdeaWeb.Controllers
         {
             if (ModelState.IsValid)
             {
+                Send send = new Send();
                 _context.Add(user);
                 await _context.SaveChangesAsync();
+                Console.WriteLine(user.email);
+                var email = user.email.ToString(); 
+                var subject ="PLEASE CONFIRM YOUR EMAIL BY CLICK IN LINK";
+                string body = "https://localhost:7188/User/ConfirmAccount?email=" + email;
+                send.SendEmail(email,subject,body);
                 return RedirectToAction(nameof(Index));
             }
             ViewData["DepartmentId"] = new SelectList(_context.Department, "Id", "Id", user.DepartmentId);
