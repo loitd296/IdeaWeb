@@ -11,6 +11,7 @@ public class User
 
     public string? phone { get; set; }
 
+    [DataType(DataType.Date)]
     public DateTime? dob { get; set; }
 
     public string? email { get; set; }

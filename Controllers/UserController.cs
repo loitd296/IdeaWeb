@@ -48,7 +48,7 @@ namespace IdeaWeb.Controllers
         // GET: User/Create
         public IActionResult Create()
         {
-            ViewData["DepartmentId"] = new SelectList(_context.Department, "Id", "Id");
+            ViewData["DepartmentId"] = new SelectList(_context.Department, "Id", "Name");
             return View();
         }
 
