@@ -16,11 +16,16 @@
                                         placeholder="Full Name" style ="margin-bottom:30px">
                                 </div>
                                 <div class="form-group row">
-                                    <div class="col-sm-6" style ="margin-bottom:30px">
-                                        <input class="form-control form-control-user" placeholder="Phone" >
+                                    <div class="col-sm-6 mb-3 mb-sm-0" style ="margin-bottom:30px">
+                                        <input type="password" class="form-control form-control-user" placeholder="Phone" >
                                     </div>
                                     <div class="col-sm-6" style ="margin-bottom:30px">
-                                        <input class="form-control  form-control-user" type="date"/>
+                                        <input type="password" class="form-control form-control-user" placeholder="DOB">
+                                        <div class="form-group">
+                                            <label asp-for="dob" class="control-label"></label>
+                                            <input asp-for="dob" class="form-control" type="date"/>
+                                            <span asp-validation-for="dob"  class="text-danger"></span>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-group">
