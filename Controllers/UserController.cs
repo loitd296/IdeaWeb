@@ -16,7 +16,7 @@ using IdeaWeb.Untils;
 namespace IdeaWeb.Controllers
 {
     public class UserController : Controller
-    {   
+    {
         private readonly IdeaWebContext _context;
         const string SessionName = "_Name";
         public UserController(IdeaWebContext context)
@@ -82,44 +82,41 @@ namespace IdeaWeb.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RegisterAccount([Bind("id,name,phone,dob,email,password,flag,DepartmentId")] User user)
-        {   
+        {
             if (ModelState.IsValid)
-            {   
+            {
                 Send send = new Send();
                 _context.Add(user);
                 await _context.SaveChangesAsync();
                 Console.WriteLine(user.email);
-                var email = user.email.ToString(); 
-                var subject ="PLEASE CONFIRM YOUR EMAIL BY CLICK IN LINK";
+                var email = user.email.ToString();
+                var subject = "PLEASE CONFIRM YOUR EMAIL BY CLICK IN LINK";
                 string body = "https://localhost:7188/User/ConfirmAccount?email=" + email;
-                send.SendEmail(email,subject,body);
+                send.SendEmail(email, subject, body);
                 return RedirectToAction(nameof(Index));
             }
             ViewData["DepartmentId"] = new SelectList(_context.Department, "Id", "Id", user.DepartmentId);
-            
+
             return View(user);
         }
-
-        public IActionResult Login()
-        {
-            return View();
-        }
         [HttpPost]
-        public async Task<IActionResult> Login(String UserName,String Password)
-        {   
+        public async Task<IActionResult> Login(String UserName, String Password)
+        {
             if (!String.IsNullOrEmpty(UserName) && !String.IsNullOrEmpty(Password))
             {
                 var user = await _context.User.FirstOrDefaultAsync(u => u.email == UserName && u.password == Password);
-                if (user != null){
+                if (user != null)
+                {
                     HttpContext.Session.SetString(SessionName, UserName);
-                    ViewBag.ErrorMessage =HttpContext.Session.GetString(SessionName);
+                    ViewBag.ErrorMessage = HttpContext.Session.GetString(SessionName);
                     Console.WriteLine("Login successful");
                 }
             }
-            else{
+            else
+            {
                 ViewBag.ErrorMessage = "Username or Password cannot be empty";
             }
-            
+
             return View();
         }
 
@@ -177,18 +174,20 @@ namespace IdeaWeb.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ConfirmAccount(String email){
+        public async Task<IActionResult> ConfirmAccount(String email)
+        {
             var user = await _context.User.FirstOrDefaultAsync(u => u.email == email);
             string message = "";
             if (user != null && user.flag == 0)
-            {       
+            {
                 user.flag = 1;
                 _context.Update(user);
                 await _context.SaveChangesAsync();
             }
-            else if(user == null){
+            else if (user == null)
+            {
                 message = "Your email does not create";
-            }   
+            }
             ViewBag.message = message;
             return View();
         }
@@ -227,6 +226,7 @@ namespace IdeaWeb.Controllers
         {
             return _context.User.Any(e => e.id == id);
         }
-
+        public IActionResult Login() { return View(); }
+        public IActionResult Register() { return View(); }
     }
 }
