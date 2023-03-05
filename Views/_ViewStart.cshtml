@@ -1,3 +1,6 @@
 ﻿@{
-    Layout = "indexAdmin";
+    Layout = ViewBag.Layout;
+    if(Layout == null){
+        Layout = "userLayout"; 
+    }
 }
