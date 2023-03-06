@@ -74,30 +74,38 @@ namespace IdeaWeb.Controllers
             ViewData["DepartmentId"] = new SelectList(_context.Department, "Id", "Id", user.DepartmentId);
             return View(user);
         }
-        public IActionResult RegisterAccount()
-        {
-            ViewData["DepartmentId"] = new SelectList(_context.Department, "Id", "Name");
-            return View();
-        }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> RegisterAccount([Bind("id,name,phone,dob,email,password,flag,DepartmentId")] User user)
+        public async Task<IActionResult> Register([Bind("id,name,phone,dob,email,password,flag,DepartmentId")] User user, String repassword)
         {
-            if (ModelState.IsValid)
-            {
-                Send send = new Send();
-                _context.Add(user);
-                await _context.SaveChangesAsync();
-                Console.WriteLine(user.email);
-                var email = user.email.ToString();
-                var subject = "PLEASE CONFIRM YOUR EMAIL BY CLICK IN LINK";
-                string body = "https://localhost:7188/User/ConfirmAccount?email=" + email;
-                send.SendEmail(email, subject, body);
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["DepartmentId"] = new SelectList(_context.Department, "Id", "Id", user.DepartmentId);
+            var Encode = new Encode();
+            string en_password = Encode.encode(user.password.ToString());
+            string en_repassword = Encode.encode(repassword);
+            Console.WriteLine(en_password + " " +en_repassword);
+            if (en_password == en_repassword)
+            {   
+                if (ModelState.IsValid)
+                {
+                    user.password = en_password;
+                    Send send = new Send();
+                    _context.Add(user);
+                    await _context.SaveChangesAsync();
+                    Console.WriteLine(user.email);
+                    var email = user.email.ToString();
+                    var subject = "PLEASE CONFIRM YOUR EMAIL BY CLICK IN LINK";
+                    string body = "https://localhost:7188/User/ConfirmAccount?email=" + email;
+                    send.SendEmail(email, subject, body);
+                    return RedirectToAction(nameof(Index));
 
-            return View(user);
+                }
+            }
+            else
+            {
+                ViewBag.ErrorMessage = "Repassword != Password";
+            }
+            ViewData["DepartmentId"] = new SelectList(_context.Department, "Id", "Name");
+
+            return View();
         }
         [HttpPost]
         public async Task<IActionResult> Login(String UserName, String Password)
@@ -116,7 +124,6 @@ namespace IdeaWeb.Controllers
             {
                 ViewBag.ErrorMessage = "Username or Password cannot be empty";
             }
-
             return View();
         }
 
@@ -227,6 +234,10 @@ namespace IdeaWeb.Controllers
             return _context.User.Any(e => e.id == id);
         }
         public IActionResult Login() { return View(); }
-        public IActionResult Register() { return View(); }
+        public IActionResult Register()
+        {
+            ViewData["DepartmentId"] = new SelectList(_context.Department, "Id", "Name");
+            return View();
+        }
     }
 }
