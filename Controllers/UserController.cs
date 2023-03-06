@@ -27,6 +27,7 @@ namespace IdeaWeb.Controllers
         // GET: User
         public async Task<IActionResult> Index()
         {
+            ViewBag.Layout = "indexAdmin";
             Console.WriteLine(HttpContext.Session.GetString(SessionName));
             var ideaWebContext = _context.User.Include(u => u.Department);
             return View(await ideaWebContext.ToListAsync());
@@ -35,6 +36,7 @@ namespace IdeaWeb.Controllers
         // GET: User/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            ViewBag.Layout = "indexAdmin";
             if (id == null)
             {
                 return NotFound();
@@ -54,6 +56,7 @@ namespace IdeaWeb.Controllers
         // GET: User/Create
         public IActionResult Create()
         {
+            ViewBag.Layout = "indexAdmin";
             ViewData["DepartmentId"] = new SelectList(_context.Department, "Id", "Name");
             return View();
         }
@@ -67,8 +70,14 @@ namespace IdeaWeb.Controllers
         {
             if (ModelState.IsValid)
             {
+                Send send = new Send();
                 _context.Add(user);
                 await _context.SaveChangesAsync();
+                Console.WriteLine(user.email);
+                var email = user.email.ToString();
+                var subject = "PLEASE CONFIRM YOUR EMAIL BY CLICK IN LINK";
+                string body = "https://localhost:7188/User/ConfirmAccount?email=" + email;
+                send.SendEmail(email, subject, body);
                 return RedirectToAction(nameof(Index));
             }
             ViewData["DepartmentId"] = new SelectList(_context.Department, "Id", "Id", user.DepartmentId);
@@ -123,6 +132,7 @@ namespace IdeaWeb.Controllers
         // GET: User/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            ViewBag.Layout = "indexAdmin";
             if (id == null)
             {
                 return NotFound();
@@ -153,8 +163,14 @@ namespace IdeaWeb.Controllers
             {
                 try
                 {
+                    Send send = new Send();
                     _context.Update(user);
                     await _context.SaveChangesAsync();
+                    Console.WriteLine(user.email);
+                    var email = user.email.ToString();
+                    var subject = "PLEASE CONFIRM YOUR EMAIL BY CLICK IN LINK";
+                    string body = "https://localhost:7188/User/ConfirmAccount?email=" + email;
+                    send.SendEmail(email, subject, body);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -195,6 +211,7 @@ namespace IdeaWeb.Controllers
         // GET: User/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            ViewBag.Layout = "indexAdmin";
             if (id == null)
             {
                 return NotFound();
