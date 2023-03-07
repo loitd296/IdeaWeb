@@ -83,49 +83,66 @@ namespace IdeaWeb.Controllers
             ViewData["DepartmentId"] = new SelectList(_context.Department, "Id", "Id", user.DepartmentId);
             return View(user);
         }
-        public IActionResult RegisterAccount()
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register([Bind("id,name,phone,dob,email,password,flag,DepartmentId")] User user, String repassword)
         {
+            var Encode = new Encode();
+            string en_password = Encode.encode(user.password.ToString());
+            string en_repassword = Encode.encode(repassword);
+            Console.WriteLine(en_password + " " + en_repassword);
+            if (en_password == en_repassword)
+            {
+                if (ModelState.IsValid)
+                {
+                    user.password = en_password;
+                    Send send = new Send();
+                    _context.Add(user);
+                    await _context.SaveChangesAsync();
+                    Console.WriteLine(user.email);
+                    var email = user.email.ToString();
+                    var subject = "PLEASE CONFIRM YOUR EMAIL BY CLICK IN LINK";
+                    string body = "https://localhost:7188/User/ConfirmAccount?email=" + email;
+                    send.SendEmail(email, subject, body);
+                    return RedirectToAction(nameof(Login));
+
+                }
+            }
+            else
+            {
+                ViewBag.ErrorMessage = "Repassword != Password";
+            }
             ViewData["DepartmentId"] = new SelectList(_context.Department, "Id", "Name");
+
             return View();
         }
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> RegisterAccount([Bind("id,name,phone,dob,email,password,flag,DepartmentId")] User user)
-        {
-            if (ModelState.IsValid)
-            {
-                Send send = new Send();
-                _context.Add(user);
-                await _context.SaveChangesAsync();
-                Console.WriteLine(user.email);
-                var email = user.email.ToString();
-                var subject = "PLEASE CONFIRM YOUR EMAIL BY CLICK IN LINK";
-                string body = "https://localhost:7188/User/ConfirmAccount?email=" + email;
-                send.SendEmail(email, subject, body);
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["DepartmentId"] = new SelectList(_context.Department, "Id", "Id", user.DepartmentId);
-
-            return View(user);
-        }
-        [HttpPost]
         public async Task<IActionResult> Login(String UserName, String Password)
-        {
+        {   
+            var Encode = new Encode();
             if (!String.IsNullOrEmpty(UserName) && !String.IsNullOrEmpty(Password))
-            {
-                var user = await _context.User.FirstOrDefaultAsync(u => u.email == UserName && u.password == Password);
-                if (user != null)
+            {   
+                var en_password = Encode.encode(Password);
+                var user = await _context.User.FirstOrDefaultAsync(u => u.email == UserName && u.password == en_password);
+                if (user != null && user.flag == 1)
                 {
                     HttpContext.Session.SetString(SessionName, UserName);
                     ViewBag.ErrorMessage = HttpContext.Session.GetString(SessionName);
                     Console.WriteLine("Login successful");
+                }
+                else if (user != null && user.flag == 0)
+                {
+                    ViewBag.ErrorMessage = "PLease Confrim Your ";
+                }
+                else
+                {
+                    ViewBag.ErrorMessage = "User not found";
                 }
             }
             else
             {
                 ViewBag.ErrorMessage = "Username or Password cannot be empty";
             }
-
             return View();
         }
 
@@ -244,6 +261,10 @@ namespace IdeaWeb.Controllers
             return _context.User.Any(e => e.id == id);
         }
         public IActionResult Login() { return View(); }
-        public IActionResult Register() { return View(); }
+        public IActionResult Register()
+        {
+            ViewData["DepartmentId"] = new SelectList(_context.Department, "Id", "Name");
+            return View();
+        }
     }
 }
