@@ -81,9 +81,9 @@ namespace IdeaWeb.Controllers
             var Encode = new Encode();
             string en_password = Encode.encode(user.password.ToString());
             string en_repassword = Encode.encode(repassword);
-            Console.WriteLine(en_password + " " +en_repassword);
+            Console.WriteLine(en_password + " " + en_repassword);
             if (en_password == en_repassword)
-            {   
+            {
                 if (ModelState.IsValid)
                 {
                     user.password = en_password;
@@ -95,7 +95,7 @@ namespace IdeaWeb.Controllers
                     var subject = "PLEASE CONFIRM YOUR EMAIL BY CLICK IN LINK";
                     string body = "https://localhost:7188/User/ConfirmAccount?email=" + email;
                     send.SendEmail(email, subject, body);
-                    return RedirectToAction(nameof(Index));
+                    return RedirectToAction(nameof(Login));
 
                 }
             }
@@ -109,15 +109,25 @@ namespace IdeaWeb.Controllers
         }
         [HttpPost]
         public async Task<IActionResult> Login(String UserName, String Password)
-        {
+        {   
+            var Encode = new Encode();
             if (!String.IsNullOrEmpty(UserName) && !String.IsNullOrEmpty(Password))
-            {
-                var user = await _context.User.FirstOrDefaultAsync(u => u.email == UserName && u.password == Password);
-                if (user != null)
+            {   
+                var en_password = Encode.encode(Password);
+                var user = await _context.User.FirstOrDefaultAsync(u => u.email == UserName && u.password == en_password);
+                if (user != null && user.flag == 1)
                 {
                     HttpContext.Session.SetString(SessionName, UserName);
                     ViewBag.ErrorMessage = HttpContext.Session.GetString(SessionName);
                     Console.WriteLine("Login successful");
+                }
+                else if (user != null && user.flag == 0)
+                {
+                    ViewBag.ErrorMessage = "PLease Confrim Your ";
+                }
+                else
+                {
+                    ViewBag.ErrorMessage = "User not found";
                 }
             }
             else
