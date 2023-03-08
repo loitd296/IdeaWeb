@@ -2151,7 +2151,7 @@ Reservation Page Style
   background-position: center center;
   background-size: cover;
   background-repeat: no-repeat;
-  padding: 260px 0px 190px 0px;
+  padding: 140px 0px 105px 0px;
   text-align: center;
 }
 
@@ -2209,7 +2209,7 @@ Reservation Page Style
   border-radius: 23px;
   box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.15);
   text-align: center;
-  padding: 30px;
+  padding: 20px;
 }
 
 .more-info .info-item i {
@@ -2237,7 +2237,7 @@ Reservation Page Style
 }
 
 .reservation-form {
-  margin: 120px 0px;
+  margin: 100px 0px;
 }
 
 .reservation-form #map {
