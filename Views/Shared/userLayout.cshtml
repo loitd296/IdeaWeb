@@ -36,14 +36,14 @@
             <div class="col-12">
                 <nav class="main-nav">
                     <!-- ***** Logo Start ***** -->
-                    <a href="index.html" class="logo">
-                        <img src="assets/images/logo.png" alt="">
+                    <a asp-area="" asp-controller="Home" asp-action="Index" class="logo">
+                        <img src="~/User/assets/images/logo.png" alt="">
                     </a>
                     <!-- ***** Logo End ***** -->
                     <!-- ***** Menu Start ***** -->
                     <ul class="nav">
-                        <li><a href="#" class="active">Home</a></li>
-                        <li><a href="#">About</a></li>
+                        <li><a asp-area="" asp-controller="Home" asp-action="Index" class="active">Home</a></li>
+                        <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
                         @* if (logged) *@
                         <li><a href="#">Hi! User</a></li> 
                         @* else {not logged in} *@
@@ -66,15 +66,8 @@
   <div class="call-to-action">
     <div class="container">
       <div class="row">
-        <div class="col-lg-8">
-          <h2>Are You Looking To Travel ?</h2>
-          <h4>Make A Reservation By Clicking The Button</h4>
-        </div>
-        <div class="col-lg-4">
-          <div class="border-button">
-            <a href="#">Book Yours Now</a>
-          </div>
-        </div>
+        <h2 style="font-size: 28px;">Do you want to share your ideas with everyone?</h2>
+        <h4 style="font-size: 18px;">Our website will help to build relationships and promote collaboration among individuals.</h4>
       </div>
     </div>
   </div>
