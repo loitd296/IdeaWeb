@@ -1,19 +1,26 @@
+@{
+
+  var name = Context.Session.GetString("_Name") != null ? Context.Session.GetString("_Name") : null;
+}
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <title>IdeaWeb</title>
-    <!-- Bootstrap core CSS -->
-    <link href="~/User/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Additional CSS Files -->
-    <link rel="stylesheet" href="~/User/assets/css/fontawesome.css">
-    <link rel="stylesheet" href="~/User/assets/css/templatemo-woox-travel.css">
-    <link rel="stylesheet" href="~/User/assets/css/owl.css">
-    <link rel="stylesheet" href="~/User/assets/css/animate.css">
-    <link rel="stylesheet"href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
-  </head>
+
+<head >
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <title>IdeaWeb</title>
+  <!-- Bootstrap core CSS -->
+  <link href="~/User/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Additional CSS Files -->
+  <link rel="stylesheet" href="~/User/assets/css/fontawesome.css">
+  <link rel="stylesheet" href="~/User/assets/css/templatemo-woox-travel.css">
+  <link rel="stylesheet" href="~/User/assets/css/owl.css">
+  <link rel="stylesheet" href="~/User/assets/css/animate.css">
+  <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css" />
+</head>
+
 <body>
 
   <!-- ***** Preloader Start ***** -->
@@ -32,42 +39,49 @@
   <!-- ***** Header Area Start ***** -->
   <header class="header-area header-sticky">
     <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <nav class="main-nav">
-                    <!-- ***** Logo Start ***** -->
-                    <a asp-area="" asp-controller="Home" asp-action="Index" class="logo">
-                        <img src="~/User/assets/images/logo.png" alt="">
-                    </a>
-                    <!-- ***** Logo End ***** -->
-                    <!-- ***** Menu Start ***** -->
-                    <ul class="nav">
-                        <li><a asp-area="" asp-controller="Home" asp-action="Index" class="active">Home</a></li>
-                        <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                        @* if (logged) *@
-                        <li><a href="#">Hi! User</a></li> 
-                        @* else {not logged in} *@
-                        @* <li><a href="#">Login</a></li>  *@
-                        @* <li><a href="#">Register</a></li>  *@
-                    </ul>   
-                    <a class='menu-trigger'>
-                        <span>Menu</span>
-                    </a>
-                    <!-- ***** Menu End ***** -->
-                </nav>
-            </div>
+      <div class="row">
+        <div class="col-12">
+          <nav class="main-nav">
+            <!-- ***** Logo Start ***** -->
+            <a asp-area="" asp-controller="Home" asp-action="Index" class="logo">
+              <img src="~/User/assets/images/logo.png" alt="">
+            </a>
+            <!-- ***** Logo End ***** -->
+            <!-- ***** Menu Start ***** -->
+            <ul class="nav">
+              <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+              <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
+              @{
+                if (name != null)
+                {
+                  <li><a>Welcome @name</a></li>
+                }
+                else
+                {
+                  <li><a asp-controller="User" asp-action="Login">Login</a></li>
+                }
+              }
+
+            </ul>
+            <a class='menu-trigger'>
+              <span>Menu</span>
+            </a>
+            <!-- ***** Menu End ***** -->
+          </nav>
         </div>
+      </div>
     </div>
   </header>
   <!-- ***** Header Area End ***** -->
 
-      @RenderBody()
+  @RenderBody()
 
   <div class="call-to-action">
     <div class="container">
       <div class="row">
         <h2 style="font-size: 28px;">Do you want to share your ideas with everyone?</h2>
-        <h4 style="font-size: 18px;">Our website will help to build relationships and promote collaboration among individuals.</h4>
+        <h4 style="font-size: 18px;">Our website will help to build relationships and promote collaboration among
+          individuals.</h4>
       </div>
     </div>
   </div>
@@ -76,8 +90,9 @@
     <div class="container">
       <div class="row">
         <div class="col-lg-12">
-          <p>Copyright © 2036 <a href="#">WoOx Travel</a> Company. All rights reserved. 
-          <br>Design: <a href="https://templatemo.com" target="_blank" title="free CSS templates">TemplateMo</a></p>
+          <p>Copyright © 2036 <a href="#">WoOx Travel</a> Company. All rights reserved.
+            <br>Design: <a href="https://templatemo.com" target="_blank" title="free CSS templates">TemplateMo</a>
+          </p>
         </div>
       </div>
     </div>
@@ -90,5 +105,6 @@
   <script src="~/User/assets/js/tabs.js"></script>
   <script src="~/User/assets/js/popup.js"></script>
   <script src="~/User/assets/js/custom.js"></script>
-  </body>
+</body>
+
 </html>

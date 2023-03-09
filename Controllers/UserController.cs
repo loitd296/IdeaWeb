@@ -16,19 +16,20 @@ using IdeaWeb.Untils;
 namespace IdeaWeb.Controllers
 {
     public class UserController : Controller
-    {
+    {   
+        
         private readonly IdeaWebContext _context;
         const string SessionName = "_Name";
         public UserController(IdeaWebContext context)
         {
             _context = context;
+           
         }
 
         // GET: User
         public async Task<IActionResult> Index()
         {
             ViewBag.Layout = "indexAdmin";
-            Console.WriteLine(HttpContext.Session.GetString(SessionName));
             var ideaWebContext = _context.User.Include(u => u.Department);
             return View(await ideaWebContext.ToListAsync());
         }
@@ -127,9 +128,8 @@ namespace IdeaWeb.Controllers
                 var user = await _context.User.FirstOrDefaultAsync(u => u.email == UserName && u.password == en_password);
                 if (user != null && user.flag == 1)
                 {
-                    HttpContext.Session.SetString(SessionName, UserName);
-                    ViewBag.ErrorMessage = HttpContext.Session.GetString(SessionName);
-                    Console.WriteLine("Login successful");
+                    HttpContext.Session.SetString(SessionName, user.name);
+                    return RedirectPreserveMethod("/");
                 }
                 else if (user != null && user.flag == 0)
                 {
