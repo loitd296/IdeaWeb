@@ -1046,7 +1046,7 @@ Visit Country Style
 */
 
 .visit-country {
-  padding: 120px 0px;
+  padding: 120px 0px 90px 0px;
 }
 
 .visit-country .side-bar-map {
@@ -2312,6 +2312,82 @@ Responsive Style
 
 body {
   overflow-x: hidden;
+}
+
+.p-100 {
+  padding: 100px;
+}
+.p-20 {
+  padding: 20px;
+}
+
+.link {
+  background-color: #95c7cc;
+  color: black;
+  border-radius: 5px;
+  margin: 70px 0;
+}
+
+.link p {
+  font-size: 15px;
+  line-height: 30px;
+  color: black;
+  font-weight: bold;
+  font-size: 16px;
+  padding: 10px 10px;
+  border-radius: 5px;
+}
+
+.index-items {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px;
+  padding: 19px 0;
+  border-bottom: #bdbdbd 1px solid;
+  border-top: #bdbdbd 1px solid;
+}
+
+.index-items li {
+  font-weight: bold;
+  color: #b1b1b1;
+}
+
+.flex {
+  display: flex;
+}
+
+.space-between {
+  justify-content: space-between;
+}
+
+.avatar img {
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+}
+
+.comments {
+  padding: 30px;
+}
+.comment {
+  border: #b1b1b1 2px solid;
+  border-radius: 15px;
+  padding: 10px 30px;
+  margin-bottom: 20px;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.pr-15 {
+  padding-right: 15px;
+}
+.mb-0 {
+  margin-bottom: 0;
+}
+.pb-0 {
+  padding-bottom: 0;
 }
 
 @media (max-width: 575px) {

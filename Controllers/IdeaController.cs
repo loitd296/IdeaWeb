@@ -62,7 +62,7 @@ namespace IdeaWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Content,Like_Count,Dislike_Count,File,Image,Date_Upload,CategoryId,UserId")] Idea idea)
         {
-            
+
             if (ModelState.IsValid)
             {
                 _context.Add(idea);
@@ -163,6 +163,15 @@ namespace IdeaWeb.Controllers
         private bool IdeaExists(int id)
         {
             return _context.Idea.Any(e => e.Id == id);
+        }
+
+        public IActionResult UserCreateIdea()
+        {
+            return View();
+        }
+        public IActionResult UserViewIdea()
+        {
+            return View();
         }
     }
 }
