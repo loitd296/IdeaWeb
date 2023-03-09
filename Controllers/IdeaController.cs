@@ -22,7 +22,6 @@ namespace IdeaWeb.Controllers
         // GET: Idea
         public async Task<IActionResult> Index()
         {
-            ViewBag.Layout = "indexAdmin";
             var ideaWebContext = _context.Idea.Include(i => i.Category).Include(i => i.User);
             return View(await ideaWebContext.ToListAsync());
         }
@@ -60,7 +59,7 @@ namespace IdeaWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Like_Count,Dislike_Count,Date_Upload,CategoryId,UserId")] Idea idea)
+        public async Task<IActionResult> Create([Bind("Id,Name,Content,Like_Count,Dislike_Count,File,Image,Date_Upload,CategoryId,UserId")] Idea idea)
         {
             if (ModelState.IsValid)
             {
@@ -96,7 +95,7 @@ namespace IdeaWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Like_Count,Dislike_Count,Date_Upload,CategoryId,UserId")] Idea idea)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Content,Like_Count,Dislike_Count,File,Image,Date_Upload,CategoryId,UserId")] Idea idea)
         {
             if (id != idea.Id)
             {

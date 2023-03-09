@@ -17,6 +17,12 @@
             @Html.DisplayFor(model => model.Name)
         </dd>
         <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Content)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Content)
+        </dd>
+        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Like_Count)
         </dt>
         <dd class = "col-sm-10">
@@ -27,6 +33,18 @@
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Dislike_Count)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.File)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.File)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Image)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Image)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Date_Upload)

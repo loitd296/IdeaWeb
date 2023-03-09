@@ -152,11 +152,20 @@ namespace IdeaWeb.Migrations
                     b.Property<int?>("CloseDateAcedamicId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Content")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime?>("Date_Upload")
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("Dislike_Count")
                         .HasColumnType("int");
+
+                    b.Property<string>("File")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("Like_Count")
                         .HasColumnType("int");

@@ -7,24 +7,16 @@
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create" class="button small green --jb-modal">Create New</a>
+    <a asp-action="Create">Create New</a>
 </p>
-<div class="card has-table">
-      <header class="card-header">
-        <p class="card-header-title">
-          <span class="icon"><i class="mdi mdi-account-multiple"></i></span>
-          Idea
-        </p>
-        <a href="#" class="card-header-icon">
-          <span class="icon"><i class="mdi mdi-reload"></i></span>
-        </a>
-      </header>
-      <div class="card-content">
-<table >
+<table class="table">
     <thead>
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Content)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Like_Count)
@@ -33,7 +25,10 @@
                 @Html.DisplayNameFor(model => model.Dislike_Count)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Comments)
+                @Html.DisplayNameFor(model => model.File)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Image)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Date_Upload)
@@ -54,16 +49,22 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.Content)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.Like_Count)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Dislike_Count)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Date_Upload)
+                @Html.DisplayFor(modelItem => item.File)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Comments)
+                @Html.DisplayFor(modelItem => item.Image)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date_Upload)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Category.Id)
@@ -72,9 +73,9 @@
                 @Html.DisplayFor(modelItem => item.User.id)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id" class="button small blue --jb-modal">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id" class="button small blue --jb-modal">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id" class="button small red --jb-modal">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>
 }
