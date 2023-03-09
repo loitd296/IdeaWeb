@@ -22,6 +22,7 @@ namespace IdeaWeb.Controllers
         // GET: Idea
         public async Task<IActionResult> Index()
         {
+            ViewBag.Layout = "indexAdmin";
             var ideaWebContext = _context.Idea.Include(i => i.Category).Include(i => i.User);
             return View(await ideaWebContext.ToListAsync());
         }

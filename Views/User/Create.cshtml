@@ -4,9 +4,8 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<h1>Create User</h1>
 
-<h4>User</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -33,15 +32,15 @@
                 <span asp-validation-for="password" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="dob" class="control-label"></label>
-                <input asp-for="dob" class="form-control" type="date"/>
+                <label asp-for="dob" class="control-label">Date of Birth</label>
+                <input asp-for="dob" class="form-control" type="date" style="width:50px: lenght:50px"/>
                 <span asp-validation-for="dob"  class="text-danger"></span>
             </div>
-            <div class="form-group">
+            @* <div class="form-group">
                 <label asp-for="flag" class="control-label"></label>
-                <input asp-for="flag" class="form-control" />
+                <input asp-for="flag" class="form-control" value="0"/>
                 <span asp-validation-for="flag" class="text-danger"></span>
-            </div>
+            </div> *@
             <div class="form-group">
                 <label asp-for="DepartmentId" class="control-label"></label>
                 <select asp-for="DepartmentId" class ="form-control" asp-items="ViewBag.DepartmentId"></select>

@@ -22,6 +22,7 @@ namespace IdeaWeb.Controllers
         // GET: CloseDateAcedamic
         public async Task<IActionResult> Index()
         {
+            ViewBag.Layout = "indexAdmin";
             return View(await _context.CloseDateAcedamic.ToListAsync());
         }
 

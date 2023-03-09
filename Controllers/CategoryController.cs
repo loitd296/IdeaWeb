@@ -17,12 +17,14 @@ namespace IdeaWeb.Controllers
 
         public CategoryController(IdeaWebContext context)
         {
+            
             _context = context;
         }
 
         // GET: Category
         public async Task<IActionResult> Index()
         {
+            ViewBag.Layout = "indexAdmin";
             return View(await _context.Category.ToListAsync());
         }
 

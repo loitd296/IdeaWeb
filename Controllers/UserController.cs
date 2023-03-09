@@ -71,6 +71,7 @@ namespace IdeaWeb.Controllers
             if (ModelState.IsValid)
             {
                 Send send = new Send();
+                user.flag = 0;
                 _context.Add(user);
                 await _context.SaveChangesAsync();
                 Console.WriteLine(user.email);
