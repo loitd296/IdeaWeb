@@ -22,12 +22,14 @@ namespace IdeaWeb.Controllers
         // GET: Department
         public async Task<IActionResult> Index()
         {
+            ViewBag.Layout = "indexAdmin";
             return View(await _context.Department.ToListAsync());
         }
 
         // GET: Department/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            ViewBag.Layout = "indexAdmin";
             if (id == null)
             {
                 return NotFound();
@@ -46,6 +48,7 @@ namespace IdeaWeb.Controllers
         // GET: Department/Create
         public IActionResult Create()
         {
+            ViewBag.Layout = "indexAdmin";
             return View();
         }
 
@@ -68,6 +71,7 @@ namespace IdeaWeb.Controllers
         // GET: Department/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            ViewBag.Layout = "indexAdmin";
             if (id == null)
             {
                 return NotFound();
