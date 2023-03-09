@@ -50,6 +50,7 @@ namespace IdeaWeb.Controllers
         // GET: Idea/Create
         public IActionResult Create()
         {
+            ViewBag.Layout = "indexAdmin";
             ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Id");
             ViewData["UserId"] = new SelectList(_context.User, "id", "id");
             return View();
@@ -62,6 +63,7 @@ namespace IdeaWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Like_Count,Dislike_Count,Date_Upload,CategoryId,UserId")] Idea idea)
         {
+            
             if (ModelState.IsValid)
             {
                 _context.Add(idea);
