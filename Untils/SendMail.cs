@@ -6,7 +6,7 @@ namespace IdeaWeb.Untils{
         public void SendEmail(string email, string subject, string body)
         {  
             var SendMail = new MailMessage();
-            SendMail.From = new MailAddress("jackscuong@gmail.com");
+            SendMail.From = new MailAddress("verifyemail8888@gmail.com");
             SendMail.To.Add(new MailAddress(email));
             Console.WriteLine(email);
             SendMail.Subject =subject ;
@@ -15,7 +15,7 @@ namespace IdeaWeb.Untils{
             stmp.EnableSsl = true;
             stmp.Port = 587;
             stmp.DeliveryMethod = SmtpDeliveryMethod.Network;
-            stmp.Credentials= new NetworkCredential("jackscuong@gmail.com","adffpqmecimzympc");
+            stmp.Credentials= new NetworkCredential("verifyemail8888@gmail.com","otsetrxdbskdebbi");
             stmp.Send(SendMail);
         }
     }
