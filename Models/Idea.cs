@@ -12,9 +12,11 @@ namespace IdeaWeb.Models
     {
         public int Id { get; set; }
         public string? Name { get; set; }
+        public string? Content {get; set; }
         public int? Like_Count { get; set; }
         public int? Dislike_Count { get; set; }
-
+        public string? File { get; set; }
+        public string? Image { get; set; }
         [DataType(DataType.Date)]
         public DateTime? Date_Upload { get; set; }
 

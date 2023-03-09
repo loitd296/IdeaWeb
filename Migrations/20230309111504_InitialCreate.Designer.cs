@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IdeaWeb.Migrations
 {
     [DbContext(typeof(IdeaWebContext))]
-    [Migration("20230303083007_InitialCreate")]
+    [Migration("20230309111504_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -155,11 +155,20 @@ namespace IdeaWeb.Migrations
                     b.Property<int?>("CloseDateAcedamicId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Content")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime?>("Date_Upload")
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("Dislike_Count")
                         .HasColumnType("int");
+
+                    b.Property<string>("File")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("Like_Count")
                         .HasColumnType("int");
