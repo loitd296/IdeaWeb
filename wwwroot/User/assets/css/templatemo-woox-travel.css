@@ -1046,7 +1046,7 @@ Visit Country Style
 */
 
 .visit-country {
-  margin-top: 120px;
+  padding: 120px 0px;
 }
 
 .visit-country .side-bar-map {
@@ -1171,7 +1171,6 @@ Call To Action Style
 */
 
 .call-to-action {
-  margin-top: 80px;
   background-image: url(../images/cta-bg.jpg);
   background-repeat: no-repeat;
   background-size: cover;
@@ -2237,7 +2236,7 @@ Reservation Page Style
 }
 
 .reservation-form {
-  margin: 100px 0px;
+  padding: 100px 0px;
 }
 
 .reservation-form #map {
@@ -2399,7 +2398,6 @@ body {
   }
   .call-to-action .border-button {
     text-align: center;
-    margin-top: 30px;
   }
   .about-main-content .content p {
     padding: 0px 5%;

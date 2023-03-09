@@ -54,11 +54,11 @@
               @{
                 if (name != null)
                 {
-                  <li><a>Welcome @name</a></li>
+                      <li><a>Welcome @name</a></li>
                 }
                 else
                 {
-                  <li><a asp-controller="User" asp-action="Login">Login</a></li>
+                      <li><a asp-controller="User" asp-action="Login">Login</a></li>
                 }
               }
 
@@ -73,8 +73,9 @@
     </div>
   </header>
   <!-- ***** Header Area End ***** -->
-
-  @RenderBody()
+  <div style = "background-color: #f5f9fc;">
+    @RenderBody()
+  </div>
 
   <div class="call-to-action">
     <div class="container">
