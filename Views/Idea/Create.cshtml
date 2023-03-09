@@ -10,7 +10,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
@@ -23,24 +23,22 @@
                 <span asp-validation-for="Content" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Like_Count" class="control-label"></label>
-                <input asp-for="Like_Count" class="form-control" />
+                <input asp-for="Like_Count" type="hidden" class="form-control" value="0" />
                 <span asp-validation-for="Like_Count" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Dislike_Count" class="control-label"></label>
-                <input asp-for="Dislike_Count" class="form-control" />
+            <div class="form-group hidden">
+                <input asp-for="Dislike_Count" type="hidden"  class="form-control" value="0" />
                 <span asp-validation-for="Dislike_Count" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="File" class="control-label"></label>
-                <input asp-for="File" class="form-control" />
-                <span asp-validation-for="File" class="text-danger"></span>
+                <label class="form-control">Document Support</label>
+                 <br/>
+                <input type="File" name="document" class="form-control" />
             </div>
             <div class="form-group">
-                <label asp-for="Image" class="control-label"></label>
-                <input asp-for="Image" class="form-control" />
-                <span asp-validation-for="Image" class="text-danger"></span>
+                <label class="form-control">Image Idea</label>
+                 <br/>
+                <input type="file" name="image" class="form-control" />
             </div>
             <div class="form-group">
                 <label asp-for="Date_Upload" class="control-label"></label>
