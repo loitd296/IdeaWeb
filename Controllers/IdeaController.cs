@@ -7,16 +7,18 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using IdeaWeb.Data;
 using IdeaWeb.Models;
+using System.IO.Compression;
 
 namespace IdeaWeb.Controllers
 {
     public class IdeaController : Controller
     {
+        private IWebHostEnvironment _hostEnvironment;
         private readonly IdeaWebContext _context;
-
-        public IdeaController(IdeaWebContext context)
+        public IdeaController(IdeaWebContext context, IWebHostEnvironment hostEnvironment)
         {
             _context = context;
+            _hostEnvironment = hostEnvironment;
         }
 
         // GET: Idea
@@ -36,8 +38,14 @@ namespace IdeaWeb.Controllers
 
             var idea = await _context.Idea
                 .Include(i => i.Category)
-                .Include(i => i.User)
+                .Include(i => i.Comments)
                 .FirstOrDefaultAsync(m => m.Id == id);
+            ViewBag.item = _context.Comment.Include(c => c.user).Where(c => c.ideaId == id);
+
+            if (idea == null)
+            {
+                return NotFound();
+            }
             if (idea == null)
             {
                 return NotFound();
@@ -49,7 +57,6 @@ namespace IdeaWeb.Controllers
         // GET: Idea/Create
         public IActionResult Create()
         {
-            ViewBag.Layout = "indexAdmin";
             ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Id");
             ViewData["UserId"] = new SelectList(_context.User, "id", "id");
             return View();
@@ -60,11 +67,28 @@ namespace IdeaWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Content,Like_Count,Dislike_Count,File,Image,Date_Upload,CategoryId,UserId")] Idea idea)
+        public async Task<IActionResult> Create(IFormFile image, IFormFile document, [Bind("Id,Name,Content,Like_Count,Dislike_Count,File,Image,Date_Upload,CategoryId,UserId")] Idea idea)
         {
 
             if (ModelState.IsValid)
             {
+                string wwwRootPath = _hostEnvironment.WebRootPath;
+                string fileName = Path.GetFileNameWithoutExtension(image.FileName);
+                string documentName = Path.GetFileName(document.FileName);
+                string extension = Path.GetExtension(image.FileName);
+                string image_Path = Path.Combine(wwwRootPath + "/Image/", fileName + extension);
+                string document_Path = Path.Combine(wwwRootPath + "/Document/", documentName);
+
+                using (var fileStream = new FileStream(image_Path, FileMode.Create))
+                {
+                    await image.CopyToAsync(fileStream);
+                }
+                using (var fileStream = new FileStream(document_Path, FileMode.Create))
+                {
+                    await document.CopyToAsync(fileStream);
+                }
+                idea.File = documentName;
+                idea.Image = fileName + extension;
                 _context.Add(idea);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -164,14 +188,21 @@ namespace IdeaWeb.Controllers
         {
             return _context.Idea.Any(e => e.Id == id);
         }
-
-        public IActionResult UserCreateIdea()
+        public FileResult DocumentDownload(int id)
         {
-            return View();
-        }
-        public IActionResult UserViewIdea()
-        {
-            return View();
+            string wwwRootPath = _hostEnvironment.WebRootPath;
+            var idea = _context.Idea.FirstOrDefault(e => e.Id == id);
+            var file = wwwRootPath + "/Document/" + idea.File;
+            var fileName = idea.Name +".zip" ;
+            using (var memoryStream = new MemoryStream())
+            {
+                using (var zipArchive = new ZipArchive(memoryStream, ZipArchiveMode.Create, true))
+                {
+                    zipArchive.CreateEntryFromFile(file, idea.File, CompressionLevel.Fastest);
+                }
+                var fileStream = new MemoryStream(memoryStream.ToArray());
+                return File(fileStream, "application/zip", fileName);
+            }
         }
     }
 }
