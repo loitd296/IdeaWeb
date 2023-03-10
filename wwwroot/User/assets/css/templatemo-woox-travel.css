@@ -169,9 +169,9 @@ ul {
 }
 
 p {
-  font-size: 15px;
-  line-height: 30px;
-  color: #afafaf;
+  font-size: 14px;
+  line-height: 28px;
+  color: #444444;
 }
 
 img {
@@ -262,15 +262,23 @@ body {
 section {
   margin-top: 120px;
 }
-
+.mt-30 {
+  margin-top: 30px;
+}
 .section-heading {
   position: relative;
   z-index: 2;
-  margin-top: 0px;
-  margin-bottom: 80px;
   text-align: left;
 }
-
+.limit-5-line {
+  margin: 0 0 5px;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  max-height: 52px;
+}
 .section-heading h2 {
   margin-top: 0px;
   margin-bottom: 20px;
@@ -279,6 +287,9 @@ section {
   font-weight: 700;
   text-transform: capitalize;
   color: #2a2a2a;
+}
+.pb-70 {
+  padding-bottom: 70px;
 }
 
 /* 
@@ -1046,7 +1057,7 @@ Visit Country Style
 */
 
 .visit-country {
-  padding: 120px 0px 90px 0px;
+  padding: 120px 0px 0px 0px;
 }
 
 .visit-country .side-bar-map {
@@ -2329,12 +2340,11 @@ body {
 }
 
 .link p {
-  font-size: 15px;
   line-height: 30px;
   color: black;
   font-weight: bold;
   font-size: 16px;
-  padding: 10px 10px;
+  padding: 10px 50px;
   border-radius: 5px;
 }
 
@@ -2349,9 +2359,14 @@ body {
 
 .index-items li {
   font-weight: bold;
-  color: #b1b1b1;
+  /* color: #22b3c1; */
 }
-
+.pt-120 {
+  padding-top: 120px;
+}
+.pb-90 {
+  padding-bottom: 90px;
+}
 .flex {
   display: flex;
 }
@@ -2361,19 +2376,32 @@ body {
 }
 
 .avatar img {
-  height: 50px;
-  width: 50px;
+  height: 40px;
+  width: 40px;
   border-radius: 50%;
 }
 
 .comments {
   padding: 30px;
 }
+
+.text-14 {
+  font-size: 14px;
+}
+.text-30 {
+  font-size: 30px;
+}
+
 .comment {
   border: #b1b1b1 2px solid;
   border-radius: 15px;
   padding: 10px 30px;
   margin-bottom: 20px;
+}
+.comment-infor {
+  border-bottom: #b1b1b1 2px solid;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 .bold {
