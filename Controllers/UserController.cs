@@ -69,8 +69,11 @@ namespace IdeaWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("id,name,phone,dob,email,password,flag,DepartmentId")] User user)
         {
+            var Encode = new Encode();
+            string en_password = Encode.encode(user.password.ToString());
             if (ModelState.IsValid)
             {
+                user.password = en_password;
                 Send send = new Send();
                 user.flag = 0;
                 _context.Add(user);
