@@ -16,14 +16,14 @@ using IdeaWeb.Untils;
 namespace IdeaWeb.Controllers
 {
     public class UserController : Controller
-    {   
-        
+    {
+
         private readonly IdeaWebContext _context;
         const string SessionName = "_Name";
         public UserController(IdeaWebContext context)
         {
             _context = context;
-           
+
         }
 
         // GET: User
@@ -123,10 +123,10 @@ namespace IdeaWeb.Controllers
         }
         [HttpPost]
         public async Task<IActionResult> Login(String UserName, String Password)
-        {   
+        {
             var Encode = new Encode();
             if (!String.IsNullOrEmpty(UserName) && !String.IsNullOrEmpty(Password))
-            {   
+            {
                 var en_password = Encode.encode(Password);
                 var user = await _context.User.FirstOrDefaultAsync(u => u.email == UserName && u.password == en_password);
                 if (user != null && user.flag == 1)
@@ -265,6 +265,9 @@ namespace IdeaWeb.Controllers
             return _context.User.Any(e => e.id == id);
         }
         public IActionResult Login() { return View(); }
+
+        public IActionResult Profile() { return View(); }
+        public IActionResult EditProfile() { return View(); }
         public IActionResult Register()
         {
             ViewData["DepartmentId"] = new SelectList(_context.Department, "Id", "Name");
