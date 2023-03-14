@@ -22,10 +22,19 @@ namespace IdeaWeb.Controllers
         }
 
         // GET: Category
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int pg=1)
         {
             ViewBag.Layout = "indexAdmin";
-            return View(await _context.Category.ToListAsync());
+            const int pageSize = 5;
+            if (pg<1)
+                pg=1;
+            int recsCount = _context.Category.Count();
+            var pager = new Pager(recsCount, pg, pageSize);
+            int recSkip = (pg - 1) * pageSize;
+            var data = _context.Category.Skip(recSkip).Take(pager.PageSize).ToList();
+            this.ViewBag.Pager = pager;
+            
+            return View(data);
         }
 
         // GET: Category/Details/5
