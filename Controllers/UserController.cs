@@ -134,7 +134,7 @@ namespace IdeaWeb.Controllers
                 {
                     HttpContext.Session.SetString(SessionName, user.name);
                     HttpContext.Session.SetInt32(SessionId, user.id);
-                    return RedirectPreserveMethod("/");
+                    return RedirectToAction("Index", "Idea");
                 }
                 else if (user != null && user.flag == 0)
                 {
