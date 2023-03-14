@@ -41,7 +41,7 @@ namespace IdeaWeb.Controllers
                 .Include(i => i.Comments)
                 .FirstOrDefaultAsync(m => m.Id == id);
             ViewBag.item = _context.Comment.Include(c => c.user).Where(c => c.ideaId == id);
-
+            
             if (idea == null)
             {
                 return NotFound();

@@ -20,6 +20,7 @@ namespace IdeaWeb.Controllers
 
         private readonly IdeaWebContext _context;
         const string SessionName = "_Name";
+        const string SessionId = "_ID";
         public UserController(IdeaWebContext context)
         {
             _context = context;
@@ -132,7 +133,8 @@ namespace IdeaWeb.Controllers
                 if (user != null && user.flag == 1)
                 {
                     HttpContext.Session.SetString(SessionName, user.name);
-                    return RedirectPreserveMethod("/");
+                    HttpContext.Session.SetInt32(SessionId, user.id);
+                    return RedirectToAction("Index", "Idea");
                 }
                 else if (user != null && user.flag == 0)
                 {

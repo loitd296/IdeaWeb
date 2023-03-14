@@ -76,6 +76,8 @@
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-controller="Rating" asp-action="AddLike" asp-route-id="@item.Id">Like</a>
+                <a asp-controller="Rating" asp-action="AddDislike" asp-route-id="@item.Id">Dislike</a>
             </td>
         </tr>
 }

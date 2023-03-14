@@ -14,7 +14,7 @@ builder.Services.AddDbContext<IdeaWebContext>(options =>
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddDistributedMemoryCache();
-
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddSession(options =>
 {   
     options.Cookie.Name = ".Ideaweb";

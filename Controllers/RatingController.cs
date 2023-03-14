@@ -8,14 +8,18 @@ using Microsoft.EntityFrameworkCore;
 using IdeaWeb.Data;
 using IdeaWeb.Models;
 
+
 namespace IdeaWeb.Controllers
 {
     public class RatingController : Controller
     {
         private readonly IdeaWebContext _context;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public RatingController(IdeaWebContext context)
+
+        public RatingController(IdeaWebContext context, IHttpContextAccessor httpContextAccessor)
         {
+            _httpContextAccessor = httpContextAccessor;
             _context = context;
         }
 
@@ -70,6 +74,105 @@ namespace IdeaWeb.Controllers
             ViewData["IdeaId"] = new SelectList(_context.Idea, "Id", "Id", rating.IdeaId);
             ViewData["userId"] = new SelectList(_context.User, "id", "id", rating.userId);
             return View(rating);
+        }
+        public async Task<IActionResult> AddLike(int id)
+        {
+            //get session id of the user
+            var userId = HttpContext.Session.GetInt32("_ID").GetValueOrDefault();
+            //var userId = 2;
+            if (userId == 0)
+            {
+                return RedirectToAction("Login", "User");
+            }
+
+            var post = _context.Idea.Include(p => p.Ratings).FirstOrDefault(p => p.Id == id);
+            int IdIdea = post.Id;
+            var rateExists = _context.Rating.Where(p => p.IdeaId == IdIdea && p.userId == userId && p.like == 1);
+            var rateDisLikeExists = _context.Rating.Where(p => p.IdeaId == IdIdea && p.userId == userId && p.Dislike == 1);
+            
+            if (rateExists.FirstOrDefault() != null)
+            {
+                post.Like_Count--;
+                _context.Update(post);
+                _context.Rating.Remove(rateExists.FirstOrDefault());
+                await _context.SaveChangesAsync();
+            }
+            else if (rateDisLikeExists.FirstOrDefault() != null)
+            {
+                var rate = rateDisLikeExists.FirstOrDefault();
+                rate.like = 1;
+                rate.Dislike = 0;
+                post.Like_Count++;
+                post.Dislike_Count--;
+
+                _context.Update(post);
+                _context.Update(rate);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                var rating = new Rating();
+                rating.like = 1;
+                rating.Dislike = 0;
+                rating.IdeaId = IdIdea;
+                rating.userId = userId;
+                post.Like_Count++;
+
+                _context.Add(rating);
+                _context.Update(post);
+                await _context.SaveChangesAsync();
+            }
+            return RedirectToAction("Index", "Idea");
+        }
+
+        public async Task<IActionResult> AddDislike(int id)
+        {            
+            //get session id of the user
+            var userId = HttpContext.Session.GetInt32("_ID").GetValueOrDefault();
+            //var userId = 2;
+            if (userId == 0)
+            {
+                return RedirectToAction("Login", "User");
+            }
+
+            var post = _context.Idea.Include(p => p.Ratings).FirstOrDefault(p => p.Id == id);
+            int IdIdea = post.Id;
+            var rateExists = _context.Rating.Where(p => p.IdeaId == IdIdea && p.userId == userId && p.like == 1);
+            var rateDisLikeExists = _context.Rating.Where(p => p.IdeaId == IdIdea && p.userId == userId && p.Dislike == 1);
+            
+            if (rateDisLikeExists.FirstOrDefault() != null)
+            {
+                post.Dislike_Count--;
+                _context.Update(post);
+                _context.Rating.Remove(rateDisLikeExists.FirstOrDefault());
+                await _context.SaveChangesAsync();
+            }
+            else if (rateExists.FirstOrDefault() != null)
+            {
+                var rate = rateExists.FirstOrDefault();
+                rate.like = 0;
+                rate.Dislike = 1;
+                post.Like_Count--;
+                post.Dislike_Count++;
+                
+                _context.Update(post);
+                _context.Update(rate);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                var rating = new Rating();
+                rating.like = 0;
+                rating.Dislike = 1;
+                rating.IdeaId = IdIdea;
+                rating.userId = userId;
+                post.Dislike_Count++;
+
+                _context.Add(rating);
+                _context.Update(post);
+                await _context.SaveChangesAsync();
+            }
+            return RedirectToAction("Index", "Idea");
         }
 
         // GET: Rating/Edit/5
