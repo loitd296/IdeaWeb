@@ -89,20 +89,22 @@ namespace IdeaWeb.Controllers
             int IdIdea = post.Id;
             var rateExists = _context.Rating.Where(p => p.IdeaId == IdIdea && p.userId == userId && p.like == 1);
             var rateDisLikeExists = _context.Rating.Where(p => p.IdeaId == IdIdea && p.userId == userId && p.Dislike == 1);
-            Console.WriteLine(rateExists);
-            if (rateExists.FirstOrDefault() != null )
+            
+            if (rateExists.FirstOrDefault() != null)
             {
                 post.Like_Count--;
                 _context.Update(post);
                 _context.Rating.Remove(rateExists.FirstOrDefault());
                 await _context.SaveChangesAsync();
             }
-            else if(rateDisLikeExists.FirstOrDefault() != null){
+            else if (rateDisLikeExists.FirstOrDefault() != null)
+            {
                 var rate = rateDisLikeExists.FirstOrDefault();
                 rate.like = 1;
                 rate.Dislike = 0;
                 post.Like_Count++;
                 post.Dislike_Count--;
+
                 _context.Update(post);
                 _context.Update(rate);
                 await _context.SaveChangesAsync();
@@ -124,24 +126,46 @@ namespace IdeaWeb.Controllers
         }
 
         public async Task<IActionResult> AddDislike(int id)
-        {            //get session id of the user
-            var userId0 = HttpContext.Session.GetInt32("_ID");
-            int userId1 = userId0.GetValueOrDefault();
-            // get post id
+        {            
+            //get session id of the user
+            var userId = HttpContext.Session.GetInt32("_ID").GetValueOrDefault();
+            //var userId = 2;
+            if (userId == 0)
+            {
+                return RedirectToAction("Login", "User");
+            }
+
             var post = _context.Idea.Include(p => p.Ratings).FirstOrDefault(p => p.Id == id);
             int IdIdea = post.Id;
-            var dis = _context.Rating.Where(p => p.IdeaId == IdIdea && p.userId == userId1).FirstOrDefaultAsync();
-
-            Console.WriteLine("---------------------------" + dis.Id + "--------------------");
-            if (post != null && post.Dislike_Count <= 0)// check user are Login or Not
+            var rateExists = _context.Rating.Where(p => p.IdeaId == IdIdea && p.userId == userId && p.like == 1);
+            var rateDisLikeExists = _context.Rating.Where(p => p.IdeaId == IdIdea && p.userId == userId && p.Dislike == 1);
+            
+            if (rateDisLikeExists.FirstOrDefault() != null)
             {
-
-
+                post.Dislike_Count--;
+                _context.Update(post);
+                _context.Rating.Remove(rateDisLikeExists.FirstOrDefault());
+                await _context.SaveChangesAsync();
+            }
+            else if (rateExists.FirstOrDefault() != null)
+            {
+                var rate = rateExists.FirstOrDefault();
+                rate.like = 0;
+                rate.Dislike = 1;
+                post.Like_Count--;
+                post.Dislike_Count++;
+                
+                _context.Update(post);
+                _context.Update(rate);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
                 var rating = new Rating();
-                rating.like = 1;
-                rating.Dislike = 0;
+                rating.like = 0;
+                rating.Dislike = 1;
                 rating.IdeaId = IdIdea;
-                rating.userId = userId1;
+                rating.userId = userId;
                 post.Dislike_Count++;
 
                 _context.Add(rating);
