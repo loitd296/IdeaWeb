@@ -184,16 +184,22 @@ namespace IdeaWeb.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+
         private bool IdeaExists(int id)
         {
             return _context.Idea.Any(e => e.Id == id);
+        }
+
+        public IActionResult UserCreateIdea()
+        {
+            return View();
         }
         public FileResult DocumentDownload(int id)
         {
             string wwwRootPath = _hostEnvironment.WebRootPath;
             var idea = _context.Idea.FirstOrDefault(e => e.Id == id);
             var file = wwwRootPath + "/Document/" + idea.File;
-            var fileName = idea.Name +".zip" ;
+            var fileName = idea.Name + ".zip";
             using (var memoryStream = new MemoryStream())
             {
                 using (var zipArchive = new ZipArchive(memoryStream, ZipArchiveMode.Create, true))
