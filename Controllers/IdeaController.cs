@@ -244,12 +244,17 @@ namespace IdeaWeb.Controllers
             .Include(i => i.User)
             .ThenInclude(i => i.Department)
             .FirstOrDefaultAsync(m => m.Id == id);
-            ViewBag.comment = _context.Comment.Include(c => c.user).Where(c => c.ideaId == id).OrderByDescending(p =>p.Date_Upload);
+            ViewBag.comment = _context.Comment.Include(c => c.user).Where(c => c.ideaId == id).OrderByDescending(p => p.Date_Upload);
             ViewBag.commentCount = _context.Comment.Where(c => c.ideaId == id).Count();
             ViewBag.id = id;
             return View(idea);
         }
-
+        public async Task<IActionResult> IdeaIndex()
+        {
+            var ideaWebContext = _context.Idea.Include(i => i.Category).Include(i => i.User).OrderByDescending(p => p.Date_Upload);
+            ViewBag.commentCount = _context.Comment.ToList();
+            return View(await ideaWebContext.ToListAsync());
+        }
 
         public FileResult DocumentDownload(int id)
         {
