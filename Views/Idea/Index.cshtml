@@ -2,9 +2,16 @@
 
 @{
     ViewData["Title"] = "Index";
+    Pager pager = new Pager();
+  int pageNo = 0;
+
+  if (ViewBag.Pager != null)
+  {
+    pager = ViewBag.Pager;
+    pageNo = pager.CurrentPage;
+  }
 }
 
-<h1>Index</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -83,3 +90,14 @@
 }
     </tbody>
 </table>
+<div class="flex items-center justify-between">
+      @if (pager.TotalPages > 0)
+      {
+                    <div class="button">
+          @for (var pge = pager.StartPage; pge <= pager.EndPage; pge++)
+          {
+                              <a type="button" class="btn btn-info" asp-controller="Idea" asp-action="Index" asp-route-pg="@pge">@pge</a>
+          }
+                    </div>
+      }
+          </div>

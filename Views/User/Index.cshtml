@@ -1,7 +1,15 @@
-@model IEnumerable<IdeaWeb.Models.User>
+@model IEnumerable<IdeaWeb.Models.UserRole>
 
 @{
     ViewData["Title"] = "Index";
+     Pager pager = new Pager();
+  int pageNo = 0;
+
+  if (ViewBag.Pager != null)
+  {
+    pager = ViewBag.Pager;
+    pageNo = pager.CurrentPage;
+  }
 }
 
 
@@ -24,22 +32,25 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.name)
+                @Html.DisplayNameFor(model => model.user.name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.phone)
+                @Html.DisplayNameFor(model => model.user.phone)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.dob)
+                @Html.DisplayNameFor(model => model.user.dob)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.email)
+                @Html.DisplayNameFor(model => model.user.email)
             </th>
             <th>
                 Verification 
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Department)
+                @Html.DisplayNameFor(model => model.user.Department)
+            </th>
+            <th>
+                UserRole
             </th>
             <th></th>
         </tr>
@@ -48,20 +59,20 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.name)
+                @Html.DisplayFor(modelItem => item.user.name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.phone)
+                @Html.DisplayFor(modelItem => item.user.phone)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.dob)
+                @Html.DisplayFor(modelItem => item.user.dob)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.email)
+                @Html.DisplayFor(modelItem => item.user.email)
             </td>
             <td>
                 @{
-                    if(item.flag == 1){
+                    if(item.user.flag == 1){
                         @Html.Raw("<span class='button green --jb-modal'>Verified</span>")
                     }
                     else{
@@ -70,14 +81,31 @@
                 }
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Department.Name)
+                @Html.DisplayFor(modelItem => item.user.Department.Name)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.id" class="button blue --jb-modal"><i class="mdi mdi-square-edit-outline"></i></a> |
-                <a asp-action="Details" asp-route-id="@item.id" class="button blue --jb-modal"><i class="mdi mdi-eye"></i></a> |
-                <a asp-action="Delete" asp-route-id="@item.id" class="button red --jb-modal"><i class="mdi mdi-trash-can"></i></a>
+                @Html.DisplayFor(modelItem => item.roles.name) 
+            </td>
+            
+
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.userId" class="button blue --jb-modal"><i class="mdi mdi-square-edit-outline"></i></a> |
+                <a asp-controller="UserRole" asp-action="Edit" asp-route-id="@item.id" class="button blue --jb-modal">EDIT ROLE</a>
+                <a asp-action="Details" asp-route-id="@item.userId" class="button blue --jb-modal"><i class="mdi mdi-eye"></i></a> |
+                <a asp-action="Delete" asp-route-id="@item.userId" class="button red --jb-modal"><i class="mdi mdi-trash-can"></i></a>
             </td>
         </tr>
 }
     </tbody>
 </table>
+          <div class="flex items-center justify-between">
+      @if (pager.TotalPages > 0)
+      {
+                    <div class="buttons">
+          @for (var pge = pager.StartPage; pge <= pager.EndPage; pge++)
+          {
+                              <a type="button" class="button active"asp-controller="User" asp-action="Index" asp-route-pg="@pge">@pge</a>
+          }
+                    </div>
+      }
+          </div>

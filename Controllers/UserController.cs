@@ -28,11 +28,20 @@ namespace IdeaWeb.Controllers
         }
 
         // GET: User
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int pg = 1)
         {
             ViewBag.Layout = "indexAdmin";
-            var ideaWebContext = _context.User.Include(u => u.Department);
-            return View(await ideaWebContext.ToListAsync());
+            const int pageSize = 5;
+            if (pg < 1)
+                pg = 1;
+            int recsCount = _context.User.Count();
+            var pager = new Pager(recsCount, pg, pageSize);
+            int recSkip = (pg - 1) * pageSize;
+            var data = _context.UserRole.Include(u => u.user).ThenInclude(u => u.Department).Include(u => u.roles).Skip(recSkip).Take(pager.PageSize).ToList();
+            this.ViewBag.Pager = pager;
+            ViewBag.UserRole = _context.Role;
+            //var ideaWebContext = _context.User.Include(u => u.Department);
+            return View(data);
         }
 
         // GET: User/Details/5
@@ -79,6 +88,18 @@ namespace IdeaWeb.Controllers
                 user.flag = 0;
                 _context.Add(user);
                 await _context.SaveChangesAsync();
+                var users = _context.User.FirstOrDefault(p => p.id == user.id);
+                //Console.WriteLine("----------------------------------------------------------------"+users.id);
+                if (users != null)
+                {
+                    var userRoles = new UserRole();
+                    userRoles.roleId = 2;
+                    userRoles.userId = users.id;
+                    _context.Add(userRoles);
+                    await _context.SaveChangesAsync();
+                }
+
+
                 Console.WriteLine(user.email);
                 var email = user.email.ToString();
                 var subject = "PLEASE CONFIRM YOUR EMAIL BY CLICK IN LINK";
@@ -105,6 +126,16 @@ namespace IdeaWeb.Controllers
                     Send send = new Send();
                     _context.Add(user);
                     await _context.SaveChangesAsync();
+                    var users = _context.User.FirstOrDefault(p => p.id == user.id);
+                    if (users != null)
+                    {
+                        var userRoles = new UserRole();
+                        userRoles.roleId = 2;
+                        userRoles.userId = users.id;
+                        _context.Add(userRoles);
+                        await _context.SaveChangesAsync();
+                    }
+
                     Console.WriteLine(user.email);
                     var email = user.email.ToString();
                     var subject = "PLEASE CONFIRM YOUR EMAIL BY CLICK IN LINK";
@@ -130,11 +161,18 @@ namespace IdeaWeb.Controllers
             {
                 var en_password = Encode.encode(Password);
                 var user = await _context.User.FirstOrDefaultAsync(u => u.email == UserName && u.password == en_password);
+                var userRole = _context.UserRole.FirstOrDefault(p => p.userId == user.id);
                 if (user != null && user.flag == 1)
                 {
                     HttpContext.Session.SetString(SessionName, user.name);
                     HttpContext.Session.SetInt32(SessionId, user.id);
-                    return RedirectToAction("Index", "Idea");
+                    
+                    if(user.userRoles == userRole){
+                        return RedirectToAction("Index", "Idea");
+                    }else{
+                        return RedirectToAction("UserViewIdea", "Idea");
+                    }
+                    
                 }
                 else if (user != null && user.flag == 0)
                 {
