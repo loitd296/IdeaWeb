@@ -271,6 +271,9 @@ namespace IdeaWeb.Controllers
         public IActionResult Profile() { return View(); }
         public IActionResult EditProfile() { return View(); }
         public IActionResult loginSuccess() { return View(); }
+        public IActionResult InputCodeRecoveryPass() { return View(); }
+        public IActionResult InputEmailRecoveryPass() { return View(); }
+        public IActionResult InputNewPassword() { return View(); }
         public IActionResult Register()
         {
             ViewData["DepartmentId"] = new SelectList(_context.Department, "Id", "Name");
