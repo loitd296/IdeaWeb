@@ -15,10 +15,12 @@ namespace IdeaWeb.Controllers
     {
         private IWebHostEnvironment _hostEnvironment;
         private readonly IdeaWebContext _context;
-        public IdeaController(IdeaWebContext context, IWebHostEnvironment hostEnvironment)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public IdeaController(IdeaWebContext context, IWebHostEnvironment hostEnvironment, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
             _hostEnvironment = hostEnvironment;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         // GET: Idea
@@ -50,7 +52,7 @@ namespace IdeaWeb.Controllers
                 .Include(i => i.Comments)
                 .FirstOrDefaultAsync(m => m.Id == id);
             ViewBag.item = _context.Comment.Include(c => c.user).Where(c => c.ideaId == id);
-            
+
             if (idea == null)
             {
                 return NotFound();
@@ -201,8 +203,68 @@ namespace IdeaWeb.Controllers
 
         public IActionResult UserCreateIdea()
         {
+            ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Name");
             return View();
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UserCreateIdea(IFormFile image, IFormFile document, [Bind("Id,Name,Content,File,Image,CategoryId")] Idea idea)
+        {
+            var userId = HttpContext.Session.GetInt32("_ID").GetValueOrDefault();
+            if (userId == 0)
+            {
+                return RedirectToAction("Login", "User");
+            }
+            if (ModelState.IsValid)
+            {
+                string wwwRootPath = _hostEnvironment.WebRootPath;
+                string fileName = Path.GetFileNameWithoutExtension(image.FileName);
+                string documentName = Path.GetFileName(document.FileName);
+                string extension = Path.GetExtension(image.FileName);
+                string image_Path = Path.Combine(wwwRootPath + "/Image/", fileName + extension);
+                string document_Path = Path.Combine(wwwRootPath + "/Document/", documentName);
+
+                using (var fileStream = new FileStream(image_Path, FileMode.Create))
+                {
+                    await image.CopyToAsync(fileStream);
+                }
+                using (var fileStream = new FileStream(document_Path, FileMode.Create))
+                {
+                    await document.CopyToAsync(fileStream);
+                }
+                idea.Like_Count = 0;
+                idea.Dislike_Count = 0;
+                idea.Date_Upload = DateTime.Now;
+                idea.UserId = userId;
+                idea.File = documentName;
+                idea.Image = fileName + extension;
+                _context.Add(idea);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Name", idea.CategoryId);
+            return View(idea);
+        }
+        public async Task<IActionResult> UserViewIdea(int id)
+        {
+            var idea = await _context.Idea
+            .Include(i => i.Category)
+            .Include(i => i.Comments)
+            .Include(i => i.User)
+            .ThenInclude(i => i.Department)
+            .FirstOrDefaultAsync(m => m.Id == id);
+            ViewBag.comment = _context.Comment.Include(c => c.user).Where(c => c.ideaId == id).OrderByDescending(p => p.Date_Upload);
+            ViewBag.commentCount = _context.Comment.Where(c => c.ideaId == id).Count();
+            ViewBag.id = id;
+            return View(idea);
+        }
+        public async Task<IActionResult> IdeaIndex()
+        {
+            var ideaWebContext = _context.Idea.Include(i => i.Category).Include(i => i.User).OrderByDescending(p => p.Date_Upload);
+            ViewBag.commentCount = _context.Comment.ToList();
+            return View(await ideaWebContext.ToListAsync());
+        }
+
         public FileResult DocumentDownload(int id)
         {
             string wwwRootPath = _hostEnvironment.WebRootPath;

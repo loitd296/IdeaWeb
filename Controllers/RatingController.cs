@@ -122,7 +122,7 @@ namespace IdeaWeb.Controllers
                 _context.Update(post);
                 await _context.SaveChangesAsync();
             }
-            return RedirectToAction("Index", "Idea");
+            return RedirectToAction("UserViewIdea", "Idea",new { id = id });
         }
 
         public async Task<IActionResult> AddDislike(int id)
@@ -172,7 +172,7 @@ namespace IdeaWeb.Controllers
                 _context.Update(post);
                 await _context.SaveChangesAsync();
             }
-            return RedirectToAction("Index", "Idea");
+            return RedirectToAction("UserViewIdea", "Idea",new { id = id });
         }
 
         // GET: Rating/Edit/5

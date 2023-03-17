@@ -12,13 +12,15 @@ namespace IdeaWeb.Controllers
 {
     public class CommentController : Controller
     {
+        private IWebHostEnvironment _hostEnvironment;
         private readonly IdeaWebContext _context;
-
-        public CommentController(IdeaWebContext context)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public CommentController(IdeaWebContext context, IWebHostEnvironment hostEnvironment, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
+            _hostEnvironment = hostEnvironment;
+            _httpContextAccessor = httpContextAccessor;
         }
-
         // GET: Comment
         public async Task<IActionResult> Index()
         {
@@ -59,17 +61,25 @@ namespace IdeaWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Date_Upload,Content,Status,ideaId,userId")] Comment comment)
+        public async Task<IActionResult> Create([Bind("Id,Content")] Comment comment, int ideaId ,int status)
         {
-            if (ModelState.IsValid)
+            var userId = HttpContext.Session.GetInt32("_ID").GetValueOrDefault();
+            if (userId == 0)
             {
+                return RedirectToAction("Login", "User");
+            }
+            Console.WriteLine(ModelState.IsValid);
+            if (ModelState.IsValid)
+            {   
+                comment.ideaId = ideaId;
+                comment.Date_Upload = DateTime.Now;
+                comment.Status = status ;
+                comment.userId = userId;
                 _context.Add(comment);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("UserViewIdea", "Idea",new { id = ideaId  });
             }
-            ViewData["ideaId"] = new SelectList(_context.Idea, "Id", "Id", comment.ideaId);
-            ViewData["userId"] = new SelectList(_context.User, "id", "id", comment.userId);
-            return View(comment);
+            return View();
         }
 
         // GET: Comment/Edit/5
