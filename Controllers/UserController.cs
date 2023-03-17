@@ -161,14 +161,15 @@ namespace IdeaWeb.Controllers
             {
                 var en_password = Encode.encode(Password);
                 var user = await _context.User.FirstOrDefaultAsync(u => u.email == UserName && u.password == en_password);
-                var userRole = _context.UserRole.FirstOrDefault(p => p.userId == user.id);
+                var userRole =  _context.UserRole.Include(u => u.roles).FirstOrDefault(u => u.userId == user.id);
+                
                 if (user != null && user.flag == 1)
                 {
                     HttpContext.Session.SetString(SessionName, user.name);
                     HttpContext.Session.SetInt32(SessionId, user.id);
-                    return RedirectToAction("IdeaIndex", "Idea");
+                    //return RedirectToAction("IdeaIndex", "Idea");
                     
-                    if(user.userRoles == userRole){
+                    if(userRole.roles.name == "Admin"){
                         return RedirectToAction("Index", "Idea");
                     }else{
                         return RedirectToAction("UserViewIdea", "Idea");
