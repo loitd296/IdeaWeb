@@ -320,5 +320,181 @@ namespace IdeaWeb.Controllers
             ViewData["DepartmentId"] = new SelectList(_context.Department, "Id", "Name");
             return View();
         }
+        public IActionResult ChartNumber()
+        {
+            ViewBag.Layout = "indexAdmin";
+            var totalIdea = _context.Idea.Count();
+            var department = _context.Department.GroupBy(s => s.Name)
+            .Select(g => new
+            {
+                Name = g.Key,
+                Count = 0,
+                Percent = (double)0,
+                personCount = 0
+            }).ToList();
+            Console.WriteLine(totalIdea);
+            var data = _context.Idea.Include(s => s.User).ThenInclude(s => s.Department)
+            .GroupBy(s => s.User.Department.Name)
+            .Select(g => new
+            {
+                Name = g.Key,
+                Count = g.Count(),
+                Percent = Math.Round(((double)g.Count() / totalIdea) * 100),
+                personCount = g.Select(s => s.User).Distinct().Count()
+            })
+            .ToList();
+            foreach (var item in department)
+            {
+                var existingData = data.FirstOrDefault(d => d.Name.Contains(item.Name));
+                if (existingData == null)
+                {
+                    data.Add(item);
+                }
+            }
+            Random rnd = new Random();
+            int red = rnd.Next(0, 255);
+            int blue = rnd.Next(0, 255);
+            int green = rnd.Next(0, 255);
+            string[] labels = new string[data.Count()];
+            string[] count = new string[data.Count()];
+            string[] rgbs = new string[data.Count()];
+            foreach (var item in data)
+            {
+                Console.WriteLine(item.Name);
+                Console.WriteLine(item.Percent);
+                Console.WriteLine(item.personCount);
+                Console.WriteLine(item.Count);
+            }
+            for (int i = 0; i < data.Count(); i++)
+            {
+                labels[i] = data[i].Name;
+                count[i] = data[i].Count.ToString();
+
+                rgbs[i] = ("'rgb(" + red.ToString() + "," + green.ToString() + "," + blue.ToString() + ")'");
+            }
+
+
+            ViewData["rgbs"] = String.Join(",", rgbs);
+            ViewData["labels"] = String.Format("'{0}'", String.Join("','", labels));
+            ViewData["count"] = String.Join(",", count);
+            return View();
+        }
+        public IActionResult ChartPercent()
+        {
+            ViewBag.Layout = "indexAdmin";
+            var totalIdea = _context.Idea.Count();
+            var department = _context.Department.GroupBy(s => s.Name)
+            .Select(g => new
+            {
+                Name = g.Key,
+                Count = 0,
+                Percent = (double)0,
+                personCount = 0
+            }).ToList();
+            Console.WriteLine(totalIdea);
+            var data = _context.Idea.Include(s => s.User).ThenInclude(s => s.Department)
+            .GroupBy(s => s.User.Department.Name)
+            .Select(g => new
+            {
+                Name = g.Key,
+                Count = g.Count(),
+                Percent = Math.Round(((double)g.Count() / totalIdea) * 100),
+                personCount = g.Select(s => s.User).Distinct().Count()
+            })
+            .ToList();
+            foreach (var item in department)
+            {
+                var existingData = data.FirstOrDefault(d => d.Name.Contains(item.Name));
+                if (existingData == null)
+                {
+                    data.Add(item);
+                }
+            }
+            Random rnd = new Random();
+
+            string[] labels = new string[data.Count()];
+            string[] count = new string[data.Count()];
+            string[] rgbs = new string[data.Count()];
+            foreach (var item in data)
+            {
+                Console.WriteLine(item.Name);
+                Console.WriteLine(item.Percent);
+                Console.WriteLine(item.personCount);
+                Console.WriteLine(item.Count);
+            }
+            for (int i = 0; i < data.Count(); i++)
+            {
+                labels[i] = data[i].Name;
+                count[i] = data[i].Percent.ToString();
+                int red = rnd.Next(0, 255);
+                int blue = rnd.Next(0, 255);
+                int green = rnd.Next(0, 255);
+                rgbs[i] = ("'rgb(" + red.ToString() + "," + green.ToString() + "," + blue.ToString() + ")'");
+            }
+
+            ViewData["rgbs"] = String.Join(",", rgbs);
+            ViewData["labels"] = String.Format("'{0}'", String.Join("','", labels));
+            ViewData["count"] = String.Join(",", count);
+            return View();
+        }
+         public IActionResult ChartContribute()
+        {
+            ViewBag.Layout = "indexAdmin";
+            var totalIdea = _context.Idea.Count();
+            var department = _context.Department.GroupBy(s => s.Name)
+            .Select(g => new
+            {
+                Name = g.Key,
+                Count = 0,
+                Percent = (double)0,
+                personCount = 0
+            }).ToList();
+            Console.WriteLine(totalIdea);
+            var data = _context.Idea.Include(s => s.User).ThenInclude(s => s.Department)
+            .GroupBy(s => s.User.Department.Name)
+            .Select(g => new
+            {
+                Name = g.Key,
+                Count = g.Count(),
+                Percent = Math.Round(((double)g.Count() / totalIdea) * 100),
+                personCount = g.Select(s => s.User).Distinct().Count()
+            })
+            .ToList();
+            foreach (var item in department)
+            {
+                var existingData = data.FirstOrDefault(d => d.Name.Contains(item.Name));
+                if (existingData == null)
+                {
+                    data.Add(item);
+                }
+            }
+            Random rnd = new Random();
+            int red = rnd.Next(0, 255);
+            int blue = rnd.Next(0, 255);
+            int green = rnd.Next(0, 255);
+            string[] labels = new string[data.Count()];
+            string[] count = new string[data.Count()];
+            string[] rgbs = new string[data.Count()];
+            foreach (var item in data)
+            {
+                Console.WriteLine(item.Name);
+                Console.WriteLine(item.Percent);
+                Console.WriteLine(item.personCount);
+                Console.WriteLine(item.Count);
+            }
+            for (int i = 0; i < data.Count(); i++)
+            {
+                labels[i] = data[i].Name;
+                count[i] = data[i].personCount.ToString();
+
+                rgbs[i] = ("'rgb(" + red.ToString() + "," + green.ToString() + "," + blue.ToString() + ")'");
+            }
+
+
+            ViewData["rgbs"] = String.Join(",", rgbs);
+            ViewData["labels"] = String.Format("'{0}'", String.Join("','", labels));
+            ViewData["count"] = String.Join(",", count);
+            return View();
+        }
     }
 }

@@ -31,14 +31,20 @@
                   <div class="col-lg-6 col-sm-5">
                     <div class="right-content">
 
-                      <span class="p-20 text-14">Author : </span>
-                      <span class="p-20 text-14">@Html.DisplayFor(model => model.User.name)</span>
-                      <span class="p-20 text-14">Category :</span>
-                      <span class="p-20 text-14">@Html.DisplayFor(model => model.Category.Name)</span>
-                      <span class="p-20 text-14">Deparment</span>
-                      <span class="p-20 text-14">@Html.DisplayFor(model => model.User.Department.Name)</span>
+                      <span class="p-20 text-14">Author : @Html.DisplayFor(model => model.User.name)</span>
+                      <span class="p-20 text-14">Category : @Html.DisplayFor(model => model.Category.Name)</span>
+                      <span class="p-20 text-14">Deparment : @Html.DisplayFor(model => model.User.Department.Name)
+                      </span>
                       <span class="p-20 text-14">Close Date</span>
-                      <span class="p-20 text-14"> Download Document  <a asp-action="DocumentDownload" asp-route-id="@ViewBag.id"><i class="fa-solid fa-download"> </i></i></a></as></span>
+                      @if (Model.UserId == ViewBag.UserId)
+                      {
+                        <span class="p-20 text-14"> Edit Your Idea : <a asp-action="Edit" asp-route-id="@ViewBag.id"><i
+                              class="fas fa-edit"></i></a></span>
+                      }
+                      <span class="p-20 text-14"> Edit Your Idea : <a asp-action="UserEditIdea"
+                          asp-route-id="@ViewBag.id"><i class="fas fa-edit"></i></a></span>
+                      <span class="p-20 text-14"> Download Document : <a asp-action="DocumentDownload"
+                          asp-route-id="@ViewBag.id"><i class="fa-solid fa-download"> </i></a></span>
                     </div>
                   </div>
                 </div>
@@ -53,6 +59,11 @@
                   <li><a href="/Rating/AddDislike/@ViewBag.id"><i
                         class="fa-regular fa-thumbs-down pr-15"></i></a>Dislike : @Html.DisplayFor(model =>
                     model.Dislike_Count)</li>
+                  @if (Model.UserId == ViewBag.UserId)
+                  {
+                    <li><a asp-action="UserDelete" asp-route-id="@ViewBag.id"><i class="fa-solid fa-trash"></i></a></li>
+                  }
+                  
                 </ul>
               </div>
             </div>
@@ -78,6 +89,7 @@
                 <div class="comment-infor">
                   <div class="flex space-between bold" style="align-items: center">
                     <div class="flex" style="align-items: center">
+
                       @if (item.Status == 0)
                       {
                         <p class="text-14">@item.user.name</p>
@@ -87,7 +99,12 @@
                         <p class="text-14">Anonymous</p>
                       }
                     </div>
-                    <time class="text-14">@item.Date_Upload</time>
+                    <time class="text-14">@item.Date_Upload @{
+                        if (item.userId == ViewBag.UserId)
+                        {
+                          <a href="/Comment/Userdelete/@item.Id"><i class="fa-solid fa-trash"></i></a>
+                        }
+                      } </time>
                   </div>
                 </div>
                 <p style="text-align: justify;" class="text-14">

@@ -61,7 +61,7 @@ namespace IdeaWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Content")] Comment comment, int ideaId ,int status)
+        public async Task<IActionResult> Create([Bind("Id,Content")] Comment comment, int ideaId, int status)
         {
             var userId = HttpContext.Session.GetInt32("_ID").GetValueOrDefault();
             if (userId == 0)
@@ -70,14 +70,14 @@ namespace IdeaWeb.Controllers
             }
             Console.WriteLine(ModelState.IsValid);
             if (ModelState.IsValid)
-            {   
+            {
                 comment.ideaId = ideaId;
                 comment.Date_Upload = DateTime.Now;
-                comment.Status = status ;
+                comment.Status = status;
                 comment.userId = userId;
                 _context.Add(comment);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("UserViewIdea", "Idea",new { id = ideaId  });
+                return RedirectToAction("UserViewIdea", "Idea", new { id = ideaId });
             }
             return View();
         }
@@ -155,6 +155,16 @@ namespace IdeaWeb.Controllers
             }
 
             return View(comment);
+        }
+        public async Task<IActionResult> UserDelete(int? id)
+        {
+            var comment = await _context.Comment
+                .Include(c => c.idea)
+                .Include(c => c.user)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            _context.Comment.Remove(comment);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("UserViewIdea", "Idea", new { id = comment.idea.Id }); ;
         }
 
         // POST: Comment/Delete/5
