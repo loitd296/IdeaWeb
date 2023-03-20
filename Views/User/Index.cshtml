@@ -10,6 +10,14 @@
     pager = ViewBag.Pager;
     pageNo = pager.CurrentPage;
   }
+            var role = Context.Session.GetString("_Role") != null ? Context.Session.GetString("_Role") : null;
+  string message = "You do not have permission to access this page";
+    if (role != "Admin"){
+     <script>
+        alert("@message");
+        window.location.href = "https://localhost:7188/User/login";
+    </script>
+  }
 }
 
 
@@ -104,7 +112,7 @@
                     <div class="buttons">
           @for (var pge = pager.StartPage; pge <= pager.EndPage; pge++)
           {
-                              <a type="button" class="button active"asp-controller="User" asp-action="Index" asp-route-pg="@pge">@pge</a>
+                              <a type="button" class="button active" style="color: black" asp-controller="User" asp-action="Index" asp-route-pg="@pge">@pge</a>
           }
                     </div>
       }

@@ -168,7 +168,6 @@ namespace IdeaWeb.Controllers
                     HttpContext.Session.SetString(SessionName, user.name);
                     HttpContext.Session.SetInt32(SessionId, user.id);
                     HttpContext.Session.SetString(SessionRole, userRole.roles.name);
-                    //return RedirectToAction("IdeaIndex", "Idea");
                     
                     if(userRole.roles.name == "Admin" || userRole.roles.name == "Manager"){
                         return RedirectToAction("Index", "Admin");

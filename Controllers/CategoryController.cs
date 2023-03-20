@@ -14,27 +14,32 @@ namespace IdeaWeb.Controllers
     public class CategoryController : Controller
     {
         private readonly IdeaWebContext _context;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public CategoryController(IdeaWebContext context)
+        public CategoryController(IdeaWebContext context, IHttpContextAccessor httpContextAccessor)
         {
-            
+            _httpContextAccessor = httpContextAccessor;
             _context = context;
         }
 
         // GET: Category
-        public async Task<IActionResult> Index(int pg=1)
+        public async Task<IActionResult> Index(int pg = 1)
         {
+
             ViewBag.Layout = "indexAdmin";
             const int pageSize = 5;
-            if (pg<1)
-                pg=1;
+            if (pg < 1)
+                pg = 1;
             int recsCount = _context.Category.Count();
             var pager = new Pager(recsCount, pg, pageSize);
             int recSkip = (pg - 1) * pageSize;
             var data = _context.Category.Skip(recSkip).Take(pager.PageSize).ToList();
             this.ViewBag.Pager = pager;
-            
+
             return View(data);
+
+
+
         }
 
         // GET: Category/Details/5
@@ -161,6 +166,6 @@ namespace IdeaWeb.Controllers
         {
             return _context.Category.Any(e => e.Id == id);
         }
-      
+
     }
 }

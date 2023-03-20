@@ -2,6 +2,14 @@
 
 @{
     ViewData["Title"] = "Edit";
+      var role = Context.Session.GetString("_Role") != null ? Context.Session.GetString("_Role") : null;
+  string message = "You do not have permission to access this page";
+    if (role == "Staff"){
+     <script>
+        alert("@message");
+        window.location.href = "https://localhost:7188/User/login";
+    </script>
+  }
 }
 
 <h1>Edit</h1>

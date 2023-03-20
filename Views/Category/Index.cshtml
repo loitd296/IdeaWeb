@@ -2,6 +2,7 @@
 
 @{
   ViewData["Title"] = "Index";
+  
   Pager pager = new Pager();
   int pageNo = 0;
 
@@ -10,11 +11,17 @@
     pager = ViewBag.Pager;
     pageNo = pager.CurrentPage;
   }
+  var role = Context.Session.GetString("_Role") != null ? Context.Session.GetString("_Role") : null;
+  string message = "You do not have permission to access this page";
+    if (role == "Staff"){
+     <script>
+        alert("@message");
+        window.location.href = "https://localhost:7188/User/login";
+    </script>
+  }
 }
 
 
-
-<h1>Index</h1>
 
 <p>
     <a asp-action="Create" class="button green --jb-modal">Create New</a>
@@ -75,7 +82,7 @@
                     <div class="buttons">
           @for (var pge = pager.StartPage; pge <= pager.EndPage; pge++)
           {
-                              <a type="button" class="button active"asp-controller="Category" asp-action="Index" asp-route-pg="@pge">@pge</a>
+                              <a type="button" class="button active" style="color: black" asp-controller="Category" asp-action="Index" asp-route-pg="@pge">@pge</a>
           }
                     </div>
       }
@@ -83,3 +90,4 @@
         </div>
       </div>
     </div>
+    
