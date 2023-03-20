@@ -29,6 +29,7 @@ namespace IdeaWeb.Controllers
         // GET: CloseDateAcedamic/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            ViewBag.Layout = "indexAdmin";
             if (id == null)
             {
                 return NotFound();
@@ -47,6 +48,7 @@ namespace IdeaWeb.Controllers
         // GET: CloseDateAcedamic/Create
         public IActionResult Create()
         {
+            ViewBag.Layout = "indexAdmin";
             return View();
         }
 
@@ -59,16 +61,30 @@ namespace IdeaWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(closeDateAcedamic);
-                await _context.SaveChangesAsync();
+
+                if (closeDateAcedamic.CloseDate > closeDateAcedamic.CloseDatePostIdea)
+                {
+                    _context.Add(closeDateAcedamic);
+                    await _context.SaveChangesAsync();
+                }
+                else
+                {
+                    return RedirectToAction(nameof(ErrorMessage));
+                }
                 return RedirectToAction(nameof(Index));
             }
             return View(closeDateAcedamic);
+        }
+        public IActionResult ErrorMessage()
+        {
+            ViewBag.AlertMsg = "The closing date for new ideas cannot exceed the final closing date!!!";
+            return View();
         }
 
         // GET: CloseDateAcedamic/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            ViewBag.Layout = "indexAdmin";
             if (id == null)
             {
                 return NotFound();
@@ -120,6 +136,7 @@ namespace IdeaWeb.Controllers
         // GET: CloseDateAcedamic/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            ViewBag.Layout = "indexAdmin";
             if (id == null)
             {
                 return NotFound();
@@ -140,6 +157,7 @@ namespace IdeaWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            ViewBag.Layout = "indexAdmin";
             var closeDateAcedamic = await _context.CloseDateAcedamic.FindAsync(id);
             _context.CloseDateAcedamic.Remove(closeDateAcedamic);
             await _context.SaveChangesAsync();
