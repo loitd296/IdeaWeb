@@ -1,3 +1,6 @@
+@{
+  var role = Context.Session.GetString("_Role") != null ? Context.Session.GetString("_Role") : null;
+}
 <!DOCTYPE html>
 <html lang="en" class="">
 <head>
@@ -136,7 +139,10 @@ input[type=submit]:hover {
   <div class="menu is-menu-main">
     <p class="menu-label">management</p>
     <ul class="menu-list">
-      <li class="--set-active-tables-html">
+      @{
+        
+        if(role == "Admin"){
+          <li class="--set-active-tables-html">
         <a asp-area="" asp-controller="User" asp-action="Index">
           <span class="icon"><i class="mdi mdi-account-circle"></i></span>
           <span class="menu-item-label">Users</span>
@@ -160,7 +166,7 @@ input[type=submit]:hover {
           <span class="menu-item-label">Acedamic years</span>
         </a>
       </li>
-            </li>
+            
             <li class="--set-active-profile-html">
         <a asp-area="" asp-controller="Department" asp-action="Index">
           <span class="icon"><i class="mdi mdi-table"></i></span>
@@ -186,7 +192,22 @@ input[type=submit]:hover {
           </li>
         </ul>
       </li>
-    </ul>
+        }else if(role == "Manager"){
+      <li class="--set-active-forms-html">
+        <a asp-area="" asp-controller="Category" asp-action="Index">
+          <span class="icon"><i class="mdi mdi-square-edit-outline"></i></span>
+          <span class="menu-item-label">Categories</span>
+        </a>
+      </li>
+        }else{
+
+          //Response.Redirect("/Idea/IdeaIndex");
+          <script>window.location.href = "/Idea/IdeaIndex";</script>
+        }
+        
+    
+      }
+      </ul>
   </div>
 </aside>
 

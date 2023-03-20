@@ -21,6 +21,7 @@ namespace IdeaWeb.Controllers
         private readonly IdeaWebContext _context;
         const string SessionName = "_Name";
         const string SessionId = "_ID";
+        const string SessionRole = "_Role";
         public UserController(IdeaWebContext context)
         {
             _context = context;
@@ -89,7 +90,6 @@ namespace IdeaWeb.Controllers
                 _context.Add(user);
                 await _context.SaveChangesAsync();
                 var users = _context.User.FirstOrDefault(p => p.id == user.id);
-                //Console.WriteLine("----------------------------------------------------------------"+users.id);
                 if (users != null)
                 {
                     var userRoles = new UserRole();
@@ -167,13 +167,15 @@ namespace IdeaWeb.Controllers
                 {
                     HttpContext.Session.SetString(SessionName, user.name);
                     HttpContext.Session.SetInt32(SessionId, user.id);
+                    HttpContext.Session.SetString(SessionRole, userRole.roles.name);
                     //return RedirectToAction("IdeaIndex", "Idea");
                     
-                    if(userRole.roles.name == "Admin"){
-                        return RedirectToAction("Index", "Idea");
+                    if(userRole.roles.name == "Admin" || userRole.roles.name == "Manager"){
+                        return RedirectToAction("Index", "Admin");
                     }else{
-                        return RedirectToAction("UserViewIdea", "Idea");
+                        return RedirectToAction("IdeaIndex", "Idea");
                     }
+                    
                     
                 }
                 else if (user != null && user.flag == 0)
