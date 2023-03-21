@@ -35,7 +35,7 @@ namespace IdeaWeb.Controllers
             int recsCount = _context.Idea.Count();
             var pager = new Pager(recsCount, pg, pageSize);
             int recSkip = (pg - 1) * pageSize;
-            var data = _context.Idea.Include(i => i.Category).Include(i => i.User).Skip(recSkip).Take(pager.PageSize).ToList();
+            var data = _context.Idea.Include(i => i.CloseDateAcedamic).Include(i => i.Category).Include(i => i.User).Skip(recSkip).Take(pager.PageSize).ToList();
             this.ViewBag.Pager = pager;
             var ideaWebContext = _context.Idea.Include(i => i.Category).Include(i => i.User);
             return View(data);
@@ -70,6 +70,7 @@ namespace IdeaWeb.Controllers
         // GET: Idea/Create
         public IActionResult Create()
         {
+            ViewData["CloseDateAcedamicId"] = new SelectList(_context.CloseDateAcedamic, "Id", "Name");
             ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Id");
             ViewData["UserId"] = new SelectList(_context.User, "id", "id");
             return View();
@@ -80,7 +81,7 @@ namespace IdeaWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(IFormFile image, IFormFile document, [Bind("Id,Name,Content,Like_Count,Dislike_Count,File,Image,Date_Upload,CategoryId,UserId")] Idea idea)
+        public async Task<IActionResult> Create(IFormFile image, IFormFile document, [Bind("Id,Name,Content,Like_Count,Dislike_Count,File,Image,Date_Upload,CloseDateAcedamicId,CategoryId,UserId")] Idea idea)
         {
 
             if (ModelState.IsValid)
@@ -106,6 +107,7 @@ namespace IdeaWeb.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["CloseDateAcedamicId"] = new SelectList(_context.CloseDateAcedamic, "Id", "Name");
             ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Id", idea.CategoryId);
             ViewData["UserId"] = new SelectList(_context.User, "id", "id", idea.UserId);
             return View(idea);
@@ -124,6 +126,7 @@ namespace IdeaWeb.Controllers
             {
                 return NotFound();
             }
+            ViewData["CloseDateAcedamicId"] = new SelectList(_context.CloseDateAcedamic, "Id", "Name", idea.CloseDateAcedamicId);
             ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Id", idea.CategoryId);
             ViewData["UserId"] = new SelectList(_context.User, "id", "id", idea.UserId);
             return View(idea);
@@ -134,7 +137,7 @@ namespace IdeaWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Content,Like_Count,Dislike_Count,File,Image,Date_Upload,CategoryId,UserId")] Idea idea)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Content,Like_Count,Dislike_Count,File,Image,Date_Upload,CloseDateAcedamicId,CategoryId,UserId")] Idea idea)
         {
             if (id != idea.Id)
             {
@@ -161,6 +164,7 @@ namespace IdeaWeb.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["CloseDateAcedamicId"] = new SelectList(_context.CloseDateAcedamic, "Id", "Name", idea.CloseDateAcedamicId);
             ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Id", idea.CategoryId);
             ViewData["UserId"] = new SelectList(_context.User, "id", "id", idea.UserId);
             return View(idea);
@@ -237,6 +241,7 @@ namespace IdeaWeb.Controllers
             }
 
             var idea = await _context.Idea
+                .Include(i => i.CloseDateAcedamic)
                 .Include(i => i.Category)
                 .Include(i => i.User)
                 .FirstOrDefaultAsync(m => m.Id == id);

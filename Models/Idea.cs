@@ -22,6 +22,8 @@ namespace IdeaWeb.Models
 
         public int CategoryId { get; set; }
         public Category? Category { get; set; }
+        public int CloseDateAcedamicId { get; set; }
+        public CloseDateAcedamic? CloseDateAcedamic { get; set; }
 
         public ICollection<Document>? Documents { get; set; }
         public ICollection<Rating>? Ratings { get; set; }
