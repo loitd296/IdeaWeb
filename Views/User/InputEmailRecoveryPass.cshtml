@@ -12,7 +12,7 @@
               <span class="text-primary text-medium">1. </span>Enter your email address below.
             </li>
             <li style="margin-bottom: 6px;">
-              <span class="text-primary text-medium">2. </span>A code will sent to your email, enter this code address below.
+              <span class="text-primary text-medium">2. </span>A confirm link will sent to your email, click the link.
             </li>
             <li style="margin-bottom: 6px;">
               <span class="text-primary text-medium">3. </span>Enter new password and re-password.
@@ -20,16 +20,15 @@
           </ol>
         </div>
 
-        <form class="card mt-4">
+        <form class="card mt-4" asp-action="forgotPassword">
           <div class="card-body">
             <div class="form-group">
               <label for="email-for-pass" style="font-size: 15px;">1. Enter your email address</label>
-              <input class="form-control" type="text" id="email-for-pass" required="">
+              <input class="form-control" name="email" type="email" id="email-for-pass" required="">
             </div>
           </div>
           <div class="card-footer">
-            <button class="btn btn-danger" type="submit" style="font-size: 15px;" asp-controller="User" asp-action="InputEmailRecoveryPass">Back to Login</button>
-            <button class="btn btn-success" type="submit" style="font-size: 15px;" asp-controller="User" asp-action="InputNewPassword">Next step</button>
+            <button class="btn btn-success" type="submit" style="font-size: 15px;" asp-controller="User" asp-action="forgotPassword">Submit</button>
           </div>
         </form>
       </div>

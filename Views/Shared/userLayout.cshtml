@@ -1,5 +1,6 @@
 @{
   var name = Context.Session.GetString("_Name") != null ? Context.Session.GetString("_Name") : null;
+  var role = Context.Session.GetString("_Role") != null ? Context.Session.GetString("_Role") : null;
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -64,24 +65,29 @@
               @{
                 if (name != null)
                 {
-                  <li><a>Welcome @name</a></li>
+                  <li class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                      data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      Hi @name
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="background: rgb(0 0 0 / 50%);">
+                      <a class="dropdown-item" href="/user/LogOut">Log out</a>
+                      @if(role == "Admin"){
+                      <a class="dropdown-item" href="/Admin/Index">Admin</a>
+                      }
+                      @if(role == "Manager"){
+                      <a class="dropdown-item" href="Admin/Index">Manager</a>
+                      }
+                      <a class="dropdown-item" href="#">Something else here</a>
+                    </div>
+                  </li>
                 }
                 else
                 {
                   <li><a asp-controller="User" asp-action="Login">Login</a></li>
                 }
               }
-              <li class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
-                  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  Hi user!
-                </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="background: rgb(0 0 0 / 50%);">
-                  <a class="dropdown-item" href="#">Action</a>
-                  <a class="dropdown-item" href="#">Another action</a>
-                  <a class="dropdown-item" href="#">Something else here</a>
-                </div>
-              </li>
+
             </ul>
             <a class='menu-trigger'>
               <span>Menu</span>
@@ -93,8 +99,8 @@
     </div>
   </header>
   <!-- ***** Header Area End ***** -->
-    @RenderBody()
-    @RenderSection("scripts", required: false)
+  @RenderBody()
+  @RenderSection("scripts", required: false)
   <div class="call-to-action">
     <div class="container">
       <div class="row">

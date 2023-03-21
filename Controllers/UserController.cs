@@ -10,8 +10,9 @@ using IdeaWeb.Models;
 using System.Net;
 using System.Net.Mail;
 using IdeaWeb.Untils;
-
-
+using OfficeOpenXml;
+using OfficeOpenXml.Style;
+using System.Globalization;
 
 namespace IdeaWeb.Controllers
 {
@@ -135,8 +136,6 @@ namespace IdeaWeb.Controllers
                         _context.Add(userRoles);
                         await _context.SaveChangesAsync();
                     }
-
-                    Console.WriteLine(user.email);
                     var email = user.email.ToString();
                     var subject = "PLEASE CONFIRM YOUR EMAIL BY CLICK IN LINK";
                     string body = "https://localhost:7188/User/ConfirmAccount?email=" + email;
@@ -161,21 +160,24 @@ namespace IdeaWeb.Controllers
             {
                 var en_password = Encode.encode(Password);
                 var user = await _context.User.FirstOrDefaultAsync(u => u.email == UserName && u.password == en_password);
-                var userRole =  _context.UserRole.Include(u => u.roles).FirstOrDefault(u => u.userId == user.id);
-                
+                var userRole = _context.UserRole.Include(u => u.roles).FirstOrDefault(u => u.userId == user.id);
+
                 if (user != null && user.flag == 1)
                 {
                     HttpContext.Session.SetString(SessionName, user.name);
                     HttpContext.Session.SetInt32(SessionId, user.id);
                     HttpContext.Session.SetString(SessionRole, userRole.roles.name);
-                    
-                    if(userRole.roles.name == "Admin" || userRole.roles.name == "Manager"){
-                        return RedirectToAction("Index", "Admin");
-                    }else{
-                        return RedirectToAction("IdeaIndex", "Idea");
+
+                    if (userRole.roles.name == "Admin" || userRole.roles.name == "Manager")
+                    {
+                        return RedirectToAction("loginSucessAdmin", "User");
                     }
-                    
-                    
+                    else
+                    {
+                        return RedirectToAction("loginSuccess", "User");
+                    }
+
+
                 }
                 else if (user != null && user.flag == 0)
                 {
@@ -192,7 +194,14 @@ namespace IdeaWeb.Controllers
             }
             return View();
         }
-
+        public ActionResult loginSuccess()
+        {
+            return View();
+        }
+        public ActionResult loginSucessAdmin()
+        {
+            return View();
+        }
         // GET: User/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -311,10 +320,38 @@ namespace IdeaWeb.Controllers
 
         public IActionResult Profile() { return View(); }
         public IActionResult EditProfile() { return View(); }
-        public IActionResult loginSuccess() { return View(); }
         public IActionResult InputCodeRecoveryPass() { return View(); }
+        public IActionResult ChangePass(string email, string password, string repassword)
+        {
+            Encode encode = new Encode();
+            Console.WriteLine(email);
+            Console.WriteLine(password);
+            Console.WriteLine(repassword);
+            var user = _context.User.FirstOrDefault(user => user.email == email);
+            if (user != null)
+            {
+                password = encode.encode(password);
+                user.password = password;
+                _context.Update(user);
+                _context.SaveChangesAsync();
+            }
+            return View();
+        }
+        public IActionResult forgotPassword(string email)
+        {
+            Send send = new Send();
+            var subject = "RESET YOUR PASSWORD BY CLICK IN LINK";
+            string body = "https://localhost:7188/User/InputNewPassword?email=" + email;
+            send.SendEmail(email, subject, body);
+            return View();
+        }
         public IActionResult InputEmailRecoveryPass() { return View(); }
-        public IActionResult InputNewPassword() { return View(); }
+        [HttpGet]
+        public IActionResult InputNewPassword(string email)
+        {
+            ViewBag.email = email;
+            return View();
+        }
         public IActionResult Register()
         {
             ViewData["DepartmentId"] = new SelectList(_context.Department, "Id", "Name");
@@ -437,7 +474,7 @@ namespace IdeaWeb.Controllers
             ViewData["count"] = String.Join(",", count);
             return View();
         }
-         public IActionResult ChartContribute()
+        public IActionResult ChartContribute()
         {
             ViewBag.Layout = "indexAdmin";
             var totalIdea = _context.Idea.Count();
@@ -496,5 +533,77 @@ namespace IdeaWeb.Controllers
             ViewData["count"] = String.Join(",", count);
             return View();
         }
+
+        public IActionResult ExportExcel()
+        {
+            CultureInfo provider = CultureInfo.InvariantCulture;
+            var userId = HttpContext.Session.GetInt32("_ID").GetValueOrDefault();
+            if (userId == 0)
+            {
+                return RedirectToAction("Login", "User");
+            }
+            var user = _context.User.Include(i => i.Department).FirstOrDefault(userId => userId == userId);
+            var exel = _context.Idea.Include(i => i.Comments).Include(i => i.Category).Include(i => i.User).ThenInclude(u => u.Department).OrderByDescending(i => i.Date_Upload);
+            var stream = new MemoryStream();
+            using (var xlPackage = new ExcelPackage(stream))
+            {
+                var worksheet = xlPackage.Workbook.Worksheets.Add("Idea");
+                var namedStyle = xlPackage.Workbook.Styles.CreateNamedStyle("HyperLink");
+                namedStyle.Style.Font.UnderLine = true;
+                const int startRow = 5;
+                var row = startRow;
+
+                //Create Headers and format them
+                using (var r = worksheet.Cells["A1:C1"])
+                {
+                    r.Merge = true;
+                    r.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.CenterContinuous;
+                }
+
+                worksheet.Cells["A2"].Value = "Idea Name";
+                worksheet.Cells["B2"].Value = "Category";
+                worksheet.Cells["C2"].Value = "Total Comment";
+                worksheet.Cells["D2"].Value = "Like";
+                worksheet.Cells["E2"].Value = "Dislike";
+                worksheet.Cells["F2"].Value = "Date";
+                worksheet.Cells["G2"].Value = "Department";
+                worksheet.Cells["A2:G2"].Style.Font.Bold = true;
+                worksheet.Cells["A2:G2"].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                worksheet.Cells["A2:G2"].Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Orange);
+
+                row = 3;
+                foreach (var idea in exel)
+                {
+                    if (user.Department.Name == idea.User.Department.Name)
+                    {
+                        worksheet.Cells[row, 1].Value = idea.Name;
+                        worksheet.Cells[row, 2].Value = idea.Category.Name;;
+                        worksheet.Cells[row, 3].Value = idea.Comments.Where(i => i.Status == 0).Count();
+                        worksheet.Cells[row, 4].Value = idea.Like_Count;
+                        worksheet.Cells[row, 5].Value = idea.Dislike_Count;
+                        worksheet.Cells[row, 6].Value = idea.Date_Upload.Value.ToShortDateString();
+                        worksheet.Cells[row, 7].Value = idea.User.Department.Name;
+                        row++;
+                    }
+                   
+                }
+                row--;
+                String range = "A2:G" + row.ToString();
+                var modelTable = worksheet.Cells[range];
+                modelTable.Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                modelTable.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                modelTable.Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                modelTable.Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                modelTable.AutoFitColumns();
+                xlPackage.Save();
+            }
+            stream.Position = 0;
+            return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Idea.xlsx");
+        }
+          public IActionResult Logout(){
+
+            HttpContext.Session.Clear();
+            return RedirectToAction("Login","user");
+          }
     }
 }
