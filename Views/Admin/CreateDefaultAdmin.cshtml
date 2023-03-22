@@ -1,0 +1,45 @@
+<div class="container" style="padding: 150px 0px 90px 0px">
+  <!-- Outer Row -->
+  <div class="row justify-content-center">
+    <div class="col-xl-10 col-lg-12 col-md-9">
+      <div class="card o-hidden border-0 shadow-lg my-5">
+        <div class="card-body p-0">
+          <!-- Nested Row within Card Body -->
+          <div class="row">
+            <img src="~/User/assets/images/country-01.jpg" alt="" class="col-lg-6 d-none d-lg-block bg-login-image" >
+            <div class="col-lg-6">
+              <div class="p-5">
+                <div class="text-center">
+                  <h1 class="h4 text-gray-900 mb-4">Default Admin</h1>
+                </div>
+                <form class="user" asp-action="CreateDefaultAdmin">
+                  <div class="form-group" style ="margin-bottom:30px">
+                    <span class="text-danger">@ViewBag.ErrorMessage</span>
+                    <input 
+                      name="UserName"
+                      class="form-control form-control-user"
+                      id="exampleInputEmail"
+                      aria-describedby="emailHelp"
+                      placeholder="Enter Email Address..."
+                    />
+                  </div>
+                  <div class="form-group" style ="margin-bottom:30px">
+                    <input name="Password"class="form-control form-control-user"id="exampleInputPassword"placeholder="Password"/>
+                  </div>
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox small" style ="margin-bottom:10px; margin-left:auto; margin-right:auto; ">
+                      <input type="checkbox"class="custom-control-input"id="customCheck"/>
+                      <label class="custom-control-label" for="customCheck">Remember Me</label>
+                    </div>
+                  </div>
+                  <input type="submit" class="btn btn-primary btn-user btn-block" style ="margin-left:auto; margin-right:auto; " value="Login">
+                </form>
+                <hr />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
