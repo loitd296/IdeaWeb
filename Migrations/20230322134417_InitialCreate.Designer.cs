@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IdeaWeb.Migrations
 {
     [DbContext(typeof(IdeaWebContext))]
-    [Migration("20230320140603_InitialCreate")]
+    [Migration("20230322134417_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -56,12 +56,15 @@ namespace IdeaWeb.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime?>("CloseDate")
+                        .IsRequired()
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("CloseDatePostIdea")
+                        .IsRequired()
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -152,7 +155,7 @@ namespace IdeaWeb.Migrations
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("CloseDateAcedamicId")
+                    b.Property<int>("CloseDateAcedamicId")
                         .HasColumnType("int");
 
                     b.Property<string>("Content")
@@ -332,9 +335,11 @@ namespace IdeaWeb.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("IdeaWeb.Models.CloseDateAcedamic", null)
+                    b.HasOne("IdeaWeb.Models.CloseDateAcedamic", "CloseDateAcedamic")
                         .WithMany("Ideas")
-                        .HasForeignKey("CloseDateAcedamicId");
+                        .HasForeignKey("CloseDateAcedamicId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("IdeaWeb.Models.User", "User")
                         .WithMany("Ideas")
@@ -343,6 +348,8 @@ namespace IdeaWeb.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
+
+                    b.Navigation("CloseDateAcedamic");
 
                     b.Navigation("User");
                 });

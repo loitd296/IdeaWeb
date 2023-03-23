@@ -62,6 +62,7 @@ public class AdminController : Controller
                 });
                 _context.UserRole.Add(new UserRole {userId = 1, roleId = 1});
                 await _context.SaveChangesAsync();
+                return RedirectToAction("Login","User");
             }
         }
         return View();

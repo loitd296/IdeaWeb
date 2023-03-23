@@ -1,0 +1,54 @@
+@model IdeaWeb.Models.User
+<div class="container" style="padding: 150px 0px 90px 0px">
+    <!-- Outer Row -->
+    <div class="row justify-content-center">
+        <div class="col-xl-10 col-lg-12 col-md-9">
+            <div class="card o-hidden border-0 shadow-lg my-5">
+                <div class="card-body p-0">
+                    <!-- Nested Row within Card Body -->
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="p-5">
+                                <form class="user" asp-action="changeUserPass">
+                                    <input type="hidden" name="id" value="@ViewBag.id" />
+                                    <div class="form-group" style="margin-bottom:30px">
+                                        <span style="color:red;">@ViewBag.erro</span>
+                                        <input name="Password" class="form-control form-control-user" id="InputPassword"
+                                            placeholder="Password" required="" />
+                                    </div>
+                                    <div class="form-group" style="margin-bottom:30px">
+                                        <input name="NewPassword" class="form-control form-control-user" id="NewPassword"
+                                            placeholder="New Password" required="" />
+                                    </div>
+                                    <div class="form-group" style="margin-bottom:30px">
+                                        <input name="RePassword" class="form-control form-control-user" id="RePassword"
+                                            placeholder="Re New Password" required="" />
+                                    </div>
+                                    <input type="submit" class="btn btn-primary btn-user btn-block"
+                                        style="margin-left:auto; margin-right:auto; " value="Change">
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const passwordInput = document.getElementById('NewPassword');
+    const confirmPasswordInput = document.getElementById('RePassword');
+
+    confirmPasswordInput.addEventListener('input', () => {
+        const passwordValue = passwordInput.value;
+        const confirmPasswordValue = confirmPasswordInput.value;
+
+        if (passwordValue === confirmPasswordValue) {
+            confirmPasswordInput.setCustomValidity("");
+        }
+        else {
+            confirmPasswordInput.setCustomValidity("Password not match");
+        }
+    });
+</script>

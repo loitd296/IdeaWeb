@@ -32,9 +32,9 @@ namespace IdeaWeb.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CloseDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    CloseDatePostIdea = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CloseDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CloseDatePostIdea = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -106,8 +106,8 @@ namespace IdeaWeb.Migrations
                     Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Date_Upload = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CategoryId = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    CloseDateAcedamicId = table.Column<int>(type: "int", nullable: true)
+                    CloseDateAcedamicId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -122,7 +122,8 @@ namespace IdeaWeb.Migrations
                         name: "FK_Idea_CloseDateAcedamic_CloseDateAcedamicId",
                         column: x => x.CloseDateAcedamicId,
                         principalTable: "CloseDateAcedamic",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Idea_User_UserId",
                         column: x => x.UserId,

@@ -20,12 +20,14 @@ namespace IdeaWeb.Controllers
     {
 
         private readonly IdeaWebContext _context;
+        private readonly IdeaWebContext _secondContext;
         const string SessionName = "_Name";
         const string SessionId = "_ID";
         const string SessionRole = "_Role";
         public UserController(IdeaWebContext context)
         {
             _context = context;
+            _secondContext = context;
 
         }
 
@@ -318,8 +320,45 @@ namespace IdeaWeb.Controllers
         }
         public IActionResult Login() { return View(); }
 
-        public IActionResult Profile() { return View(); }
-        public IActionResult EditProfile() { return View(); }
+        public async Task<IActionResult> Profile()
+        {
+            var userId = HttpContext.Session.GetInt32("_ID").GetValueOrDefault();
+
+            if (userId == 0)
+            {
+                return RedirectToAction("Login", "User");
+            }
+            var user = await _context.User.Include(u => u.Department).Include(u => u.comments).Include(u => u.Ideas)
+             .FirstOrDefaultAsync(u => u.id == userId);
+            ViewBag.comment = user.comments.Count();
+            ViewBag.idea = user.Ideas.Count();
+            ViewBag.userId = userId;
+            return View(user);
+        }
+        public async Task<IActionResult> EditProfile(int? id)
+        {
+            var user = await _context.User.FindAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["DepartmentId"] = new SelectList(_context.Department, "Id", "Name", user.DepartmentId);
+            return View(user);
+        }
+        [HttpPost]
+        public async Task<IActionResult> EditProfile([Bind("id,name,phone,dob,DepartmentId")] User user)
+        {
+            var userEdit = await _secondContext.User.FindAsync(user.id);
+            userEdit.name = user.name;
+            userEdit.phone = user.phone;
+            userEdit.DepartmentId = user.DepartmentId;
+            userEdit.dob = user.dob;
+            _context.Update(userEdit);
+            await _context.SaveChangesAsync();
+            ViewData["DepartmentId"] = new SelectList(_context.Department, "Id", "Name", user.DepartmentId);
+            return RedirectToAction("Profile");
+        }
         public IActionResult InputCodeRecoveryPass() { return View(); }
         public IActionResult ChangePass(string email, string password, string repassword)
         {
@@ -577,7 +616,7 @@ namespace IdeaWeb.Controllers
                     if (user.Department.Name == idea.User.Department.Name)
                     {
                         worksheet.Cells[row, 1].Value = idea.Name;
-                        worksheet.Cells[row, 2].Value = idea.Category.Name;;
+                        worksheet.Cells[row, 2].Value = idea.Category.Name; ;
                         worksheet.Cells[row, 3].Value = idea.Comments.Where(i => i.Status == 0).Count();
                         worksheet.Cells[row, 4].Value = idea.Like_Count;
                         worksheet.Cells[row, 5].Value = idea.Dislike_Count;
@@ -585,7 +624,7 @@ namespace IdeaWeb.Controllers
                         worksheet.Cells[row, 7].Value = idea.User.Department.Name;
                         row++;
                     }
-                   
+
                 }
                 row--;
                 String range = "A2:G" + row.ToString();
@@ -600,10 +639,42 @@ namespace IdeaWeb.Controllers
             stream.Position = 0;
             return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Idea.xlsx");
         }
-          public IActionResult Logout(){
+        public async Task<IActionResult> changeUserPass(int id)
+        {
+            var user = await _context.User.FindAsync(id);
+            ViewBag.id = user.id;
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> changeUserPass(int id, string password, string NewPassword, string RePassword)
+        {
+            var user = await _context.User.FindAsync(id);
+            Encode encode = new Encode();
+
+            password = encode.encode(password);
+            NewPassword = encode.encode(NewPassword);
+            if (user.password == password)
+            {
+                user.password =  NewPassword;
+                _context.Update(user);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("ChangPassSucess");
+            }
+            else
+            {
+                ViewBag.erro = "Your password is wrong";
+            }
+            ViewBag.id = id;
+            return View();
+        }
+        public IActionResult ChangPassSucess(){
+            return View();
+        }
+        public IActionResult Logout()
+        {
 
             HttpContext.Session.Clear();
-            return RedirectToAction("Login","user");
-          }
+            return RedirectToAction("Login", "user");
+        }
     }
 }
