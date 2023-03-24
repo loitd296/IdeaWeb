@@ -41,6 +41,23 @@ namespace IdeaWeb.Controllers
 
 
         }
+        [HttpGet]
+        public ActionResult Search(string query, int pg = 1)
+        {
+            ViewBag.Layout = "indexAdmin";
+            const int pageSize = 5;
+            if (pg < 1)
+                pg = 1;
+            int recsCount = _context.Idea.Count();
+            var pager = new Pager(recsCount, pg, pageSize);
+            int recSkip = (pg - 1) * pageSize;
+            this.ViewBag.Pager = pager;
+            // Query the data source using Entity Framework
+            var results = _context.Category.Skip(recSkip).Take(pager.PageSize).Where(d => d.Name.Contains(query)).ToList();
+
+            // Pass the results to the view
+            return View(results);
+        }
 
         // GET: Category/Details/5
         public async Task<IActionResult> Details(int? id)

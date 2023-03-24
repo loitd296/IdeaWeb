@@ -47,6 +47,23 @@ namespace IdeaWeb.Controllers
             //var ideaWebContext = _context.User.Include(u => u.Department);
             return View(data);
         }
+        [HttpGet]
+        public ActionResult Search(string query, int pg = 1)
+        {
+            ViewBag.Layout = "indexAdmin";
+            const int pageSize = 5;
+            if (pg < 1)
+                pg = 1;
+            int recsCount = _context.Idea.Count();
+            var pager = new Pager(recsCount, pg, pageSize);
+            int recSkip = (pg - 1) * pageSize;
+            this.ViewBag.Pager = pager;
+            // Query the data source using Entity Framework
+            var results = _context.UserRole.Include(u => u.user).ThenInclude(u => u.Department).Include(u => u.roles).Skip(recSkip).Take(pager.PageSize).Where(d => d.user.name.Contains(query)).ToList();
+
+            // Pass the results to the view
+            return View(results);
+        }
 
         // GET: User/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -655,7 +672,7 @@ namespace IdeaWeb.Controllers
             NewPassword = encode.encode(NewPassword);
             if (user.password == password)
             {
-                user.password =  NewPassword;
+                user.password = NewPassword;
                 _context.Update(user);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("ChangPassSucess");
@@ -667,7 +684,8 @@ namespace IdeaWeb.Controllers
             ViewBag.id = id;
             return View();
         }
-        public IActionResult ChangPassSucess(){
+        public IActionResult ChangPassSucess()
+        {
             return View();
         }
         public IActionResult Logout()

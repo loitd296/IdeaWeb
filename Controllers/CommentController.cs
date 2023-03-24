@@ -68,7 +68,13 @@ namespace IdeaWeb.Controllers
             {
                 return RedirectToAction("Login", "User");
             }
-            Console.WriteLine(ModelState.IsValid);
+            Console.WriteLine(ideaId);
+            var idea = _context.Idea.Include(i => i.CloseDateAcedamic).FirstOrDefault(i => i.Id == ideaId);
+            Console.WriteLine("------------" + idea.Name);
+            if (DateTime.Now > idea.CloseDateAcedamic.CloseDate)
+            {
+                return RedirectToAction("ErrorMessageForUser", "Comment", new { id = idea.Id });
+            }
             if (ModelState.IsValid)
             {
                 comment.ideaId = ideaId;
@@ -79,6 +85,13 @@ namespace IdeaWeb.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction("UserViewIdea", "Idea", new { id = ideaId });
             }
+            return View();
+        }
+        [HttpGet]
+        public IActionResult ErrorMessageForUser(int id)
+        {
+            ViewBag.Id = id;
+            ViewBag.AlertMsg = "The closing date for new ideas cannot exceed the final closing date!!!";
             return View();
         }
 

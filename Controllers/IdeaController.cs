@@ -26,12 +26,12 @@ namespace IdeaWeb.Controllers
         }
 
         // GET: Idea
-        public async Task<IActionResult> Index(int pg=1)
+        public async Task<IActionResult> Index(int pg = 1)
         {
             ViewBag.Layout = "indexAdmin";
             const int pageSize = 5;
-            if (pg<1)
-                pg=1;
+            if (pg < 1)
+                pg = 1;
             int recsCount = _context.Idea.Count();
             var pager = new Pager(recsCount, pg, pageSize);
             int recSkip = (pg - 1) * pageSize;
@@ -71,8 +71,8 @@ namespace IdeaWeb.Controllers
         public IActionResult Create()
         {
             ViewData["CloseDateAcedamicId"] = new SelectList(_context.CloseDateAcedamic, "Id", "Name");
-            ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Id");
-            ViewData["UserId"] = new SelectList(_context.User, "id", "id");
+            ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Name");
+            ViewData["UserId"] = new SelectList(_context.User, "id", "name");
             return View();
         }
 
@@ -83,7 +83,11 @@ namespace IdeaWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(IFormFile image, IFormFile document, [Bind("Id,Name,Content,Like_Count,Dislike_Count,File,Image,Date_Upload,CloseDateAcedamicId,CategoryId,UserId")] Idea idea)
         {
-
+            var closeDate = await _context.CloseDateAcedamic.FindAsync(idea.CloseDateAcedamicId);
+            if (idea.Date_Upload > closeDate.CloseDatePostIdea)
+            {
+                return RedirectToAction(nameof(ErrorMessage));
+            }
             if (ModelState.IsValid)
             {
                 string wwwRootPath = _hostEnvironment.WebRootPath;
@@ -111,6 +115,16 @@ namespace IdeaWeb.Controllers
             ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Id", idea.CategoryId);
             ViewData["UserId"] = new SelectList(_context.User, "id", "id", idea.UserId);
             return View(idea);
+        }
+        public IActionResult ErrorMessage()
+        {
+            ViewBag.AlertMsg = "The closing date for new ideas cannot exceed the final closing date!!!";
+            return View();
+        }
+        public IActionResult ErrorMessageForUser()
+        {
+            ViewBag.AlertMsg = "The closing date for new ideas cannot exceed the final closing date!!!";
+            return View();
         }
 
         // GET: Idea/Edit/5
@@ -278,13 +292,19 @@ namespace IdeaWeb.Controllers
 
         public IActionResult UserCreateIdea()
         {
+            ViewData["CloseDateAcedamicId"] = new SelectList(_context.CloseDateAcedamic, "Id", "Name");
             ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Name");
             return View();
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UserCreateIdea(IFormFile image, IFormFile document, [Bind("Id,Name,Content,File,Image,CategoryId")] Idea idea)
+        public async Task<IActionResult> UserCreateIdea(IFormFile image, IFormFile document, [Bind("Id,Name,Content,File,Image,CategoryId,CloseDateAcedamicId")] Idea idea)
         {
+            var closeDate = await _context.CloseDateAcedamic.FindAsync(idea.CloseDateAcedamicId);
+            if (DateTime.Now > closeDate.CloseDatePostIdea)
+            {
+                return RedirectToAction(nameof(ErrorMessageForUser));
+            }
             var userId = HttpContext.Session.GetInt32("_ID").GetValueOrDefault();
             if (userId == 0)
             {
@@ -317,6 +337,7 @@ namespace IdeaWeb.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["CloseDateAcedamicId"] = new SelectList(_context.CloseDateAcedamic, "Id", "Name", idea.CloseDateAcedamicId);
             ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Name", idea.CategoryId);
             return View(idea);
         }
@@ -334,11 +355,18 @@ namespace IdeaWeb.Controllers
             ViewBag.UserId = HttpContext.Session.GetInt32("_ID").GetValueOrDefault();
             return View(idea);
         }
-        public async Task<IActionResult> IdeaIndex()
+        public async Task<IActionResult> IdeaIndex(int pg = 1)
         {
-            var ideaWebContext = _context.Idea.Include(i => i.Category).Include(i => i.User).OrderByDescending(p => p.Date_Upload);
+            const int pageSize = 5;
+            if (pg < 1)
+                pg = 1;
+            int recsCount = _context.Category.Count();
+            var pager = new Pager(recsCount, pg, pageSize);
+            int recSkip = (pg - 1) * pageSize;
+            var data = _context.Idea.Include(i => i.Category).Include(i => i.User).OrderByDescending(p => p.Date_Upload).ToList();
+            this.ViewBag.Pager = pager;
             ViewBag.commentCount = _context.Comment.ToList();
-            return View(await ideaWebContext.ToListAsync());
+            return View(data);
         }
 
         public FileResult DocumentDownload(int id)
@@ -357,6 +385,40 @@ namespace IdeaWeb.Controllers
                 var fileStream = new MemoryStream(memoryStream.ToArray());
                 return File(fileStream, "application/zip", fileName);
             }
+        }
+        [HttpGet]
+        public ActionResult Search(string query, int pg = 1)
+        {
+            ViewBag.Layout = "indexAdmin";
+            const int pageSize = 5;
+            if (pg < 1)
+                pg = 1;
+            int recsCount = _context.Idea.Count();
+            var pager = new Pager(recsCount, pg, pageSize);
+            int recSkip = (pg - 1) * pageSize;
+            this.ViewBag.Pager = pager;
+            // Query the data source using Entity Framework
+            var results = _context.Idea.Include(i => i.CloseDateAcedamic).Include(i => i.Category).Include(i => i.User).Skip(recSkip).Take(pager.PageSize).Where(d => d.Name.Contains(query)).ToList();
+
+            // Pass the results to the view
+            return View(results);
+        }
+        public ActionResult SearchforUser(string query, int pg = 1)
+        {
+            
+            const int pageSize = 5;
+            if (pg < 1)
+                pg = 1;
+            int recsCount = _context.Idea.Count();
+            var pager = new Pager(recsCount, pg, pageSize);
+            int recSkip = (pg - 1) * pageSize;
+            this.ViewBag.Pager = pager;
+            // Query the data source using Entity Framework
+            ViewBag.commentCount = _context.Comment.ToList();
+            var results = _context.Idea.Include(i => i.Category).Include(i => i.User).OrderByDescending(p => p.Date_Upload).Skip(recSkip).Take(pager.PageSize).Where(d => d.Name.Contains(query)).ToList();
+
+            // Pass the results to the view
+            return View(results);
         }
     }
 }

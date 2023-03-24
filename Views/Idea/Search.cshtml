@@ -19,7 +19,7 @@
 <form asp-controller="Idea" asp-action="Search" method="get">
     <p>
         <input type="text" name="query" />
-        <button type="submit"class="button green --jb-modal">Search</button>
+       <button type="submit" class="button green --jb-modal">Search</button>
     </p>
 </form>
 <table class="table">
@@ -105,13 +105,13 @@
 <div class="flex items-center justify-between">
       @if (pager.TotalPages > 0)
       {
-        <div class="button">
+                    <div class="button">
           @for (var pge = pager.StartPage; pge <= pager.EndPage; pge++)
           {
             <div class="button">
-                <a type="button" class="btn btn-info" asp-controller="Idea" asp-action="Index" asp-route-pg="@pge">@pge</a>
+            <a type="button" class="btn btn-info" asp-controller="Idea" asp-action="Search" asp-route-pg="@pge">@pge</a>
             </div>
           }
-        </div>
+             </div>       
       }
-</div>
+          </div>
