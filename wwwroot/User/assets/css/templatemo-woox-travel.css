@@ -93,7 +93,54 @@ figcaption {
   border: 0;
   outline: 0;
 }
-
+.w-1\.0 {
+  width: 100%;
+}
+.w-0\.5 {
+  width: 50%;
+}
+.grow {
+  flex-grow: 1;
+}
+.border-radius-8 {
+  border-radius: 8px;
+}
+.border-radius-12 {
+  border-radius: 8px;
+}
+.border-0 {
+  border: 0px;
+}
+.white {
+  color: white;
+}
+.fw-500 {
+  font-weight: 500;
+}
+.text-center {
+  text-align: center;
+}
+.h-43 {
+  height: 43px;
+}
+.\#22b3c1 {
+  background-color: #22b3c1;
+}
+.\#157347 {
+  background-color: #157347;
+}
+.ml-14 {
+  margin-left: 14px;
+}
+.h-51 {
+  height: 51px;
+}
+.mb-80 {
+  margin-bottom: 80px;
+}
+.text-14 {
+  font-size: 14px;
+}
 .clearfix:after {
   content: ".";
   display: block;
@@ -101,6 +148,18 @@ figcaption {
   visibility: hidden;
   line-height: 0;
   height: 0;
+}
+
+.mb-70 {
+  margin-bottom: 70px;
+}
+.inline-block {
+  display: inline-block;
+}
+
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .clearfix {

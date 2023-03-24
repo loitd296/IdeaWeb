@@ -12,17 +12,29 @@
   }
 }
 
-
-<p>
-    <a asp-action="Create" class="button green --jb-modal">Create New</a>
-</p>
 <form asp-controller="Idea" asp-action="Search" method="get">
-    <p>
-        <input type="text" name="query" />
-        <button type="submit"class="button green --jb-modal">Search</button>
+    <p class="flex w-0.5 mx-auto">
+        <input type="text" name="query" class="grow border-radius-8 h-51" style = "border: 1px #d5d1d1 solid;" />
+        <button type="submit" class="btn btn-success ml-14 border-radius-12 text-14 fw-500">Search</button>
     </p>
 </form>
-<table class="table">
+<br>
+<p style="margin-bottom: 15px;">
+    <a asp-action="Create" class="button green --jb-modal">Create New</a>
+</p>
+
+<div class="card has-table">
+      <header class="card-header">
+        <p class="card-header-title">
+          <span class="icon"><i class="mdi mdi-account-multiple"></i></span>
+          Idea
+        </p>
+        <a href="#" class="card-header-icon">
+          <span class="icon"><i class="mdi mdi-reload"></i></span>
+        </a>
+      </header>
+      <div class="card-content">
+        <table class="table">
     <thead>
         <tr>
             <th>
@@ -102,6 +114,10 @@
 }
     </tbody>
 </table>
+        </div>
+        </div>
+
+
 <div class="flex items-center justify-between">
       @if (pager.TotalPages > 0)
       {
