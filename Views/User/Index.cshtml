@@ -102,9 +102,9 @@
             
 
             <td>
-                <a asp-action="Edit" asp-route-id="@item.userId" class="button blue --jb-modal"><i class="mdi mdi-square-edit-outline"></i></a> |
+                <a asp-action="Edit" asp-route-id="@item.userId" class="button blue --jb-modal"><i class="mdi mdi-square-edit-outline"></i></a> 
                 <a asp-controller="UserRole" asp-action="Edit" asp-route-id="@item.id" class="button blue --jb-modal">EDIT ROLE</a>
-                <a asp-action="Details" asp-route-id="@item.userId" class="button blue --jb-modal"><i class="mdi mdi-eye"></i></a> |
+                <a asp-action="Details" asp-route-id="@item.userId" class="button blue --jb-modal"><i class="mdi mdi-eye"></i></a> 
                 <a asp-action="Delete" asp-route-id="@item.userId" class="button red --jb-modal"><i class="mdi mdi-trash-can"></i></a>
             </td>
         </tr>
@@ -117,7 +117,7 @@
                     <div class="buttons">
           @for (var pge = pager.StartPage; pge <= pager.EndPage; pge++)
           {
-                              <a type="button" class="button active" style="color: black" asp-controller="User" asp-action="Index" asp-route-pg="@pge">@pge</a>
+                              <a type="button" class="button" style="color: black" asp-controller="User" asp-action="Index" asp-route-pg="@pge">@pge</a>
           }
                     </div>
       }

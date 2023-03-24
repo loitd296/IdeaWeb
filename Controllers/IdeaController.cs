@@ -44,6 +44,7 @@ namespace IdeaWeb.Controllers
         // GET: Idea/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            ViewBag.Layout = "indexAdmin";
             if (id == null)
             {
                 return NotFound();
@@ -70,6 +71,7 @@ namespace IdeaWeb.Controllers
         // GET: Idea/Create
         public IActionResult Create()
         {
+            ViewBag.Layout = "indexAdmin";
             ViewData["CloseDateAcedamicId"] = new SelectList(_context.CloseDateAcedamic, "Id", "Name");
             ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Name");
             ViewData["UserId"] = new SelectList(_context.User, "id", "name");
@@ -84,6 +86,7 @@ namespace IdeaWeb.Controllers
         public async Task<IActionResult> Create(IFormFile image, IFormFile document, [Bind("Id,Name,Content,Like_Count,Dislike_Count,File,Image,Date_Upload,CloseDateAcedamicId,CategoryId,UserId")] Idea idea)
         {
             var closeDate = await _context.CloseDateAcedamic.FindAsync(idea.CloseDateAcedamicId);
+
             if (idea.Date_Upload > closeDate.CloseDatePostIdea)
             {
                 return RedirectToAction(nameof(ErrorMessage));
@@ -109,6 +112,15 @@ namespace IdeaWeb.Controllers
                 idea.Image = fileName + extension;
                 _context.Add(idea);
                 await _context.SaveChangesAsync();
+                var checkCat = _context.Category.Find(idea.CategoryId);
+                var ideaCheck = _context.Idea.Find(idea.Id);
+                if (checkCat.Deleted_Status == 1)
+                {
+                    _context.Idea.Remove(ideaCheck);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(ErrorMessageCategory));
+                }
+
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CloseDateAcedamicId"] = new SelectList(_context.CloseDateAcedamic, "Id", "Name");
@@ -121,15 +133,32 @@ namespace IdeaWeb.Controllers
             ViewBag.AlertMsg = "The closing date for new ideas cannot exceed the final closing date!!!";
             return View();
         }
+        public IActionResult ErrorMessageCategory()
+        {
+            ViewBag.AlertMsg = "This category is unavailable, please try another!!!";
+            return View();
+        }
+        public IActionResult ErrorMessageCategoryEdit(int id)
+        {
+            ViewBag.id = id;
+            ViewBag.AlertMsg = "This category is unavailable, please try another!!!";
+            return View();
+        }
         public IActionResult ErrorMessageForUser()
         {
             ViewBag.AlertMsg = "The closing date for new ideas cannot exceed the final closing date!!!";
+            return View();
+        }
+        public IActionResult ErrorMessageForUserCat()
+        {
+            ViewBag.AlertMsg = "This category is unavailable, please try another!!!";
             return View();
         }
 
         // GET: Idea/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            ViewBag.Layout = "indexAdmin";
             if (id == null)
             {
                 return NotFound();
@@ -141,7 +170,7 @@ namespace IdeaWeb.Controllers
                 return NotFound();
             }
             ViewData["CloseDateAcedamicId"] = new SelectList(_context.CloseDateAcedamic, "Id", "Name", idea.CloseDateAcedamicId);
-            ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Id", idea.CategoryId);
+            ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Name", idea.CategoryId);
             ViewData["UserId"] = new SelectList(_context.User, "id", "id", idea.UserId);
             return View(idea);
         }
@@ -162,8 +191,18 @@ namespace IdeaWeb.Controllers
             {
                 try
                 {
-                    _context.Update(idea);
-                    await _context.SaveChangesAsync();
+                    var checkCat = _context.Category.Find(idea.CategoryId);
+                    if (checkCat.Deleted_Status == 0)
+                    {
+                        _context.Update(idea);
+                        await _context.SaveChangesAsync();
+                    }
+                    else
+                    {
+
+                        return RedirectToAction("ErrorMessageCategoryEdit", "Idea", new { id = id });
+                    }
+
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -185,8 +224,6 @@ namespace IdeaWeb.Controllers
         }
         public async Task<IActionResult> UserEditIdea(int? id)
         {
-
-
             var idea = await _context.Idea.FindAsync(id);
             if (idea == null)
             {
@@ -249,6 +286,7 @@ namespace IdeaWeb.Controllers
         // GET: Idea/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            ViewBag.Layout = "indexAdmin";
             if (id == null)
             {
                 return NotFound();
@@ -272,6 +310,7 @@ namespace IdeaWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            ViewBag.Layout = "indexAdmin";
             var idea = await _context.Idea.FindAsync(id);
             _context.Idea.Remove(idea);
             await _context.SaveChangesAsync();
@@ -360,10 +399,11 @@ namespace IdeaWeb.Controllers
             const int pageSize = 5;
             if (pg < 1)
                 pg = 1;
-            int recsCount = _context.Category.Count();
+            int recsCount = _context.Idea.Count();
             var pager = new Pager(recsCount, pg, pageSize);
             int recSkip = (pg - 1) * pageSize;
-            var data = _context.Idea.Include(i => i.Category).Include(i => i.User).OrderByDescending(p => p.Date_Upload).ToList();
+            this.ViewBag.Pager = pager;
+            var data = _context.Idea.Include(i => i.CloseDateAcedamic).Include(i => i.Category).Include(i => i.User).Skip(recSkip).Take(pager.PageSize).ToList();
             this.ViewBag.Pager = pager;
             ViewBag.commentCount = _context.Comment.ToList();
             return View(data);
@@ -371,7 +411,7 @@ namespace IdeaWeb.Controllers
 
         public FileResult DocumentDownload(int id)
         {
-
+            ViewBag.Layout = "indexAdmin";
             string wwwRootPath = _hostEnvironment.WebRootPath;
             var idea = _context.Idea.FirstOrDefault(e => e.Id == id);
             var file = wwwRootPath + "/Document/" + idea.File;
@@ -405,7 +445,6 @@ namespace IdeaWeb.Controllers
         }
         public ActionResult SearchforUser(string query, int pg = 1)
         {
-            
             const int pageSize = 5;
             if (pg < 1)
                 pg = 1;

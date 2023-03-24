@@ -325,6 +325,7 @@ namespace IdeaWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            ViewBag.Layout = "indexAdmin";
             var user = await _context.User.FindAsync(id);
             _context.User.Remove(user);
             await _context.SaveChangesAsync();
@@ -352,6 +353,7 @@ namespace IdeaWeb.Controllers
             ViewBag.userId = userId;
             return View(user);
         }
+        
         public async Task<IActionResult> EditProfile(int? id)
         {
             var user = await _context.User.FindAsync(id);

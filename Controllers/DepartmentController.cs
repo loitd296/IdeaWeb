@@ -123,6 +123,7 @@ namespace IdeaWeb.Controllers
         // GET: Department/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            ViewBag.Layout = "indexAdmin";
             if (id == null)
             {
                 return NotFound();
@@ -143,6 +144,7 @@ namespace IdeaWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            ViewBag.Layout = "indexAdmin";
             var department = await _context.Department.FindAsync(id);
             _context.Department.Remove(department);
             await _context.SaveChangesAsync();

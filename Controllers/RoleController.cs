@@ -22,12 +22,14 @@ namespace IdeaWeb.Controllers
         // GET: Role
         public async Task<IActionResult> Index()
         {
+            ViewBag.Layout = "indexAdmin";
             return View(await _context.Role.ToListAsync());
         }
 
         // GET: Role/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            ViewBag.Layout = "indexAdmin";
             if (id == null)
             {
                 return NotFound();
@@ -46,6 +48,7 @@ namespace IdeaWeb.Controllers
         // GET: Role/Create
         public IActionResult Create()
         {
+            ViewBag.Layout = "indexAdmin";
             return View();
         }
 
@@ -68,6 +71,7 @@ namespace IdeaWeb.Controllers
         // GET: Role/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            ViewBag.Layout = "indexAdmin";
             if (id == null)
             {
                 return NotFound();
@@ -119,6 +123,7 @@ namespace IdeaWeb.Controllers
         // GET: Role/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            ViewBag.Layout = "indexAdmin";
             if (id == null)
             {
                 return NotFound();
@@ -139,6 +144,7 @@ namespace IdeaWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            ViewBag.Layout = "indexAdmin";
             var role = await _context.Role.FindAsync(id);
             _context.Role.Remove(role);
             await _context.SaveChangesAsync();

@@ -32,10 +32,10 @@
                 @Html.DisplayNameFor(model => model.Content)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Like_Count)
+                Like
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Dislike_Count)
+                Dislike
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.File)
@@ -47,7 +47,7 @@
                 @Html.DisplayNameFor(model => model.Date_Upload)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CloseDateAcedamic)
+                Acedamic
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Category)
@@ -92,11 +92,9 @@
                 @Html.DisplayFor(modelItem => item.User.name)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id" class="button blue --jb-modal"><i class="mdi mdi-square-edit-outline"></i></a> |
-                <a asp-action="Details" asp-route-id="@item.Id"class="button blue --jb-modal"><i class="mdi mdi-eye"></i></a> |
-                <a asp-action="Delete" asp-route-id="@item.Id"class="button red --jb-modal"><i class="mdi mdi-trash-can"></i></a>
-                <a asp-controller="Rating" asp-action="AddLike" asp-route-id="@item.Id">Like</a>
-                <a asp-controller="Rating" asp-action="AddDislike" asp-route-id="@item.Id">Dislike</a>
+                <a asp-action="Edit" asp-route-id="@item.Id" class="button small blue --jb-modal"><i class="mdi mdi-square-edit-outline"></i></a> 
+                <a asp-action="Details" asp-route-id="@item.Id"class="button small blue --jb-modal"><i class="mdi mdi-eye"></i></a> 
+                <a asp-action="Delete" asp-route-id="@item.Id"class="button small red --jb-modal"><i class="mdi mdi-trash-can"></i></a>
             </td>
         </tr>
 }
@@ -105,12 +103,12 @@
 <div class="flex items-center justify-between">
       @if (pager.TotalPages > 0)
       {
-        <div class="button">
+        <div>
           @for (var pge = pager.StartPage; pge <= pager.EndPage; pge++)
           {
-            <div class="button">
-                <a type="button" class="btn btn-info" asp-controller="Idea" asp-action="Index" asp-route-pg="@pge">@pge</a>
-            </div>
+            
+                <a type="button" class="button" asp-controller="Idea" asp-action="Index" asp-route-pg="@pge">@pge</a>
+            
           }
         </div>
       }

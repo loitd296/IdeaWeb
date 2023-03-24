@@ -22,6 +22,7 @@ namespace IdeaWeb.Controllers
         // GET: UserRole
         public async Task<IActionResult> Index()
         {
+            ViewBag.Layout = "indexAdmin";
             var ideaWebContext = _context.UserRole.Include(u => u.roles).Include(u => u.user);
             return View(await ideaWebContext.ToListAsync());
         }
@@ -29,6 +30,7 @@ namespace IdeaWeb.Controllers
         // GET: UserRole/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            ViewBag.Layout = "indexAdmin";
             if (id == null)
             {
                 return NotFound();
@@ -49,6 +51,7 @@ namespace IdeaWeb.Controllers
         // GET: UserRole/Create
         public IActionResult Create()
         {
+            ViewBag.Layout = "indexAdmin";
             ViewData["roleId"] = new SelectList(_context.Role, "id", "id");
             ViewData["userId"] = new SelectList(_context.User, "id", "id");
             return View();
@@ -75,6 +78,7 @@ namespace IdeaWeb.Controllers
         // GET: UserRole/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            ViewBag.Layout = "indexAdmin";
             if (id == null)
             {
                 return NotFound();
@@ -130,6 +134,7 @@ namespace IdeaWeb.Controllers
         // GET: UserRole/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            ViewBag.Layout = "indexAdmin";
             if (id == null)
             {
                 return NotFound();
@@ -152,6 +157,7 @@ namespace IdeaWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            ViewBag.Layout = "indexAdmin";
             var userRole = await _context.UserRole.FindAsync(id);
             _context.UserRole.Remove(userRole);
             await _context.SaveChangesAsync();

@@ -25,7 +25,6 @@ namespace IdeaWeb.Controllers
         // GET: Category
         public async Task<IActionResult> Index(int pg = 1)
         {
-
             ViewBag.Layout = "indexAdmin";
             const int pageSize = 5;
             if (pg < 1)
@@ -35,11 +34,7 @@ namespace IdeaWeb.Controllers
             int recSkip = (pg - 1) * pageSize;
             var data = _context.Category.Skip(recSkip).Take(pager.PageSize).ToList();
             this.ViewBag.Pager = pager;
-
             return View(data);
-
-
-
         }
         [HttpGet]
         public ActionResult Search(string query, int pg = 1)
@@ -62,6 +57,7 @@ namespace IdeaWeb.Controllers
         // GET: Category/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            ViewBag.Layout = "indexAdmin";
             if (id == null)
             {
                 return NotFound();
@@ -80,6 +76,7 @@ namespace IdeaWeb.Controllers
         // GET: Category/Create
         public IActionResult Create()
         {
+            ViewBag.Layout = "indexAdmin";
             return View();
         }
 
@@ -102,6 +99,7 @@ namespace IdeaWeb.Controllers
         // GET: Category/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            ViewBag.Layout = "indexAdmin";
             if (id == null)
             {
                 return NotFound();
@@ -153,6 +151,7 @@ namespace IdeaWeb.Controllers
         // GET: Category/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            ViewBag.Layout = "indexAdmin";
             if (id == null)
             {
                 return NotFound();
@@ -173,8 +172,18 @@ namespace IdeaWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            ViewBag.Layout = "indexAdmin";
             var category = await _context.Category.FindAsync(id);
-            _context.Category.Remove(category);
+            var IdeaHaveCategory = _context.Idea.Where(i => i.CategoryId == id).ToList();
+            Console.WriteLine("----------"+ IdeaHaveCategory.Count());
+            if(IdeaHaveCategory.Count() <= 0){
+                _context.Category.Remove(category);
+            }else if (IdeaHaveCategory.Count() > 0){
+                category.Status = 0;
+                category.Deleted_Status = 1;
+                 _context.Update(category);
+            }
+            
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

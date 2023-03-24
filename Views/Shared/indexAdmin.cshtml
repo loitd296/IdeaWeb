@@ -8,7 +8,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Dashboard - Admin One Tailwind CSS Admin Dashboard</title>
+  <title>IdeaWeb-Manage</title>
 
   <!-- Tailwind is included -->
   <link href="~/css/main.css?v=1628755089081" rel="stylesheet">
@@ -59,14 +59,6 @@
 <body>
   <div id="app">
     <nav id="navbar-main" class="navbar is-fixed-top">
-      <div class="navbar-brand">
-        <a class="navbar-item mobile-aside-button">
-          <span class="icon"><i class="mdi mdi-forwardburger mdi-24px"></i></span>
-        </a>
-        <div class="navbar-item">
-          <div class="control"><input placeholder="Search everywhere..." class="input"></div>
-        </div>
-      </div>
       <div class="navbar-brand is-right">
         <a class="navbar-item --jb-navbar-menu-toggle" data-target="navbar-menu">
           <span class="icon"><i class="mdi mdi-dots-vertical mdi-24px"></i></span>
@@ -83,20 +75,12 @@
               </span>
             </a>
             <div class="navbar-dropdown">
-              <a href="#" class="navbar-item">
+              <a href="~/User/Profile" class="navbar-item">
                 <span class="icon" style="color: black"><i class="mdi mdi-account"></i></span>
                 <span style="color: black">My Profile</span>
               </a>
-              <a class="navbar-item">
-                <span class="icon" style="color: black"><i class="mdi mdi-settings"></i></span>
-                <span style="color: black">Settings</span>
-              </a>
-              <a class="navbar-item">
-                <span class="icon" style="color: black"><i class="mdi mdi-email"></i></span>
-                <span style="color: black">Messages</span>
-              </a>
               <hr class="navbar-divider">
-              <a class="navbar-item">
+              <a href="~/User/Logout" class="navbar-item">
                 <span class="icon" style="color: black"><i class="mdi mdi-logout"></i></span>
                 <span style="color: black">Log Out</span>
               </a>
@@ -110,7 +94,7 @@
   <aside class="aside is-placed-left is-expanded">
     <div class="aside-tools">
       <div>
-        Ideas <b class="font-black">Website</b>
+       <a href="https://localhost:7188/Admin/Index">Ideas <b class="font-black">Website</b></a> 
       </div>
     </div>
     <div class="menu is-menu-main">

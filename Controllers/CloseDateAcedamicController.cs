@@ -62,7 +62,9 @@ namespace IdeaWeb.Controllers
             if (ModelState.IsValid)
             {
 
-                if (closeDateAcedamic.CloseDate > closeDateAcedamic.CloseDatePostIdea)
+                if (closeDateAcedamic.CloseDate > closeDateAcedamic.CloseDatePostIdea && 
+            closeDateAcedamic.CloseDate > DateTime.Now && 
+            closeDateAcedamic.CloseDatePostIdea > DateTime.Now)
                 {
                     _context.Add(closeDateAcedamic);
                     await _context.SaveChangesAsync();
@@ -109,8 +111,9 @@ namespace IdeaWeb.Controllers
             {
                 return NotFound();
             }
-
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && closeDateAcedamic.CloseDate > closeDateAcedamic.CloseDatePostIdea &&
+            closeDateAcedamic.CloseDate > DateTime.Now && 
+            closeDateAcedamic.CloseDatePostIdea > DateTime.Now)
             {
                 try
                 {
@@ -129,6 +132,10 @@ namespace IdeaWeb.Controllers
                     }
                 }
                 return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                return RedirectToAction(nameof(ErrorMessage));
             }
             return View(closeDateAcedamic);
         }
