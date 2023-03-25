@@ -13,6 +13,7 @@ namespace IdeaWeb.Controllers
 {
     public class CategoryController : Controller
     {
+
         private readonly IdeaWebContext _context;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
@@ -25,8 +26,8 @@ namespace IdeaWeb.Controllers
         // GET: Category
         public async Task<IActionResult> Index(int pg = 1)
         {
-
             ViewBag.Layout = "indexAdmin";
+
             const int pageSize = 5;
             if (pg < 1)
                 pg = 1;
@@ -62,6 +63,8 @@ namespace IdeaWeb.Controllers
         // GET: Category/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            ViewBag.Layout = "indexAdmin";
+
             if (id == null)
             {
                 return NotFound();
@@ -80,6 +83,8 @@ namespace IdeaWeb.Controllers
         // GET: Category/Create
         public IActionResult Create()
         {
+            ViewBag.Layout = "indexAdmin";
+
             return View();
         }
 
@@ -90,6 +95,8 @@ namespace IdeaWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Status,Deleted_Status")] Category category)
         {
+            ViewBag.Layout = "indexAdmin";
+
             if (ModelState.IsValid)
             {
                 _context.Add(category);
@@ -102,6 +109,8 @@ namespace IdeaWeb.Controllers
         // GET: Category/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            ViewBag.Layout = "indexAdmin";
+
             if (id == null)
             {
                 return NotFound();
@@ -122,6 +131,8 @@ namespace IdeaWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Status,Deleted_Status")] Category category)
         {
+            ViewBag.Layout = "indexAdmin";
+
             if (id != category.Id)
             {
                 return NotFound();
@@ -153,6 +164,7 @@ namespace IdeaWeb.Controllers
         // GET: Category/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            ViewBag.Layout = "indexAdmin";
             if (id == null)
             {
                 return NotFound();
@@ -173,6 +185,8 @@ namespace IdeaWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            ViewBag.Layout = "indexAdmin";
+
             var category = await _context.Category.FindAsync(id);
             _context.Category.Remove(category);
             await _context.SaveChangesAsync();

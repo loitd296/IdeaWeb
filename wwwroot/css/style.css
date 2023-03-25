@@ -52,3 +52,25 @@
 .text-14 {
   font-size: 14px;
 }
+.p-0 {
+  padding: 0;
+}
+
+h1 {
+  font-size: 30px;
+  font-weight: 600;
+  text-align: center;
+}
+
+label {
+  display: inline-block;
+  margin-bottom: 8px;
+}
+
+.form-control {
+  margin-bottom: 8px;
+}
+
+dt {
+  margin-bottom: 12px;
+}

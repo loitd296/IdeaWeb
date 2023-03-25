@@ -75,6 +75,7 @@ namespace IdeaWeb.Controllers
         // GET: UserRole/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            ViewBag.Layout = "indexAdmin";
             if (id == null)
             {
                 return NotFound();
@@ -97,6 +98,7 @@ namespace IdeaWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("id,userId,roleId")] UserRole userRole)
         {
+            ViewBag.Layout = "indexAdmin";
             if (id != userRole.id)
             {
                 return NotFound();

@@ -44,6 +44,8 @@ namespace IdeaWeb.Controllers
         // GET: Idea/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            ViewBag.Layout = "indexAdmin";
+
             if (id == null)
             {
                 return NotFound();
@@ -70,6 +72,8 @@ namespace IdeaWeb.Controllers
         // GET: Idea/Create
         public IActionResult Create()
         {
+            ViewBag.Layout = "indexAdmin";
+
             ViewData["CloseDateAcedamicId"] = new SelectList(_context.CloseDateAcedamic, "Id", "Name");
             ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Name");
             ViewData["UserId"] = new SelectList(_context.User, "id", "name");
@@ -83,6 +87,8 @@ namespace IdeaWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(IFormFile image, IFormFile document, [Bind("Id,Name,Content,Like_Count,Dislike_Count,File,Image,Date_Upload,CloseDateAcedamicId,CategoryId,UserId")] Idea idea)
         {
+            ViewBag.Layout = "indexAdmin";
+
             var closeDate = await _context.CloseDateAcedamic.FindAsync(idea.CloseDateAcedamicId);
             if (idea.Date_Upload > closeDate.CloseDatePostIdea)
             {
@@ -130,6 +136,7 @@ namespace IdeaWeb.Controllers
         // GET: Idea/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            ViewBag.Layout = "indexAdmin";
             if (id == null)
             {
                 return NotFound();
@@ -153,6 +160,8 @@ namespace IdeaWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Content,Like_Count,Dislike_Count,File,Image,Date_Upload,CloseDateAcedamicId,CategoryId,UserId")] Idea idea)
         {
+            ViewBag.Layout = "indexAdmin";
+
             if (id != idea.Id)
             {
                 return NotFound();
@@ -249,6 +258,8 @@ namespace IdeaWeb.Controllers
         // GET: Idea/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            ViewBag.Layout = "indexAdmin";
+
             if (id == null)
             {
                 return NotFound();
@@ -405,7 +416,7 @@ namespace IdeaWeb.Controllers
         }
         public ActionResult SearchforUser(string query, int pg = 1)
         {
-            
+
             const int pageSize = 5;
             if (pg < 1)
                 pg = 1;
