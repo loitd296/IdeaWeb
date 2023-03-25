@@ -2,7 +2,7 @@
 
 @{
   ViewData["Title"] = "Index";
-  
+
   Pager pager = new Pager();
   int pageNo = 0;
 
@@ -13,22 +13,24 @@
   }
   var role = Context.Session.GetString("_Role") != null ? Context.Session.GetString("_Role") : null;
   string message = "You do not have permission to access this page";
-    if (role == "Staff"){
-     <script>
-        alert("@message");
-        window.location.href = "https://localhost:7188/User/login";
+  if (role == "Staff")
+  {
+    <script>
+                    alert("@message");
+                    window.location.href = "https://localhost:7188/User/login";
     </script>
   }
 }
 
 
 <form asp-controller="Category" asp-action="Search" method="get">
-    <p>
-        <input type="text" name="query" />
-       <button type="submit" class="button green --jb-modal">Search</button>
+    <p class="flex w-0.5 mx-auto">
+        <input type="text" name="query" class="grow border-radius-8 h-51" style = "border: 1px #d5d1d1 solid;" />
+        <button type="submit" class="btn btn-success ml-14 border-radius-12 text-14 fw-500">Search</button>
     </p>
 </form>
-<p>
+<br>
+<p style="margin-bottom: 15px;">
     <a asp-action="Create" class="button green --jb-modal">Create New</a>
 </p>
 <div class="card has-table">
@@ -62,14 +64,14 @@
           <tbody>
         @foreach (var item in Model)
         {
-              <tr>
-                <td>
+                    <tr>
+                      <td>
               @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
+                      </td>
+                      <td>
               @Html.DisplayFor(modelItem => item.Status)
-                </td>
-                <td>
+                      </td>
+                      <td>
               @Html.DisplayFor(modelItem => item.Deleted_Status)
                 </td>
                 <td>
@@ -89,10 +91,10 @@
           {
                               <a type="button" class="button" style="color: black" asp-controller="Category" asp-action="Index" asp-route-pg="@pge">@pge</a>
           }
-                    </div>
+                          </div>
       }
           </div>
         </div>
       </div>
     </div>
-    
+

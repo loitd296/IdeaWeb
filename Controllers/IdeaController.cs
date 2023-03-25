@@ -85,6 +85,8 @@ namespace IdeaWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(IFormFile image, IFormFile document, [Bind("Id,Name,Content,Like_Count,Dislike_Count,File,Image,Date_Upload,CloseDateAcedamicId,CategoryId,UserId")] Idea idea)
         {
+            ViewBag.Layout = "indexAdmin";
+
             var closeDate = await _context.CloseDateAcedamic.FindAsync(idea.CloseDateAcedamicId);
 
             if (idea.Date_Upload > closeDate.CloseDatePostIdea)
@@ -188,6 +190,8 @@ namespace IdeaWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Content,Like_Count,Dislike_Count,File,Image,Date_Upload,CloseDateAcedamicId,CategoryId,UserId")] Idea idea)
         {
+            ViewBag.Layout = "indexAdmin";
+
             if (id != idea.Id)
             {
                 return NotFound();

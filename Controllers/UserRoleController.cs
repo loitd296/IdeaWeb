@@ -101,6 +101,7 @@ namespace IdeaWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("id,userId,roleId")] UserRole userRole)
         {
+            ViewBag.Layout = "indexAdmin";
             if (id != userRole.id)
             {
                 return NotFound();

@@ -13,6 +13,7 @@ namespace IdeaWeb.Controllers
 {
     public class CategoryController : Controller
     {
+
         private readonly IdeaWebContext _context;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
@@ -26,6 +27,7 @@ namespace IdeaWeb.Controllers
         public async Task<IActionResult> Index(int pg = 1)
         {
             ViewBag.Layout = "indexAdmin";
+
             const int pageSize = 5;
             if (pg < 1)
                 pg = 1;
@@ -87,6 +89,8 @@ namespace IdeaWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Status,Deleted_Status")] Category category)
         {
+            ViewBag.Layout = "indexAdmin";
+
             if (ModelState.IsValid)
             {
                 _context.Add(category);
@@ -120,6 +124,8 @@ namespace IdeaWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Status,Deleted_Status")] Category category)
         {
+            ViewBag.Layout = "indexAdmin";
+
             if (id != category.Id)
             {
                 return NotFound();

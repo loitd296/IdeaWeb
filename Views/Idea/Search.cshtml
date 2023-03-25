@@ -13,15 +13,16 @@
 }
 
 
-<p>
-    <a asp-action="Create" class="button green --jb-modal">Create New</a>
-</p>
 <form asp-controller="Idea" asp-action="Search" method="get">
-    <p>
-        <input type="text" name="query" />
-       <button type="submit" class="button green --jb-modal">Search</button>
+    <p class="flex w-0.5 mx-auto">
+        <input type="text" name="query" class="grow border-radius-8 h-51" style = "border: 1px #d5d1d1 solid;" />
+        <button type="submit" class="btn btn-success ml-14 border-radius-12 text-14 fw-500">Search</button>
     </p>
 </form>
+<br>
+<p style="margin-bottom: 15px;">
+    <a asp-action="Create" class="button green --jb-modal">Create New</a>
+</p>
 <table class="table">
     <thead>
         <tr>
