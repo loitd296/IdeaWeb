@@ -154,6 +154,12 @@ namespace IdeaWeb.Controllers
             ViewBag.AlertMsg = "This category is unavailable, please try another!!!";
             return View();
         }
+        public IActionResult ErrorMessageForUserCatEdit(int id)
+        {
+            ViewBag.id = id;
+            ViewBag.AlertMsg = "This category is unavailable, please try another!!!";
+            return View();
+        }
 
         // GET: Idea/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -265,8 +271,18 @@ namespace IdeaWeb.Controllers
                     idea.File = documentName;
 
                 }
-                _context.Update(idea);
-                await _context.SaveChangesAsync();
+                var checkCat = _context.Category.Find(Editidea.CategoryId);
+                if (checkCat.Deleted_Status == 0)
+                {
+                    _context.Update(idea);
+                    await _context.SaveChangesAsync();
+                }
+                else
+                {
+                    return RedirectToAction("ErrorMessageForUserCatEdit", "Idea", new { id = Editidea.Id });
+                }
+
+
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -374,6 +390,14 @@ namespace IdeaWeb.Controllers
                 idea.Image = fileName + extension;
                 _context.Add(idea);
                 await _context.SaveChangesAsync();
+                var checkCat = _context.Category.Find(idea.CategoryId);
+                var ideaCheck = _context.Idea.Find(idea.Id);
+                if (checkCat.Deleted_Status == 1)
+                {
+                    _context.Idea.Remove(ideaCheck);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(ErrorMessageForUserCat));
+                }
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CloseDateAcedamicId"] = new SelectList(_context.CloseDateAcedamic, "Id", "Name", idea.CloseDateAcedamicId);

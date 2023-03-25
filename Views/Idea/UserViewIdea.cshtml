@@ -39,11 +39,10 @@
                       <span class="p-20 text-14">Close Date</span>
                       @if (Model.UserId == ViewBag.UserId)
                       {
-                        <span class="p-20 text-14"> Edit Your Idea : <a asp-action="Edit" asp-route-id="@ViewBag.id"><i
-                              class="fas fa-edit"></i></a></span>
-                      }
-                      <span class="p-20 text-14"> Edit Your Idea : <a asp-action="UserEditIdea"
+                                             <span class="p-20 text-14"> Edit Your Idea : <a asp-action="UserEditIdea"
                           asp-route-id="@ViewBag.id"><i class="fas fa-edit"></i></a></span>
+                      }
+ 
                       <span class="p-20 text-14"> Download Document : <a asp-action="DocumentDownload"
                           asp-route-id="@ViewBag.id"><i class="fa-solid fa-download"> </i></a></span>
                     </div>
