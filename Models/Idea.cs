@@ -11,17 +11,21 @@ namespace IdeaWeb.Models
     public class Idea
     {
         public int Id { get; set; }
+        [Required]
         public string? Name { get; set; }
+        [Required]
         public string? Content {get; set; }
         public int? Like_Count { get; set; }
         public int? Dislike_Count { get; set; }
         public string? File { get; set; }
         public string? Image { get; set; }
+        [Required]
         [DataType(DataType.Date)]
         public DateTime? Date_Upload { get; set; }
-
+        [Required]
         public int CategoryId { get; set; }
         public Category? Category { get; set; }
+        [Required]
         public int CloseDateAcedamicId { get; set; }
         public CloseDateAcedamic? CloseDateAcedamic { get; set; }
 

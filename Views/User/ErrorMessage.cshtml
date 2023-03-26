@@ -1,0 +1,10 @@
+@{ 
+    if(ViewBag.AlertMsg != null) {
+        <text>
+            <script>
+                alert('@ViewBag.AlertMsg');
+                window.location.href = "/User/Create";
+            </script>
+        </text>
+    }
+}

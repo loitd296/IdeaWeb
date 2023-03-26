@@ -6,20 +6,20 @@ public class User
 {
 
     public int id { get; set; }
-
+    [Required]
     public string? name { get; set; }
-
+    [Required]
     public string? phone { get; set; }
 
     [DataType(DataType.Date)]
     public DateTime? dob { get; set; }
-
+    [Required]
     public string? email { get; set; }
-
+    [Required]
     public string? password { get; set; }
-
-    public int flag {get; set;} = 0;
-
+    [Required]
+    public int flag { get; set; } = 0;
+    [Required]
     public int DepartmentId { get; set; }
 
     public Department? Department { get; set; }

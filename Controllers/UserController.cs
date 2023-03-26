@@ -62,6 +62,10 @@ namespace IdeaWeb.Controllers
             var results = _context.UserRole.Include(u => u.user).ThenInclude(u => u.Department).Include(u => u.roles).Skip(recSkip).Take(pager.PageSize).Where(d => d.user.name.Contains(query)).ToList();
 
             // Pass the results to the view
+            if (results.Count() == 0)
+            {
+                return RedirectToAction("Index");
+            }
             return View(results);
         }
 
@@ -101,7 +105,11 @@ namespace IdeaWeb.Controllers
         public async Task<IActionResult> Create([Bind("id,name,phone,dob,email,password,flag,DepartmentId")] User user)
         {
             var Encode = new Encode();
-            string en_password = Encode.encode(user.password.ToString());
+            string en_password;
+            if(user.password == null){
+                return View("Error");
+            }
+            en_password = Encode.encode(user.password.ToString());
             if (ModelState.IsValid)
             {
                 user.password = en_password;
@@ -129,6 +137,11 @@ namespace IdeaWeb.Controllers
             }
             ViewData["DepartmentId"] = new SelectList(_context.Department, "Id", "Id", user.DepartmentId);
             return View(user);
+        }
+        public IActionResult ErrorMessage()
+        {
+            ViewBag.AlertMsg = "You need to create password for this user account";
+            return View();
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -353,7 +366,7 @@ namespace IdeaWeb.Controllers
             ViewBag.userId = userId;
             return View(user);
         }
-        
+
         public async Task<IActionResult> EditProfile(int? id)
         {
             var user = await _context.User.FindAsync(id);

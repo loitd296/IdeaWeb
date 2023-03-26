@@ -53,6 +53,10 @@ namespace IdeaWeb.Controllers
             var results = _context.Category.Skip(recSkip).Take(pager.PageSize).Where(d => d.Name.Contains(query)).ToList();
 
             // Pass the results to the view
+            if (results.Count() == 0)
+            {
+                return RedirectToAction("Index");
+            }
             return View(results);
         }
 
@@ -93,6 +97,8 @@ namespace IdeaWeb.Controllers
 
             if (ModelState.IsValid)
             {
+                category.Status = 1;
+                category.Deleted_Status = 0;
                 _context.Add(category);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -122,19 +128,26 @@ namespace IdeaWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Status,Deleted_Status")] Category category)
+        public async Task<IActionResult> Edit(int id, bool DeleteCheckbox, bool CancleDeleteCheckbox,[Bind("Id,Name,Status,Deleted_Status")] Category category)
         {
             ViewBag.Layout = "indexAdmin";
-
+            
             if (id != category.Id)
             {
                 return NotFound();
             }
-
             if (ModelState.IsValid)
             {
                 try
                 {
+                    if(DeleteCheckbox == true){
+                        category.Status = 0;
+                        category.Deleted_Status=1;
+                    }
+                    if(CancleDeleteCheckbox == true){
+                        category.Status = 1;
+                        category.Deleted_Status=0;
+                    }
                     _context.Update(category);
                     await _context.SaveChangesAsync();
                 }
@@ -181,15 +194,18 @@ namespace IdeaWeb.Controllers
             ViewBag.Layout = "indexAdmin";
             var category = await _context.Category.FindAsync(id);
             var IdeaHaveCategory = _context.Idea.Where(i => i.CategoryId == id).ToList();
-            Console.WriteLine("----------"+ IdeaHaveCategory.Count());
-            if(IdeaHaveCategory.Count() <= 0){
+            Console.WriteLine("----------" + IdeaHaveCategory.Count());
+            if (IdeaHaveCategory.Count() <= 0)
+            {
                 _context.Category.Remove(category);
-            }else if (IdeaHaveCategory.Count() > 0){
+            }
+            else if (IdeaHaveCategory.Count() > 0)
+            {
                 category.Status = 0;
                 category.Deleted_Status = 1;
-                 _context.Update(category);
+                _context.Update(category);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

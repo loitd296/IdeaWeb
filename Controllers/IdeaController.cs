@@ -73,7 +73,7 @@ namespace IdeaWeb.Controllers
         {
             ViewBag.Layout = "indexAdmin";
             ViewData["CloseDateAcedamicId"] = new SelectList(_context.CloseDateAcedamic, "Id", "Name");
-            ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Name");
+            ViewData["CategoryId"] = new SelectList(_context.Category.Where(d => d.Status == 1), "Id", "Name");
             ViewData["UserId"] = new SelectList(_context.User, "id", "name");
             return View();
         }
@@ -352,7 +352,7 @@ namespace IdeaWeb.Controllers
         public IActionResult UserCreateIdea()
         {
             ViewData["CloseDateAcedamicId"] = new SelectList(_context.CloseDateAcedamic, "Id", "Name");
-            ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Name");
+            ViewData["CategoryId"] = new SelectList(_context.Category.Where(d => d.Status == 1), "Id", "Name");
             return View();
         }
         [HttpPost]
@@ -469,6 +469,10 @@ namespace IdeaWeb.Controllers
             var results = _context.Idea.Include(i => i.CloseDateAcedamic).Include(i => i.Category).Include(i => i.User).Skip(recSkip).Take(pager.PageSize).Where(d => d.Name.Contains(query)).ToList();
 
             // Pass the results to the view
+            if (results.Count() == 0)
+            {
+                return RedirectToAction("Index");
+            }
             return View(results);
         }
         public ActionResult SearchforUser(string query, int pg = 1)
@@ -485,6 +489,10 @@ namespace IdeaWeb.Controllers
             var results = _context.Idea.Include(i => i.Category).Include(i => i.User).OrderByDescending(p => p.Date_Upload).Skip(recSkip).Take(pager.PageSize).Where(d => d.Name.Contains(query)).ToList();
 
             // Pass the results to the view
+            if (results.Count() == 0)
+            {
+                return RedirectToAction("IdeaIndex");
+            }
             return View(results);
         }
     }

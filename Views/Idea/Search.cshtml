@@ -96,8 +96,6 @@
                 <a asp-action="Edit" asp-route-id="@item.Id" class="button blue --jb-modal"><i class="mdi mdi-square-edit-outline"></i></a> |
                 <a asp-action="Details" asp-route-id="@item.Id"class="button blue --jb-modal"><i class="mdi mdi-eye"></i></a> |
                 <a asp-action="Delete" asp-route-id="@item.Id"class="button red --jb-modal"><i class="mdi mdi-trash-can"></i></a>
-                <a asp-controller="Rating" asp-action="AddLike" asp-route-id="@item.Id">Like</a>
-                <a asp-controller="Rating" asp-action="AddDislike" asp-route-id="@item.Id">Dislike</a>
             </td>
         </tr>
 }
