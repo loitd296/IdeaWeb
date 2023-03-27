@@ -1,4 +1,15 @@
 @model IdeaWeb.Models.Idea
+@{
+    Pager pager = new Pager();
+    @* IEnumerable<T> enumerablePager = (IEnumerable<T>)pager; *@
+  int pageNo = 0;
+
+  if (ViewBag.Pager != null)
+  {
+    pager = ViewBag.Pager;
+    pageNo = pager.CurrentPage;
+  }
+}
 <div class="visit-country">
   <div class="container">
     <div class="row">
@@ -112,7 +123,15 @@
                 </p>
               </div>
             }
+             <div class="button">
+          @for (var pge = pager.StartPage; pge <= ViewBag.commentCount/2 - 1; pge++)
+          {
+            <a type="button" class="btn btn-info" asp-controller="Idea" asp-action="UserViewIdea" asp-route-pg="@pge">@pge</a>
           }
+         </div>   
+          }
+   
+
         </div>
       </div>
     </div>
