@@ -106,7 +106,8 @@ namespace IdeaWeb.Controllers
         {
             var Encode = new Encode();
             string en_password;
-            if(user.password == null){
+            if (user.password == null)
+            {
                 return RedirectToAction("ErrorInputPasswordMessage");
             }
             en_password = Encode.encode(user.password.ToString());
@@ -152,10 +153,27 @@ namespace IdeaWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(bool AgreeCheckbox, [Bind("id,name,phone,dob,email,password,flag,DepartmentId")] User user, String repassword)
         {
+            var UserExists = _context.User.FirstOrDefault(u => u.email == user.email);
+            TimeSpan time = (TimeSpan)(DateTime.Now - user.dob);
+            int yearGap = (int)(time.TotalDays / 365.25);
+            if (yearGap < 18)
+            {
+                ModelState.AddModelError("dob", "Your age must be over 17 years");
+            }
+            if (UserExists != null)
+            {
+                ModelState.AddModelError("email", "Your Email is already in use");
+            }
+            if (yearGap < 18 || UserExists != null)
+            {
+                ViewData["DepartmentId"] = new SelectList(_context.Department, "Id", "Name");
+                return View(user);
+            }
             var Encode = new Encode();
             string en_password;
             string en_repassword;
-            if(user.password == null || repassword == null){
+            if (user.password == null || repassword == null)
+            {
                 return RedirectToAction("ErrorInputPasswordMessageForUser");
             }
             en_password = Encode.encode(user.password.ToString());
@@ -182,7 +200,6 @@ namespace IdeaWeb.Controllers
                     string body = "https://localhost:7188/User/ConfirmAccount?email=" + email;
                     send.SendEmail(email, subject, body);
                     return RedirectToAction(nameof(Login));
-
                 }
             }
             else if (en_password != en_repassword)
@@ -205,7 +222,7 @@ namespace IdeaWeb.Controllers
             {
                 var en_password = Encode.encode(Password);
                 var user = await _context.User.FirstOrDefaultAsync(u => u.email == UserName && u.password == en_password);
-                
+
 
                 if (user != null && user.flag == 1)
                 {
@@ -393,6 +410,14 @@ namespace IdeaWeb.Controllers
         [HttpPost]
         public async Task<IActionResult> EditProfile([Bind("id,name,phone,dob,DepartmentId")] User user)
         {
+            TimeSpan time = (TimeSpan)(DateTime.Now - user.dob);
+            int yearGap = (int)(time.TotalDays / 365.25);
+            if (yearGap < 18)
+            {
+                ModelState.AddModelError("dob", "Your age must be over 17 years");
+                ViewData["DepartmentId"] = new SelectList(_context.Department, "Id", "Name", user.DepartmentId);
+                return View(user);
+            }
             var userEdit = await _secondContext.User.FindAsync(user.id);
             userEdit.name = user.name;
             userEdit.phone = user.phone;
@@ -422,10 +447,21 @@ namespace IdeaWeb.Controllers
         }
         public IActionResult forgotPassword(string email)
         {
+            var userExist = _context.User.FirstOrDefault(u => u.email == email);
+            if (userExist == null)
+            {
+
+                return RedirectToAction(nameof(ErrorMessage));
+            }
             Send send = new Send();
             var subject = "RESET YOUR PASSWORD BY CLICK IN LINK";
             string body = "https://localhost:7188/User/InputNewPassword?email=" + email;
             send.SendEmail(email, subject, body);
+            return View();
+        }
+        public IActionResult ErrorMessage()
+        {
+            ViewBag.AlertMsg = "Email is not exist";
             return View();
         }
         public IActionResult InputEmailRecoveryPass() { return View(); }
@@ -452,7 +488,6 @@ namespace IdeaWeb.Controllers
                 Percent = (double)0,
                 personCount = 0
             }).ToList();
-            Console.WriteLine(totalIdea);
             var data = _context.Idea.Include(s => s.User).ThenInclude(s => s.Department)
             .GroupBy(s => s.User.Department.Name)
             .Select(g => new

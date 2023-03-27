@@ -259,7 +259,29 @@ namespace IdeaWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UserEditIdea(IFormFile image, IFormFile document, [Bind("Id,Name,Content,CategoryId")] Idea Editidea)
         {
-            var idea = await _secondContext.Idea.FindAsync(Editidea.Id);
+            var userId = HttpContext.Session.GetInt32("_ID").GetValueOrDefault();
+            if (userId == 0)
+            {
+                return RedirectToAction("Login", "User");
+            }
+            var idea = _secondContext.Idea.Include(i => i.CloseDateAcedamic).FirstOrDefault(i => i.Id == Editidea.Id);
+            if (DateTime.Now > idea.CloseDateAcedamic.CloseDatePostIdea)
+            {
+                ModelState.AddModelError("Name", "Date for edit is closed");
+                ViewData["CategoryId"] = new SelectList(_context.Category.Where(c => c.Status == 1), "Id", "Name", idea.CategoryId);
+                return View(Editidea);
+            }
+            if (Editidea.Name != null) 
+            {
+                var IdeaExists = _context.Idea.Where(i => i.Name == Editidea.Name && i.UserId == userId).ToList();
+                Console.WriteLine(IdeaExists.Count());
+                if (IdeaExists.Count() >= 1 && idea.Name != Editidea.Name)
+                {
+                    ModelState.AddModelError("Name", "Idea Exists");
+                    ViewData["CategoryId"] = new SelectList(_context.Category.Where(c => c.Status == 1), "Id", "Name", idea.CategoryId);
+                    return View(Editidea);
+                }
+            }
             string wwwRootPath = _hostEnvironment.WebRootPath;
             try
             {
@@ -372,6 +394,7 @@ namespace IdeaWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UserCreateIdea(IFormFile image, IFormFile document, [Bind("Id,Name,Content,File,Image,CategoryId,CloseDateAcedamicId")] Idea idea)
         {
+
             var closeDate = await _context.CloseDateAcedamic.FindAsync(idea.CloseDateAcedamicId);
             if (DateTime.Now > closeDate.CloseDatePostIdea)
             {
@@ -381,6 +404,15 @@ namespace IdeaWeb.Controllers
             if (userId == 0)
             {
                 return RedirectToAction("Login", "User");
+            }
+            var IdeaExists = _context.Idea.FirstOrDefault(i => i.Name == idea.Name && i.UserId == userId && i.CloseDateAcedamicId == idea.CloseDateAcedamicId);
+            if (image == null || document == null)
+            {
+                ModelState.AddModelError("File", "Image and Document are required");
+            }
+            if (IdeaExists != null)
+            {
+                ModelState.AddModelError("Name", "Idea already exists");
             }
             if (ModelState.IsValid)
             {
@@ -415,10 +447,10 @@ namespace IdeaWeb.Controllers
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(ErrorMessageForUserCat));
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(IdeaIndex));
             }
             ViewData["CloseDateAcedamicId"] = new SelectList(_context.CloseDateAcedamic, "Id", "Name", idea.CloseDateAcedamicId);
-            ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Name", idea.CategoryId);
+            ViewData["CategoryId"] = new SelectList(_context.Category.Where(d => d.Status == 1), "Id", "Name", idea.CategoryId);
             return View(idea);
         }
         public async Task<IActionResult> UserViewIdea(int id)
@@ -447,7 +479,8 @@ namespace IdeaWeb.Controllers
 
             return View(idea);
         }
-        public async Task<IActionResult> IdeaIndex(int pg = 1)
+        [HttpGet]
+        public async Task<IActionResult> IdeaIndex(string query, int pg = 1)
         {
             const int pageSize = 5;
             if (pg < 1)
@@ -456,9 +489,22 @@ namespace IdeaWeb.Controllers
             var pager = new Pager(recsCount, pg, pageSize);
             int recSkip = (pg - 1) * pageSize;
             this.ViewBag.Pager = pager;
-            var data = _context.Idea.Include(i => i.CloseDateAcedamic).Include(i => i.Category).Include(i => i.User).Skip(recSkip).Take(pager.PageSize).ToList();
+            var data = _context.Idea.ToList();
+            if (query == "Oldest")
+            {
+                data = _context.Idea.Include(i => i.CloseDateAcedamic).Include(i => i.Category).Include(i => i.View).Include(i => i.User).Skip(recSkip).Take(pager.PageSize).OrderBy(i => i.Date_Upload).ToList();
+            }
+            else if (query == "MostView")
+            {
+                data = _context.Idea.Include(i => i.CloseDateAcedamic).Include(i => i.Category).Include(i => i.View).Include(i => i.User).Skip(recSkip).Take(pager.PageSize).OrderByDescending(i => i.View.Count()).ToList();
+            }
+            else
+            {
+                data = _context.Idea.Include(i => i.CloseDateAcedamic).Include(i => i.Category).Include(i => i.View).Include(i => i.User).Skip(recSkip).Take(pager.PageSize).OrderByDescending(i => i.Date_Upload).ToList();
+            }
             this.ViewBag.Pager = pager;
             ViewBag.commentCount = _context.Comment.ToList();
+            ViewBag.viewCount = _context.View.ToList();
             return View(data);
         }
 

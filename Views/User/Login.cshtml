@@ -24,17 +24,19 @@
                     />
                   </div>
                   <div class="form-group" style ="margin-bottom:30px">
-                    <input name="Password"class="form-control form-control-user"id="exampleInputPassword"placeholder="Password"/>
+                    <input name="Password" type="password" class="form-control form-control-user"id="exampleInputPassword"placeholder="Password"/>
                   </div>
                   <input type="submit" class="btn btn-primary btn-user btn-block" style ="margin-left:auto; margin-right:auto; " value="Login">
                 </form>
                 <hr />
-                <div class="text-center">
-                  <a class="small" asp-area="" asp-controller="User" asp-action="Register">Create an Account!</a>
+                <div>
+                  <a class="small text-left" asp-area="" asp-controller="User" asp-action="Register">Create an Account!</a>
+                  <a class="small text-right" asp-area="" asp-controller="User" asp-action="InputEmailRecoveryPass">Forgot Password</a>
                 </div>
               </div>
             </div>
           </div>
+          
         </div>
       </div>
     </div>
