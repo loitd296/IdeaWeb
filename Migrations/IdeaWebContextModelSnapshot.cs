@@ -117,30 +117,6 @@ namespace IdeaWeb.Migrations
                     b.ToTable("Department");
                 });
 
-            modelBuilder.Entity("IdeaWeb.Models.Document", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("DataLink")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("Date_Upload")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("IdeaId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IdeaId");
-
-                    b.ToTable("Document");
-                });
-
             modelBuilder.Entity("IdeaWeb.Models.Idea", b =>
                 {
                     b.Property<int>("Id")
@@ -294,6 +270,29 @@ namespace IdeaWeb.Migrations
                     b.ToTable("UserRole");
                 });
 
+            modelBuilder.Entity("IdeaWeb.Models.View", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<int>("ideaId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("userId")
+                        .HasColumnType("int");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("ideaId");
+
+                    b.HasIndex("userId");
+
+                    b.ToTable("View");
+                });
+
             modelBuilder.Entity("IdeaWeb.Models.Comment", b =>
                 {
                     b.HasOne("IdeaWeb.Models.Idea", "idea")
@@ -311,17 +310,6 @@ namespace IdeaWeb.Migrations
                     b.Navigation("idea");
 
                     b.Navigation("user");
-                });
-
-            modelBuilder.Entity("IdeaWeb.Models.Document", b =>
-                {
-                    b.HasOne("IdeaWeb.Models.Idea", "Idea")
-                        .WithMany("Documents")
-                        .HasForeignKey("IdeaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Idea");
                 });
 
             modelBuilder.Entity("IdeaWeb.Models.Idea", b =>
@@ -400,6 +388,25 @@ namespace IdeaWeb.Migrations
                     b.Navigation("user");
                 });
 
+            modelBuilder.Entity("IdeaWeb.Models.View", b =>
+                {
+                    b.HasOne("IdeaWeb.Models.Idea", "idea")
+                        .WithMany("View")
+                        .HasForeignKey("ideaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("IdeaWeb.Models.User", "user")
+                        .WithMany("View")
+                        .HasForeignKey("userId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("idea");
+
+                    b.Navigation("user");
+                });
+
             modelBuilder.Entity("IdeaWeb.Models.Category", b =>
                 {
                     b.Navigation("Ideas");
@@ -419,9 +426,9 @@ namespace IdeaWeb.Migrations
                 {
                     b.Navigation("Comments");
 
-                    b.Navigation("Documents");
-
                     b.Navigation("Ratings");
+
+                    b.Navigation("View");
                 });
 
             modelBuilder.Entity("IdeaWeb.Models.Role", b =>
@@ -432,6 +439,8 @@ namespace IdeaWeb.Migrations
             modelBuilder.Entity("IdeaWeb.Models.User", b =>
                 {
                     b.Navigation("Ideas");
+
+                    b.Navigation("View");
 
                     b.Navigation("comments");
 

@@ -29,6 +29,7 @@ public class User
     public ICollection<Rating>? ratings { get; set; }
 
     public ICollection<Comment>? comments { get; set; }
+    public ICollection<View>? View { get; set; }
 
     public ICollection<Idea>? Ideas { get; set; }
 

@@ -423,6 +423,17 @@ namespace IdeaWeb.Controllers
         }
         public async Task<IActionResult> UserViewIdea(int id)
         {
+            var userId = HttpContext.Session.GetInt32("_ID").GetValueOrDefault();
+            if (userId == 0)
+            {
+                return RedirectToAction("Login", "User");
+            }
+            var view = _context.View.FirstOrDefault(x => x.userId == userId && x.ideaId == id);
+            if (view == null)
+            {
+                _context.View.Add(new View { userId = userId, ideaId = id });
+                await _context.SaveChangesAsync();
+            }
             var idea = await _context.Idea
             .Include(i => i.Category)
             .Include(i => i.Comments)
@@ -432,7 +443,8 @@ namespace IdeaWeb.Controllers
             ViewBag.comment = _context.Comment.Include(c => c.user).Where(c => c.ideaId == id).OrderByDescending(p => p.Date_Upload);
             ViewBag.commentCount = _context.Comment.Where(c => c.ideaId == id).Count();
             ViewBag.id = id;
-            ViewBag.UserId = HttpContext.Session.GetInt32("_ID").GetValueOrDefault();
+            ViewBag.UserId = userId;
+
             return View(idea);
         }
         public async Task<IActionResult> IdeaIndex(int pg = 1)
