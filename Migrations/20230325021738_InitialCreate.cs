@@ -188,27 +188,6 @@ namespace IdeaWeb.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Document",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Date_Upload = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DataLink = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IdeaId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Document", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Document_Idea_IdeaId",
-                        column: x => x.IdeaId,
-                        principalTable: "Idea",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Rating",
                 columns: table => new
                 {
@@ -236,6 +215,32 @@ namespace IdeaWeb.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "View",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    userId = table.Column<int>(type: "int", nullable: false),
+                    ideaId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_View", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_View_Idea_ideaId",
+                        column: x => x.ideaId,
+                        principalTable: "Idea",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_View_User_userId",
+                        column: x => x.userId,
+                        principalTable: "User",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Comment_ideaId",
                 table: "Comment",
@@ -245,11 +250,6 @@ namespace IdeaWeb.Migrations
                 name: "IX_Comment_userId",
                 table: "Comment",
                 column: "userId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Document_IdeaId",
-                table: "Document",
-                column: "IdeaId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Idea_CategoryId",
@@ -290,6 +290,16 @@ namespace IdeaWeb.Migrations
                 name: "IX_UserRole_userId",
                 table: "UserRole",
                 column: "userId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_View_ideaId",
+                table: "View",
+                column: "ideaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_View_userId",
+                table: "View",
+                column: "userId");
         }
 
         /// <inheritdoc />
@@ -299,19 +309,19 @@ namespace IdeaWeb.Migrations
                 name: "Comment");
 
             migrationBuilder.DropTable(
-                name: "Document");
-
-            migrationBuilder.DropTable(
                 name: "Rating");
 
             migrationBuilder.DropTable(
                 name: "UserRole");
 
             migrationBuilder.DropTable(
-                name: "Idea");
+                name: "View");
 
             migrationBuilder.DropTable(
                 name: "Role");
+
+            migrationBuilder.DropTable(
+                name: "Idea");
 
             migrationBuilder.DropTable(
                 name: "Category");

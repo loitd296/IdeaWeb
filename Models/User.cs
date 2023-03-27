@@ -18,7 +18,7 @@ public class User
 
     public string? password { get; set; }
 
-    public int flag {get; set;} = 0;
+    public int flag { get; set; } = 0;
 
     public int DepartmentId { get; set; }
 
@@ -29,6 +29,7 @@ public class User
     public ICollection<Rating>? ratings { get; set; }
 
     public ICollection<Comment>? comments { get; set; }
+    public ICollection<View>? View { get; set; }
 
     public ICollection<Idea>? Ideas { get; set; }
 

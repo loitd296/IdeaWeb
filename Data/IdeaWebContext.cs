@@ -34,25 +34,28 @@ public class IdeaWebContext : DbContext
             .HasMany(u => u.userRoles)
             .WithOne(ur => ur.user)
             .OnDelete(DeleteBehavior.Cascade);
-        
+
         modelBuilder.Entity<User>()
             .HasMany(u => u.ratings)
             .WithOne(r => r.user)
             .HasForeignKey(r => r.userId)
             .OnDelete(DeleteBehavior.Restrict);
-
+        modelBuilder.Entity<User>()
+            .HasMany(u => u.View)
+            .WithOne(v => v.user)
+            .OnDelete(DeleteBehavior.Restrict);
         // Configure other relationships
 
         base.OnModelCreating(modelBuilder);
     }
-   
-    
+
+
 
     public DbSet<IdeaWeb.Models.Category> Category { get; set; }
     public DbSet<IdeaWeb.Models.CloseDateAcedamic> CloseDateAcedamic { get; set; }
     public DbSet<IdeaWeb.Models.Comment> Comment { get; set; }
     public DbSet<IdeaWeb.Models.Department> Department { get; set; }
-    public DbSet<IdeaWeb.Models.Document> Document { get; set; }
+    public DbSet<IdeaWeb.Models.View> View { get; set; }
     public DbSet<IdeaWeb.Models.Idea> Idea { get; set; }
     public DbSet<IdeaWeb.Models.Rating> Rating { get; set; }
     public DbSet<IdeaWeb.Models.Role> Role { get; set; }

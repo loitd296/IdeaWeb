@@ -24,13 +24,10 @@ namespace IdeaWeb.Models
         public Category? Category { get; set; }
         public int CloseDateAcedamicId { get; set; }
         public CloseDateAcedamic? CloseDateAcedamic { get; set; }
-
-        public ICollection<Document>? Documents { get; set; }
         public ICollection<Rating>? Ratings { get; set; }
         public ICollection<Comment>? Comments { get; set; }
-
+        public ICollection<View>? View { get; set; }
         public int UserId { get; set; }
-       
         public User? User { get; set; }
        
     }
