@@ -36,6 +36,35 @@
         <button type="submit" class="btn btn-success ml-14 border-radius-12 fw-500 text-14">Search</button>
     </p>
 </form>
+<label for="query">Select your favorite fruit:</label>
+<select id="query" name="query">
+  <option value=""></option>
+  <option value="Lasted">Lasted </option>
+  <option value="Oldest">Oldest</option>
+  <option value="MostView">Most View</option>
+</select>
+<script>
+  const fruitSelect = document.getElementById('query');
+  
+  fruitSelect.addEventListener('change', (event) => {
+    const selectedOption = event.target.value;
+    
+    switch(selectedOption) {
+      case 'Lasted':
+        window.location.href = "/Idea/IdeaIndex/?query=Lasted";
+        break;
+      case 'Oldest':
+        window.location.href = "/Idea/IdeaIndex/?query=Oldest";
+        break;
+      case 'MostView':
+        window.location.href = "/Idea/IdeaIndex/?query=MostView";
+        break;
+      default:
+        console.log('Invalid selection');
+        break;
+    }
+  });
+</script>
     <div class="row">
       <div class="col-lg-8" style="margin: auto">
         <div class="items">
@@ -53,10 +82,19 @@
                         <div class="col-lg-8 col-sm-7">
                           <div class="right-content">
                             <h4>@Html.DisplayFor(modelItem => item.Name)</h4>
+                              @{
+                                var view_count = 0;
+                                foreach(var view in ViewBag.viewCount){
+                                    if(view.ideaId == item.Id){
+                                        view_count++;
+                                    }
+                                }
+                            }
+                            <span><li><i class="fa-solid fa-eye"></i> :@view_count</li></span>
                             <span>@Html.DisplayFor(modelItem => item.User.name)</span>
                             <span>@Html.DisplayFor(modelItem => item.Date_Upload)</span>
                             <div class="main-button">
-                              <a href="UserViewIdea/@item.Id">Explore More</a>
+                              <a href="/Idea/UserViewIdea/@item.Id">Explore More</a>
                             </div>
                             <p class="limit-5-line">
                               @Html.DisplayFor(modelItem => item.Content)

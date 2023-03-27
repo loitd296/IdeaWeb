@@ -19,7 +19,6 @@ namespace IdeaWeb.Models
         public int? Dislike_Count { get; set; }
         public string? File { get; set; }
         public string? Image { get; set; }
-        [Required]
         [DataType(DataType.Date)]
         public DateTime? Date_Upload { get; set; }
         [Required]
