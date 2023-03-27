@@ -59,11 +59,17 @@ namespace IdeaWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name")] Department department)
         {
-            if (ModelState.IsValid)
+            ViewBag.Layout = "indexAdmin";
+            var Dep = _context.Department.Where(i => i.Name == department.Name).ToList();
+            if (ModelState.IsValid && Dep.Count() <= 0)
             {
                 _context.Add(department);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
+            }
+            else if (Dep.Count() > 0)
+            {
+                ViewBag.ErrorMessage = "Name is exist!";
             }
             return View(department);
         }
@@ -92,12 +98,14 @@ namespace IdeaWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Department department)
         {
+            ViewBag.Layout = "indexAdmin";
             if (id != department.Id)
             {
                 return NotFound();
             }
-
-            if (ModelState.IsValid)
+            var Dep = _context.Department.Where(i => i.Name == department.Name).ToList();
+            var Dep1 =  _context.Category.FirstOrDefault();
+            if (ModelState.IsValid && Dep.Count() <= 0)
             {
                 try
                 {
@@ -116,6 +124,10 @@ namespace IdeaWeb.Controllers
                     }
                 }
                 return RedirectToAction(nameof(Index));
+            }
+            else if (Dep.Count() > 0 && Dep1.Name != department.Name)
+            {
+                ViewBag.ErrorMessage = "Name is exist!";
             }
             return View(department);
         }
