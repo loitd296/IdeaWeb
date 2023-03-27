@@ -107,7 +107,7 @@ namespace IdeaWeb.Controllers
             var Encode = new Encode();
             string en_password;
             if(user.password == null){
-                return View("Error");
+                return RedirectToAction("ErrorInputPasswordMessage");
             }
             en_password = Encode.encode(user.password.ToString());
             if (ModelState.IsValid)
@@ -121,7 +121,7 @@ namespace IdeaWeb.Controllers
                 if (users != null)
                 {
                     var userRoles = new UserRole();
-                    userRoles.roleId = 2;
+                    userRoles.roleId = 3;
                     userRoles.userId = users.id;
                     _context.Add(userRoles);
                     await _context.SaveChangesAsync();
@@ -138,20 +138,29 @@ namespace IdeaWeb.Controllers
             ViewData["DepartmentId"] = new SelectList(_context.Department, "Id", "Id", user.DepartmentId);
             return View(user);
         }
-        public IActionResult ErrorMessage()
+        public IActionResult ErrorInputPasswordMessage()
+        {
+            ViewBag.AlertMsg = "You need to create password for this user account";
+            return View();
+        }
+        public IActionResult ErrorInputPasswordMessageForUser()
         {
             ViewBag.AlertMsg = "You need to create password for this user account";
             return View();
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register([Bind("id,name,phone,dob,email,password,flag,DepartmentId")] User user, String repassword)
+        public async Task<IActionResult> Register(bool AgreeCheckbox, [Bind("id,name,phone,dob,email,password,flag,DepartmentId")] User user, String repassword)
         {
             var Encode = new Encode();
-            string en_password = Encode.encode(user.password.ToString());
-            string en_repassword = Encode.encode(repassword);
-            Console.WriteLine(en_password + " " + en_repassword);
-            if (en_password == en_repassword)
+            string en_password;
+            string en_repassword;
+            if(user.password == null || repassword == null){
+                return RedirectToAction("ErrorInputPasswordMessageForUser");
+            }
+            en_password = Encode.encode(user.password.ToString());
+            en_repassword = Encode.encode(repassword);
+            if (en_password == en_repassword && AgreeCheckbox == true)
             {
                 if (ModelState.IsValid)
                 {
@@ -163,7 +172,7 @@ namespace IdeaWeb.Controllers
                     if (users != null)
                     {
                         var userRoles = new UserRole();
-                        userRoles.roleId = 2;
+                        userRoles.roleId = 3;
                         userRoles.userId = users.id;
                         _context.Add(userRoles);
                         await _context.SaveChangesAsync();
@@ -176,9 +185,13 @@ namespace IdeaWeb.Controllers
 
                 }
             }
-            else
+            else if (en_password != en_repassword)
             {
-                ViewBag.ErrorMessage = "Repassword != Password";
+                ViewBag.ErrorMessage = "Repeated Password does not match Original Password";
+            }
+            if (AgreeCheckbox == false)
+            {
+                ViewBag.ErrorAgreementMessage = "Please agree with the terms and conditions.";
             }
             ViewData["DepartmentId"] = new SelectList(_context.Department, "Id", "Name");
 
@@ -192,10 +205,11 @@ namespace IdeaWeb.Controllers
             {
                 var en_password = Encode.encode(Password);
                 var user = await _context.User.FirstOrDefaultAsync(u => u.email == UserName && u.password == en_password);
-                var userRole = _context.UserRole.Include(u => u.roles).FirstOrDefault(u => u.userId == user.id);
+                
 
                 if (user != null && user.flag == 1)
                 {
+                    var userRole = _context.UserRole.Include(u => u.roles).FirstOrDefault(u => u.userId == user.id);
                     HttpContext.Session.SetString(SessionName, user.name);
                     HttpContext.Session.SetInt32(SessionId, user.id);
                     HttpContext.Session.SetString(SessionRole, userRole.roles.name);
@@ -208,16 +222,14 @@ namespace IdeaWeb.Controllers
                     {
                         return RedirectToAction("loginSuccess", "User");
                     }
-
-
+                }
+                else if (user == null)
+                {
+                    ViewBag.ErrorMessage = "Your username or password is incorrect !";
                 }
                 else if (user != null && user.flag == 0)
                 {
-                    ViewBag.ErrorMessage = "PLease Confrim Your ";
-                }
-                else
-                {
-                    ViewBag.ErrorMessage = "User not found";
+                    ViewBag.ErrorMessage = "Your are not yet confirm your email, please Confirm Your email !";
                 }
             }
             else
@@ -705,7 +717,6 @@ namespace IdeaWeb.Controllers
         }
         public IActionResult Logout()
         {
-
             HttpContext.Session.Clear();
             return RedirectToAction("Login", "user");
         }

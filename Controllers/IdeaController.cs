@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using IdeaWeb.Data;
 using IdeaWeb.Models;
 using System.IO.Compression;
+using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace IdeaWeb.Controllers
 {
@@ -101,7 +103,18 @@ namespace IdeaWeb.Controllers
                 string extension = Path.GetExtension(image.FileName);
                 string image_Path = Path.Combine(wwwRootPath + "/Image/", fileName + extension);
                 string document_Path = Path.Combine(wwwRootPath + "/Document/", documentName);
+                // if (extension != ".jpg" || extension != ".jpeg" || extension != ".png" || extension != ".gif" || extension != ".bmp" || extension != "")
+                // {
+                //     ViewBag.ErrorMessage = "Your username or password is incorrect !";
+                // }
+                // else
+                // {
 
+                //     using (var fileStream = new FileStream(image_Path, FileMode.Create))
+                //     {
+                //         await image.CopyToAsync(fileStream);
+                //     }
+                // }
                 using (var fileStream = new FileStream(image_Path, FileMode.Create))
                 {
                     await image.CopyToAsync(fileStream);

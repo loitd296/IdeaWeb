@@ -44,6 +44,11 @@
                                     asp-items="ViewBag.DepartmentId" style="margin-bottom:30px"></select>
                             </div>
                             <div class="form-group">
+                                <input type="checkbox" id="AgreeCheckbox" name="AgreeCheckbox" value="true" />   
+                                <label class="control-label">I agree with the terms and conditions</label>
+                                <span class="text-danger">@ViewBag.ErrorAgreementMessage</span>
+                            </div>
+                            <div class="form-group">
                                 <input type="submit" value="Register Account"
                                     class="btn btn-primary btn-user btn-block" />
                             </div>
