@@ -421,7 +421,7 @@ namespace IdeaWeb.Controllers
             ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Name", idea.CategoryId);
             return View(idea);
         }
-        public async Task<IActionResult> UserViewIdea(int id)
+        public async Task<IActionResult> UserViewIdea(int id,int pg = 1 )
         {
             var userId = HttpContext.Session.GetInt32("_ID").GetValueOrDefault();
             if (userId == 0)
@@ -440,7 +440,14 @@ namespace IdeaWeb.Controllers
             .Include(i => i.User)
             .ThenInclude(i => i.Department)
             .FirstOrDefaultAsync(m => m.Id == id);
-            ViewBag.comment = _context.Comment.Include(c => c.user).Where(c => c.ideaId == id).OrderByDescending(p => p.Date_Upload);
+            const int pageSize = 3;
+            if (pg < 1)
+                pg = 1;
+            int recsCount = _context.Idea.Count();
+            var pager = new Pager(recsCount, pg, pageSize);
+            int recSkip = (pg - 1) * pageSize;
+            this.ViewBag.Pager = pager;
+            ViewBag.comment = _context.Comment.Include(c => c.user).Where(c => c.ideaId == id).Skip(recSkip).Take(pager.PageSize).OrderByDescending(p => p.Date_Upload).ToList();
             ViewBag.commentCount = _context.Comment.Where(c => c.ideaId == id).Count();
             ViewBag.id = id;
             ViewBag.UserId = userId;
