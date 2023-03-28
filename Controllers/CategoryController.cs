@@ -94,14 +94,16 @@ namespace IdeaWeb.Controllers
         public async Task<IActionResult> Create([Bind("Id,Name,Status,Deleted_Status")] Category category)
         {
             ViewBag.Layout = "indexAdmin";
-
-            if (ModelState.IsValid)
+            var cat =  _context.Category.Where(i => i.Name == category.Name).ToList();
+            if (ModelState.IsValid && cat.Count() <= 0)
             {
                 category.Status = 1;
                 category.Deleted_Status = 0;
                 _context.Add(category);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
+            }else if (cat.Count() > 0){
+                ViewBag.ErrorMessage = "Category is exist!";
             }
             return View(category);
         }
@@ -131,12 +133,13 @@ namespace IdeaWeb.Controllers
         public async Task<IActionResult> Edit(int id, bool DeleteCheckbox, bool CancleDeleteCheckbox,[Bind("Id,Name,Status,Deleted_Status")] Category category)
         {
             ViewBag.Layout = "indexAdmin";
-            
+            var cat =  _context.Category.Where(i => i.Name == category.Name).ToList();
+            var cat1 =  _context.Category.FirstOrDefault();
             if (id != category.Id)
             {
                 return NotFound();
             }
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && cat.Count() <= 0)
             {
                 try
                 {
@@ -163,6 +166,8 @@ namespace IdeaWeb.Controllers
                     }
                 }
                 return RedirectToAction(nameof(Index));
+            }else if (cat.Count() > 0 && cat1.Name != category.Name){
+                ViewBag.ErrorMessage = "Category is exist!";
             }
             return View(category);
         }

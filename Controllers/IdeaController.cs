@@ -401,6 +401,9 @@ namespace IdeaWeb.Controllers
                 return RedirectToAction(nameof(ErrorMessageForUser));
             }
             var userId = HttpContext.Session.GetInt32("_ID").GetValueOrDefault();
+
+            var checkIdeaOwn = _context.Idea.Where(i => i.UserId == userId);
+            var checkNameExist = checkIdeaOwn.Where(i => i.Name.Contains(idea.Name)).ToList();
             if (userId == 0)
             {
                 return RedirectToAction("Login", "User");

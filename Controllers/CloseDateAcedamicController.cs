@@ -59,7 +59,9 @@ namespace IdeaWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,CloseDate,CloseDatePostIdea")] CloseDateAcedamic closeDateAcedamic)
         {
-            if (ModelState.IsValid)
+            ViewBag.Layout = "indexAdmin";
+            var CD = _context.CloseDateAcedamic.Where(i => i.Name == closeDateAcedamic.Name).ToList();
+            if (ModelState.IsValid && CD.Count() <= 0)
             {
 
                 if (closeDateAcedamic.CloseDate > closeDateAcedamic.CloseDatePostIdea && 
@@ -74,6 +76,9 @@ namespace IdeaWeb.Controllers
                     return RedirectToAction(nameof(ErrorMessage));
                 }
                 return RedirectToAction(nameof(Index));
+            }else if (CD.Count() > 0)
+            {
+                ViewBag.ErrorMessage = "Name is exist!";
             }
             return View(closeDateAcedamic);
         }
@@ -107,13 +112,16 @@ namespace IdeaWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,CloseDate,CloseDatePostIdea")] CloseDateAcedamic closeDateAcedamic)
         {
+            ViewBag.Layout = "indexAdmin";
             if (id != closeDateAcedamic.Id)
             {
                 return NotFound();
             }
+            var CD = _context.CloseDateAcedamic.Where(i => i.Name == closeDateAcedamic.Name).ToList();
+            var CD1 =  _context.Category.FirstOrDefault();
             if (ModelState.IsValid && closeDateAcedamic.CloseDate > closeDateAcedamic.CloseDatePostIdea &&
             closeDateAcedamic.CloseDate > DateTime.Now && 
-            closeDateAcedamic.CloseDatePostIdea > DateTime.Now)
+            closeDateAcedamic.CloseDatePostIdea > DateTime.Now && CD.Count() <= 0)
             {
                 try
                 {
@@ -132,11 +140,15 @@ namespace IdeaWeb.Controllers
                     }
                 }
                 return RedirectToAction(nameof(Index));
+            }else if (CD.Count() > 0 && CD1.Name != closeDateAcedamic.Name)
+            {
+                ViewBag.ErrorMessage = "Name is exist!";
             }
             else
             {
                 return RedirectToAction(nameof(ErrorMessage));
             }
+            
             return View(closeDateAcedamic);
         }
 
