@@ -47,7 +47,7 @@
                       <span class="p-20 text-14">Category : @Html.DisplayFor(model => model.Category.Name)</span>
                       <span class="p-20 text-14">Deparment : @Html.DisplayFor(model => model.User.Department.Name)
                       </span>
-                      <span class="p-20 text-14">Close Date</span>
+                      <span class="p-20 text-14">Close Date : @Html.DisplayFor(model => model.CloseDateAcedamic.CloseDatePostIdea)</span>
                       @if (Model.UserId == ViewBag.UserId)
                       {
                                              <span class="p-20 text-14"> Edit Your Idea : <a asp-action="UserEditIdea"

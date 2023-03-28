@@ -469,6 +469,7 @@ namespace IdeaWeb.Controllers
             var idea = await _context.Idea
             .Include(i => i.Category)
             .Include(i => i.Comments)
+            .Include(i => i.CloseDateAcedamic)
             .Include(i => i.User)
             .ThenInclude(i => i.Department)
             .FirstOrDefaultAsync(m => m.Id == id);
