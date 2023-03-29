@@ -13,43 +13,43 @@
                         </div>
                         <form class="user" asp-action="Register">
                             <div class="form-group">
-                                <input asp-for="name" class="form-control form-control-user" placeholder="Full Name"
+                                <input asp-for="name" class="form-control form-control-user text-14" placeholder="Full Name"
                                     style="margin-bottom:30px" required="">
                             </div>
                             <div class="form-group row">
                                 <div class="col-sm-6" style="margin-bottom:30px">
-                                    <input asp-for="phone" class="form-control form-control-user" placeholder="Phone"
+                                    <input asp-for="phone" class="form-control form-control-user text-14" placeholder="Phone"
                                         required="">
                                 </div>
                                 <div class="col-sm-6" style="margin-bottom:30px">
-                                    <input asp-for="dob" class="form-control  form-control-user" type="date"
+                                    <input asp-for="dob" class="form-control  form-control-user text-14" type="date"
                                         required="" />
                                     <span asp-validation-for="dob" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <input asp-for="email" class="form-control form-control-user"
+                                <input asp-for="email" class="form-control form-control-user text-14"
                                     placeholder="Gmail Address" type="email" style="margin-bottom:30px" required="">
                                 <span asp-validation-for="email" class="text-danger"></span>
                             </div>
                             <div class="form-group row">
                                 <div class="col-sm-6 mb-3 mb-sm-0" style="margin-bottom:30px">
-                                    <input asp-for="password" type="password" class="form-control form-control-user"
+                                    <input asp-for="password" type="password" class="form-control form-control-user text-14"
                                         placeholder="Password" required="">
                                 </div>
                                 <div class="col-sm-6" style="margin-bottom:30px">
-                                    <input type="password" name="repassword" class="form-control form-control-user"
+                                    <input type="password" name="repassword" class="form-control form-control-user text-14"
                                         placeholder="Repeat Password" required="">
                                     <span class="text-danger">@ViewBag.ErrorMessage</span>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <select asp-for="DepartmentId" class="form-control form-control-user"
+                                <select asp-for="DepartmentId" class="form-control form-control-user text-14"
                                     asp-items="ViewBag.DepartmentId" style="margin-bottom:30px"></select>
                             </div>
                             <div class="form-group">
                                 <input type="checkbox" id="AgreeCheckbox" name="AgreeCheckbox" value="true" />
-                                <label class="control-label">I agree with the terms and conditions</label>
+                                <label class="control-label text-14">I agree with the terms and conditions</label>
                                 <span class="text-danger">@ViewBag.ErrorAgreementMessage</span>
                             </div>
                             <div class="form-group">

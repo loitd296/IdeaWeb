@@ -1441,7 +1441,9 @@ progress::-ms-fill {
   margin-bottom: 80px;
 }
 .text-14 {
-  font-size: 14px;
+  font-size: 14px !important
+
+;
 }
 .modal-card-foot .button:not(:last-child) {
   margin-right: 0.5rem;

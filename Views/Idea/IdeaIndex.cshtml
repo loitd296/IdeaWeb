@@ -1,140 +1,166 @@
 @model IEnumerable<IdeaWeb.Models.Idea>
 @{
-   var comments = ViewBag.commentCount;
-       Pager pager = new Pager();
-  int pageNo = 0;
-
-  if (ViewBag.Pager != null)
+  var comments = ViewBag.commentCount; Pager pager = new Pager(); int pageNo
+  = 0; if (ViewBag.Pager != null)
   {
-    pager = ViewBag.Pager;
-    pageNo = pager.CurrentPage;
+    pager = ViewBag.Pager; pageNo =
+  pager.CurrentPage;
   }
 }
-<div class="visit-country">
-  <div class="container">
-    <div class="row" style="margin-bottom: 80px">
-      <div class="col-lg-9">
-        <div class="section-heading">
-          <h2>Share and receive everyone's ideas</h2>
-          <p>
-            Sharing ideas can lead to new and creative solutions to problems.
-            This can lead to improved products, services and processes, which
-            can benefit everyone involved.
-          </p>
+  <div class="visit-country pb-100">
+    <div class="container">
+      <div class="row" style="margin-bottom: 80px">
+        <div class="col-lg-9">
+          <div class="section-heading">
+            <h2>Share and receive everyone's ideas</h2>
+            <p>
+              Sharing ideas can lead to new and creative solutions to problems.
+              This can lead to improved products, services and processes, which
+              can benefit everyone involved.
+            </p>
+          </div>
+        </div>
+        <div class="col-lg-3">
+          <div class="main-button mt-30">
+            <a asp-action="UserCreateIdea">Create a new Idea</a>
+          </div>
         </div>
       </div>
-      <div class="col-lg-3">
-        <div class="main-button mt-30">
-          <a asp-action="UserCreateIdea">Create a new Idea</a>
-        </div>
-      </div>
-    </div>
 
-<form asp-controller="Idea" asp-action="SearchforUser" method="get" class="w-1.0">
-    <p class="flex w-0.5 mx-auto mb-80">
-        <input type="text" name="query" class="grow border-radius-8 h-51" style = "border: 1px #d5d1d1 solid;" />
-        <button type="submit" class="btn btn-success ml-14 border-radius-12 fw-500 text-14">Search</button>
-    </p>
-</form>
-<label for="query">Select your favorite fruit:</label>
-<select id="query" name="query">
-  <option value=""></option>
-  <option value="Lasted">Lasted </option>
-  <option value="Oldest">Oldest</option>
-  <option value="MostView">Most View</option>
-</select>
-<script>
-  const fruitSelect = document.getElementById('query');
-  
-  fruitSelect.addEventListener('change', (event) => {
-    const selectedOption = event.target.value;
-    
-    switch(selectedOption) {
-      case 'Lasted':
-        window.location.href = "/Idea/IdeaIndex/?query=Lasted";
-        break;
-      case 'Oldest':
-        window.location.href = "/Idea/IdeaIndex/?query=Oldest";
-        break;
-      case 'MostView':
-        window.location.href = "/Idea/IdeaIndex/?query=MostView";
-        break;
-      default:
-        console.log('Invalid selection');
-        break;
-    }
-  });
-</script>
-    <div class="row">
-      <div class="col-lg-8" style="margin: auto">
-        <div class="items">
-          <div class="row">
-            <div class="col-lg-12">
-              @{
-                	foreach (var item in Model) {
-                    <div class="item">
-                      <div class="row">
-                        <div class="col-lg-4 col-sm-5">
-                          <div class="image">
-                            <img src="~/Image/@Html.DisplayFor(modelItem => item.Image)" alt="" />
-                          </div>
-                        </div>
-                        <div class="col-lg-8 col-sm-7">
-                          <div class="right-content">
-                            <h4>@Html.DisplayFor(modelItem => item.Name)</h4>
-                              @{
-                                var view_count = 0;
-                                foreach(var view in ViewBag.viewCount){
-                                    if(view.ideaId == item.Id){
-                                        view_count++;
-                                    }
-                                }
-                            }
-                            <span><li><i class="fa-solid fa-eye"></i> :@view_count</li></span>
-                            <span>@Html.DisplayFor(modelItem => item.User.name)</span>
-                            <span>@Html.DisplayFor(modelItem => item.Date_Upload)</span>
-                            <div class="main-button">
-                              <a href="/Idea/UserViewIdea/@item.Id">Explore More</a>
-                            </div>
-                            <p class="limit-5-line">
-                              @Html.DisplayFor(modelItem => item.Content)
-                            </p>
-                            @{
-                                var count = 0;
-                                foreach(var comment in comments){
-                                    if(comment.ideaId == item.Id){
-                                        count++;
-                                    }
-                                }
-                            }
-                            <ul class="info">
-                              <li><i class="fa-regular fa-comment"></i>Comment: @count</li>
-                              <li><i class="fa-regular fa-thumbs-up"></i>Like : @Html.DisplayFor(modelItem => item.Like_Count)
-                              <li>
-                                <i class="fa-regular fa-thumbs-down"></i>Dislike :  @Html.DisplayFor(modelItem => item.Dislike_Count)
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  }
-              }
-            <div class="col-lg-12">
-                 @if (pager.TotalPages > 0)
-      {
-        <div class="button">
-          @for (var pge = pager.StartPage; pge <= pager.EndPage; pge++)
-          {
-            <a type="button" class="btn btn-info" asp-controller="Idea" asp-action="IdeaIndex" asp-route-pg="@pge">@pge</a>
+      <form asp-controller="Idea" asp-action="SearchforUser" method="get" class="w-1.0">
+        <p class="flex w-0.5 mx-auto mb-80">
+          <input type="text" name="query" class="grow border-radius-8 h-51" style="border: 1px #d5d1d1 solid"/>
+          <button type="submit" class="btn btn-success ml-14 border-radius-12 fw-500 text-14">
+            Search
+          </button>
+        </p>
+      </form>
+      <label for="query" class="text-14">Select your favorite fruit:</label>
+      <select id="query" name="query" class="radius-9 ml-10 h-30 w-300 #c6c6c6 text-14">
+        <option value=""></option>
+        <option value="Lasted">Lasted</option>
+        <option value="Oldest">Oldest</option>
+        <option value="MostView">Most View</option>
+      </select>
+      <script>
+        const fruitSelect = document.getElementById("query");
+
+        fruitSelect.addEventListener("change", (event) => {
+          const selectedOption = event.target.value;
+
+          switch (selectedOption) {
+            case "Lasted":
+              window.location.href = "/Idea/IdeaIndex/?query=Lasted";
+              break;
+            case "Oldest":
+              window.location.href = "/Idea/IdeaIndex/?query=Oldest";
+              break;
+            case "MostView":
+              window.location.href = "/Idea/IdeaIndex/?query=MostView";
+              break;
+            default:
+              console.log("Invalid selection");
+              break;
           }
-         </div>         
-      }
-              
+        });
+      </script>
+      <div class="row">
+        <div class="col-lg-8" style="margin: auto">
+          <div class="items">
+            <div class="row">
+              <div class="col-lg-12">
+              @{
+                foreach (var item in Model)
+                {
+                                                                <div class="item">
+                                                                  <div class="row">
+                                                                    <div class="col-lg-4 col-sm-5">
+                                                                      <div class="image">
+                                                                        <img
+                                                  src="~/Image/@Html.DisplayFor(modelItem => item.Image)"
+                                                  alt=""
+                                                                        />
+                                                                      </div>
+                                                                    </div>
+                                                                    <div class="col-lg-8 col-sm-7">
+                                                                      <div class="right-content">
+                                                                        <h4>@Html.DisplayFor(modelItem => item.Name)</h4>
+                          @{
+                            var view_count = 0; foreach (var view in
+                          ViewBag.viewCount)
+                            {
+                              if (view.ideaId == item.Id)
+                              {
+                                view_count++;
+                              }
+                            }
+                          }
+                                                                        <span
+                                                                          ><li>
+                                                                            <i class="fa-solid fa-eye"></i> :@view_count
+                                                                          </li></span
+                                                                        >
+                                                                        <span
+                                                                          >@Html.DisplayFor(modelItem => item.User.name)</span
+                                                                        >
+                                                                        <span
+                                                                          >@Html.DisplayFor(modelItem => item.Date_Upload)</span
+                                                                        >
+                                                                        <div class="main-button">
+                                                                          <a href="/Idea/UserViewIdea/@item.Id">Explore More</a>
+                                                                        </div>
+                                                                        <p class="limit-5-line">
+                            @Html.DisplayFor(modelItem => item.Content)
+                                                                        </p>
+                          @{
+                            var count = 0; foreach (var comment in comments)
+                            {
+                              if (comment.ideaId == item.Id) { count++; }
+                            }
+                          }
+                                                                        <ul class="info">
+                                                                          <li>
+                                                                            <i class="fa-regular fa-comment"></i>Comment: @count
+                                                                          </li>
+                                                                          <li>
+                                                                            <i class="fa-regular fa-thumbs-up"></i>Like :
+                              @Html.DisplayFor(modelItem => item.Like_Count)
+                                                                          </li>
+                                                                          <li>
+                                                                            <i class="fa-regular fa-thumbs-down"></i>Dislike :
+                              @Html.DisplayFor(modelItem => item.Dislike_Count)
+                                                                          </li>
+                                                                        </ul>
+                                                                      </div>
+                                                                    </div>
+                                                                  </div>
+                                                                </div>
+                }
+              }
+                <div class="col-lg-12">
+                @if (pager.TotalPages > 0)
+                {
+                                          <div class="button">
+                    @for (var pge = pager.StartPage; pge <= pager.EndPage;
+                  pge++)
+                    {
+                                                                    <a
+                                                                      type="button"
+                                                                      class="btn btn-info"
+                      asp-controller="Idea"
+                      asp-action="IdeaIndex"
+                      asp-route-pg="@pge"
+                                                                      >@pge</a
+                                                                    >
+                    }
+                                          </div>
+                }
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</div>
+  </div></IdeaWeb.Models.Idea
+>

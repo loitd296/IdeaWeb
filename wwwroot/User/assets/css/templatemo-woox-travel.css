@@ -96,6 +96,16 @@ figcaption {
 .w-1\.0 {
   width: 100%;
 }
+.logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.logo p {
+  font-size: 35px;
+  color: #e7e7e7;
+  font-weight: 600;
+}
 .w-0\.5 {
   width: 50%;
 }
@@ -123,6 +133,9 @@ figcaption {
 .h-43 {
   height: 43px;
 }
+.h-1\.0 {
+  height: 100%;
+}
 .\#22b3c1 {
   background-color: #22b3c1;
 }
@@ -140,6 +153,24 @@ figcaption {
 }
 .text-14 {
   font-size: 14px;
+}
+.radius-9 {
+  border-radius: 9px;
+}
+.ml-10 {
+  margin-left: 10px;
+}
+.h-30 {
+  height: 30px;
+}
+.pb-100 {
+  padding-bottom: 100px;
+}
+.w-300 {
+  width: 300px;
+}
+#c6c6c6 {
+  border-color: #c6c6c6;
 }
 .clearfix:after {
   content: ".";
@@ -1116,7 +1147,7 @@ Visit Country Style
 */
 
 .visit-country {
-  padding: 120px 0px 0px 0px;
+  padding: 120px 0px 100px 0px;
 }
 
 .visit-country .side-bar-map {

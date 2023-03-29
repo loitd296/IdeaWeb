@@ -17,20 +17,20 @@
                     <span class="text-danger">@ViewBag.ErrorMessage</span>
                     <input 
                       name="UserName"
-                      class="form-control form-control-user"
+                      class="form-control form-control-user text-14"
                       id="exampleInputEmail"
                       aria-describedby="emailHelp"
                       placeholder="Enter Email Address..."
                     />
                   </div>
                   <div class="form-group" style ="margin-bottom:30px">
-                    <input name="Password" type="password" class="form-control form-control-user"id="exampleInputPassword"placeholder="Password"/>
+                    <input name="Password" type="password" class="form-control form-control-user text-14"id="exampleInputPassword"placeholder="Password"/>
                   </div>
                   <input type="submit" class="btn btn-primary btn-user btn-block" style ="margin-left:auto; margin-right:auto; " value="Login">
                 </form>
                 <hr />
                 <div>
-                  <a class="small text-left" asp-area="" asp-controller="User" asp-action="Register">Create an Account!</a>
+                  <a class="small text-left" asp-area="" asp-controller="User" asp-action="Register">Create an Account!</a><br>
                   <a class="small text-right" asp-area="" asp-controller="User" asp-action="InputEmailRecoveryPass">Forgot Password</a>
                 </div>
               </div>
