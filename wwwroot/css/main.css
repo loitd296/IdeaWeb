@@ -1441,9 +1441,17 @@ progress::-ms-fill {
   margin-bottom: 80px;
 }
 .text-14 {
-  font-size: 14px !important
-
-;
+  font-size: 14px !important;
+}
+.break-page {
+  border: #e1e4e9 1px solid;
+}
+.break-page:hover {
+  border-color: #10b981;
+  background-color: #10b981;
+}
+.justify-center {
+  justify-content: center;
 }
 .modal-card-foot .button:not(:last-child) {
   margin-right: 0.5rem;

@@ -96,6 +96,18 @@ figcaption {
 .w-1\.0 {
   width: 100%;
 }
+.align-center {
+  align-items: center;
+}
+.mr-15 {
+  margin-right: 15px;
+}
+.mb-20 {
+  margin-bottom: 20px;
+}
+.justify-center {
+  justify-content: center;
+}
 .logo {
   display: flex;
   justify-content: center;
@@ -145,6 +157,9 @@ figcaption {
 .ml-14 {
   margin-left: 14px;
 }
+.mb-35 {
+  margin-bottom: 35px;
+}
 .h-51 {
   height: 51px;
 }
@@ -152,7 +167,11 @@ figcaption {
   margin-bottom: 80px;
 }
 .text-14 {
-  font-size: 14px;
+  font-size: 14px !important;
+}
+.my-5px {
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 .radius-9 {
   border-radius: 9px;

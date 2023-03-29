@@ -116,13 +116,13 @@
 }
     </tbody>
 </table>
-          <div class="flex items-center justify-between">
+          <div class="flex items-center justify-center" style="justify-content: center;">
       @if (pager.TotalPages > 0)
       {
                     <div class="buttons">
           @for (var pge = pager.StartPage; pge <= pager.EndPage; pge++)
           {
-                              <a type="button" class="button" style="color: black" asp-controller="User" asp-action="Index" asp-route-pg="@pge">@pge</a>
+                              <a type="button" class="button break-page" style="color: black" asp-controller="User" asp-action="Index" asp-route-pg="@pge">@pge</a>
           }
                     </div>
       }
