@@ -75,8 +75,10 @@ namespace IdeaWeb.Controllers
             ViewData["userId"] = new SelectList(_context.User, "id", "id", rating.userId);
             return View(rating);
         }
+        [HttpPost]
         public async Task<IActionResult> AddLike(int id)
         {
+            Console.WriteLine(id);
             //get session id of the user
             var userId = HttpContext.Session.GetInt32("_ID").GetValueOrDefault();
             //var userId = 2;
@@ -89,7 +91,7 @@ namespace IdeaWeb.Controllers
             int IdIdea = post.Id;
             var rateExists = _context.Rating.Where(p => p.IdeaId == IdIdea && p.userId == userId && p.like == 1);
             var rateDisLikeExists = _context.Rating.Where(p => p.IdeaId == IdIdea && p.userId == userId && p.Dislike == 1);
-            
+
             if (rateExists.FirstOrDefault() != null)
             {
                 post.Like_Count--;
@@ -122,11 +124,18 @@ namespace IdeaWeb.Controllers
                 _context.Update(post);
                 await _context.SaveChangesAsync();
             }
-            return RedirectToAction("UserViewIdea", "Idea",new { id = id });
+            var idea = _context.Idea.FirstOrDefault(i => i.Id == id);
+            var Like_Count = idea.Like_Count;
+            var Dislike_Count = idea.Dislike_Count;
+            return Json(new
+            {
+                like = Like_Count,
+                dis_like = Dislike_Count
+            });
         }
 
         public async Task<IActionResult> AddDislike(int id)
-        {            
+        {
             //get session id of the user
             var userId = HttpContext.Session.GetInt32("_ID").GetValueOrDefault();
             if (userId == 0)
@@ -138,7 +147,7 @@ namespace IdeaWeb.Controllers
             int IdIdea = post.Id;
             var rateExists = _context.Rating.Where(p => p.IdeaId == IdIdea && p.userId == userId && p.like == 1);
             var rateDisLikeExists = _context.Rating.Where(p => p.IdeaId == IdIdea && p.userId == userId && p.Dislike == 1);
-            
+
             if (rateDisLikeExists.FirstOrDefault() != null)
             {
                 post.Dislike_Count--;
@@ -153,7 +162,7 @@ namespace IdeaWeb.Controllers
                 rate.Dislike = 1;
                 post.Like_Count--;
                 post.Dislike_Count++;
-                
+
                 _context.Update(post);
                 _context.Update(rate);
                 await _context.SaveChangesAsync();
@@ -171,7 +180,14 @@ namespace IdeaWeb.Controllers
                 _context.Update(post);
                 await _context.SaveChangesAsync();
             }
-            return RedirectToAction("UserViewIdea", "Idea",new { id = id });
+            var idea = _context.Idea.FirstOrDefault(i => i.Id == id);
+            var Like_Count = idea.Like_Count;
+            var Dislike_Count = idea.Dislike_Count;
+            return Json(new
+            {
+                like = Like_Count,
+                dis_like = Dislike_Count
+            });
         }
 
         // GET: Rating/Edit/5

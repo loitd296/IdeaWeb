@@ -1,7 +1,7 @@
 @model IdeaWeb.Models.Idea
 @{
-    Pager pager = new Pager();
-    @* IEnumerable<T> enumerablePager = (IEnumerable<T>)pager; *@
+  Pager pager = new Pager();
+  @* IEnumerable<T> enumerablePager = (IEnumerable<T>)pager; *@
   int pageNo = 0;
 
   if (ViewBag.Pager != null)
@@ -24,7 +24,7 @@
         </div>
       </div>
     </div>
-    
+
     <div class="link">
       <p>@Html.DisplayFor(model => model.Name)</p>
     </div>
@@ -47,13 +47,14 @@
                       <span class="p-20 text-14">Category : @Html.DisplayFor(model => model.Category.Name)</span>
                       <span class="p-20 text-14">Deparment : @Html.DisplayFor(model => model.User.Department.Name)
                       </span>
-                      <span class="p-20 text-14">Close Date : @Html.DisplayFor(model => model.CloseDateAcedamic.CloseDatePostIdea)</span>
+                      <span class="p-20 text-14">Close Date : @Html.DisplayFor(model =>
+                        model.CloseDateAcedamic.CloseDatePostIdea)</span>
                       @if (Model.UserId == ViewBag.UserId)
                       {
-                                             <span class="p-20 text-14"> Edit Your Idea : <a asp-action="UserEditIdea"
+                        <span class="p-20 text-14"> Edit Your Idea : <a asp-action="UserEditIdea"
                           asp-route-id="@ViewBag.id"><i class="fas fa-edit"></i></a></span>
                       }
- 
+
                       <span class="p-20 text-14"> Download Document : <a asp-action="DocumentDownload"
                           asp-route-id="@ViewBag.id"><i class="fa-solid fa-download"> </i></a></span>
                     </div>
@@ -65,16 +66,23 @@
                 </p>
                 <ul class="index-items">
                   <li><i class="fa-regular fa-comment pr-15"></i>Comment : @ViewBag.commentCount</li>
-                  <li><a href="/Rating/AddLike/@ViewBag.id"><i class="fa-regular fa-thumbs-up pr-15"></i></a>Like :
-                    @Html.DisplayFor(model => model.Like_Count) </li>
-                  <li><a href="/Rating/AddDislike/@ViewBag.id"><i
-                        class="fa-regular fa-thumbs-down pr-15"></i></a>Dislike : @Html.DisplayFor(model =>
-                    model.Dislike_Count)</li>
+                  <li>
+                    <a href="#" class="like-button" data-item-id="@ViewBag.id"><i
+                        class="fa-regular fa-thumbs-up pr-15"></i></a>
+                    Like:
+                    <span id="like-count-1">@Model.Like_Count</span>
+                  </li>
+                  <li>
+                    <a href="#" class="dislike-button" data-item-id="@ViewBag.id"><i
+                        class="fa-regular fa-thumbs-up pr-15"></i></a>
+                    Dislike:
+                    <span id="like-count-2">@Model.Dislike_Count</span>
+                  </li>
                   @if (Model.UserId == ViewBag.UserId)
                   {
                     <li><a asp-action="UserDelete" asp-route-id="@ViewBag.id"><i class="fa-solid fa-trash"></i></a></li>
                   }
-                  
+
                 </ul>
               </div>
             </div>
@@ -123,17 +131,53 @@
                 </p>
               </div>
             }
-             <div class="button">
-          @for (var pge = pager.StartPage; pge <= ViewBag.commentCount/2 - 1; pge++)
-          {
-            <a type="button" class="btn btn-info" asp-controller="Idea" asp-action="UserViewIdea" asp-route-pg="@pge">@pge</a>
+            <div class="button">
+              @for (var pge = pager.StartPage; pge <= ViewBag.commentCount / 2 - 1; pge++)
+              {
+                <a type="button" class="btn btn-info" asp-controller="Idea" asp-action="UserViewIdea"
+              asp-route-pg="@pge">@pge</a>
+              }
+            </div>
           }
-         </div>   
-          }
-   
-
         </div>
       </div>
     </div>
   </div>
 </div>
+<script>
+  $('.like-button').on('click', function (e) {
+    e.preventDefault();
+    var itemId = parseInt($(this).data('item-id'));
+    var span = $('#like-count-1')
+    var span_2 = $('#like-count-2')
+    $.ajax({
+      url: '/Rating/AddLike',
+      data: { id: itemId },
+      dataType: "json",
+      type: "POST",
+      success: function (response) {
+        span.text(response.like);
+        span_2.text(response.dis_like);
+      }
+    });
+  });
+</script>
+<script>
+  $('.dislike-button').on('click', function (e) {
+    e.preventDefault();
+    var itemId = parseInt($(this).data('item-id'));
+    var span = $('#like-count-1')
+    var span_2 = $('#like-count-2')
+    console.log(itemId);
+    $.ajax({
+      url: '/Rating/AddDislike',
+      data: { id: itemId },
+      dataType: "json",
+      type: "POST",
+      success: function (response) {
+        span.text(response.like);
+        span_2.text(response.dis_like);
+      }
+    });
+  });
+</script>
