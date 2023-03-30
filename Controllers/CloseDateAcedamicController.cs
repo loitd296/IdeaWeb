@@ -13,10 +13,12 @@ namespace IdeaWeb.Controllers
     public class CloseDateAcedamicController : Controller
     {
         private readonly IdeaWebContext _context;
+        private readonly IdeaWebContext _secondContext;
 
         public CloseDateAcedamicController(IdeaWebContext context)
         {
             _context = context;
+            _secondContext = context;
         }
 
         // GET: CloseDateAcedamic
@@ -61,6 +63,7 @@ namespace IdeaWeb.Controllers
         {
             ViewBag.Layout = "indexAdmin";
             var CD = _context.CloseDateAcedamic.Where(i => i.Name == closeDateAcedamic.Name).ToList();
+            //var CD1 = _secondContext.Category.FirstOrDefault(i => i.Id == d);
             if (ModelState.IsValid && CD.Count() <= 0)
             {
 
@@ -113,19 +116,20 @@ namespace IdeaWeb.Controllers
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,CloseDate,CloseDatePostIdea")] CloseDateAcedamic closeDateAcedamic)
         {
             ViewBag.Layout = "indexAdmin";
+            
             if (id != closeDateAcedamic.Id)
             {
                 return NotFound();
             }
             var CD = _context.CloseDateAcedamic.Where(i => i.Name == closeDateAcedamic.Name).ToList();
-            var CD1 =  _context.Category.FirstOrDefault();
+            var CD1 = _secondContext.CloseDateAcedamic.FirstOrDefault(i => i.Id == id);
             if (ModelState.IsValid && closeDateAcedamic.CloseDate > closeDateAcedamic.CloseDatePostIdea &&
             closeDateAcedamic.CloseDate > DateTime.Now && 
-            closeDateAcedamic.CloseDatePostIdea > DateTime.Now && CD.Count() <= 0)
+            closeDateAcedamic.CloseDatePostIdea > DateTime.Now)
             {
                 try
                 {
-                    _context.Update(closeDateAcedamic);
+                    _context.Update(CD1);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -140,7 +144,7 @@ namespace IdeaWeb.Controllers
                     }
                 }
                 return RedirectToAction(nameof(Index));
-            }else if (CD.Count() > 0 && CD1.Name != closeDateAcedamic.Name)
+            }else if (CD.Count() >=1  && CD1.Name != closeDateAcedamic.Name)
             {
                 ViewBag.ErrorMessage = "Name is exist!";
             }

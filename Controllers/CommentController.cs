@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using IdeaWeb.Data;
 using IdeaWeb.Models;
+using IdeaWeb.Untils;
+using System.Net;
+using System.Net.Mail;
 
 namespace IdeaWeb.Controllers
 {
@@ -64,13 +67,13 @@ namespace IdeaWeb.Controllers
         public async Task<IActionResult> Create([Bind("Id,Content")] Comment comment, int ideaId, int status)
         {
             var userId = HttpContext.Session.GetInt32("_ID").GetValueOrDefault();
+            var idea = _context.Idea.Include(i => i.CloseDateAcedamic).FirstOrDefault(i => i.Id == ideaId);
+            var user =_context.User.FirstOrDefault(i => i.id == idea.UserId);
             if (userId == 0)
             {
                 return RedirectToAction("Login", "User");
             }
-            Console.WriteLine(ideaId);
-            var idea = _context.Idea.Include(i => i.CloseDateAcedamic).FirstOrDefault(i => i.Id == ideaId);
-            Console.WriteLine("------------" + idea.Name);
+            
             if (DateTime.Now > idea.CloseDateAcedamic.CloseDate)
             {
                 return RedirectToAction("ErrorMessageForUser", "Comment", new { id = idea.Id });
@@ -83,6 +86,15 @@ namespace IdeaWeb.Controllers
                 comment.userId = userId;
                 _context.Add(comment);
                 await _context.SaveChangesAsync();
+                Send send = new Send();
+                var email = user.email.ToString();
+                var subject = "A user commented on your idea " + idea.Name;
+                string body = subject.ToString()+ " on " + comment.Date_Upload + "\n\n" + "Click the link below to check it out: " + "\n" + "https://localhost:7188/Idea/UserViewIdea/" + ideaId;
+                Console.WriteLine("-------------------");
+                Console.WriteLine("-------------------"+email);
+                Console.WriteLine("-------------------"+subject);
+                Console.WriteLine("-------------------"+body);
+                send.SendEmail(email, subject, body);
                 return RedirectToAction("UserViewIdea", "Idea", new { id = ideaId });
             }
             return View();

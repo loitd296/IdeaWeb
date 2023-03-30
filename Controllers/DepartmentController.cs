@@ -13,10 +13,12 @@ namespace IdeaWeb.Controllers
     public class DepartmentController : Controller
     {
         private readonly IdeaWebContext _context;
+         private readonly IdeaWebContext _secondContext;
 
         public DepartmentController(IdeaWebContext context)
         {
             _context = context;
+            _secondContext = context;
         }
 
         // GET: Department
@@ -104,12 +106,12 @@ namespace IdeaWeb.Controllers
                 return NotFound();
             }
             var Dep = _context.Department.Where(i => i.Name == department.Name).ToList();
-            var Dep1 =  _context.Category.FirstOrDefault();
-            if (ModelState.IsValid && Dep.Count() <= 0)
+            var Dep1 =  _secondContext.Department.FirstOrDefault(i => i.Id == id);
+            if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(department);
+                    _context.Update(Dep1);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -125,7 +127,7 @@ namespace IdeaWeb.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            else if (Dep.Count() > 0 && Dep1.Name != department.Name)
+            else if (Dep.Count() >= 1 && Dep1.Name != department.Name)
             {
                 ViewBag.ErrorMessage = "Name is exist!";
             }

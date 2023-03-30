@@ -10,6 +10,7 @@ using IdeaWeb.Data;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<IdeaWebContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("IdeaWebContext")));
+    
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

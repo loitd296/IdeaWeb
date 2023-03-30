@@ -148,7 +148,12 @@ namespace IdeaWeb.Controllers
         {
             ViewBag.AlertMsg = "You need to create password for this user account";
             return View();
+        }   
+        public IActionResult Thetermsandconditions()
+        {
+            return View();
         }
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(bool AgreeCheckbox, [Bind("id,name,phone,dob,email,password,flag,DepartmentId")] User user, String repassword)

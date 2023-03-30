@@ -274,7 +274,6 @@ namespace IdeaWeb.Controllers
             if (Editidea.Name != null) 
             {
                 var IdeaExists = _context.Idea.Where(i => i.Name == Editidea.Name && i.UserId == userId).ToList();
-                Console.WriteLine(IdeaExists.Count());
                 if (IdeaExists.Count() >= 1 && idea.Name != Editidea.Name)
                 {
                     ModelState.AddModelError("Name", "Idea Exists");
@@ -320,8 +319,6 @@ namespace IdeaWeb.Controllers
                 {
                     return RedirectToAction("ErrorMessageForUserCatEdit", "Idea", new { id = Editidea.Id });
                 }
-
-
             }
             catch (DbUpdateConcurrencyException)
             {

@@ -15,12 +15,14 @@ namespace IdeaWeb.Controllers
     {
 
         private readonly IdeaWebContext _context;
+        private readonly IdeaWebContext _secondContext;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         public CategoryController(IdeaWebContext context, IHttpContextAccessor httpContextAccessor)
         {
             _httpContextAccessor = httpContextAccessor;
             _context = context;
+            _secondContext = context;
         }
 
         // GET: Category
@@ -94,7 +96,7 @@ namespace IdeaWeb.Controllers
         public async Task<IActionResult> Create([Bind("Id,Name,Status,Deleted_Status")] Category category)
         {
             ViewBag.Layout = "indexAdmin";
-            var cat =  _context.Category.Where(i => i.Name == category.Name).ToList();
+            var cat = _context.Category.Where(i => i.Name == category.Name).ToList();
             if (ModelState.IsValid && cat.Count() <= 0)
             {
                 category.Status = 1;
@@ -102,7 +104,9 @@ namespace IdeaWeb.Controllers
                 _context.Add(category);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
-            }else if (cat.Count() > 0){
+            }
+            else if (cat.Count() > 0)
+            {
                 ViewBag.ErrorMessage = "Category is exist!";
             }
             return View(category);
@@ -130,33 +134,37 @@ namespace IdeaWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, bool DeleteCheckbox, bool CancleDeleteCheckbox,[Bind("Id,Name,Status,Deleted_Status")] Category category)
+        public async Task<IActionResult> Edit(int id, bool CancleDeleteCheckbox, [Bind("Id,Name,Status,Deleted_Status")] Category category1)
         {
             ViewBag.Layout = "indexAdmin";
-            var cat =  _context.Category.Where(i => i.Name == category.Name).ToList();
-            var cat1 =  _context.Category.FirstOrDefault();
-            if (id != category.Id)
+            var category = _secondContext.Category.FirstOrDefault(i => i.Id == category1.Id);
+            var cat = _context.Category.Where(i => i.Name == category.Name).ToList();
+            
+            //var check = cat.Any(n => n.Equals(category.Name));
+            if (id != category1.Id)
             {
                 return NotFound();
             }
-            if (ModelState.IsValid && cat.Count() <= 0)
+            if (ModelState.IsValid)
             {
                 try
                 {
-                    if(DeleteCheckbox == true){
-                        category.Status = 0;
-                        category.Deleted_Status=1;
-                    }
-                    if(CancleDeleteCheckbox == true){
+                    if (CancleDeleteCheckbox == true)
+                    {
                         category.Status = 1;
-                        category.Deleted_Status=0;
+                        category.Deleted_Status = 0;
+                        _context.Update(category);
+                        await _context.SaveChangesAsync();
                     }
-                    _context.Update(category);
-                    await _context.SaveChangesAsync();
+                    else if (CancleDeleteCheckbox == false)
+                    {
+                        _context.Update(category);
+                        await _context.SaveChangesAsync();
+                    }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CategoryExists(category.Id))
+                    if (!CategoryExists(category1.Id))
                     {
                         return NotFound();
                     }
@@ -166,8 +174,13 @@ namespace IdeaWeb.Controllers
                     }
                 }
                 return RedirectToAction(nameof(Index));
-            }else if (cat.Count() > 0 && cat1.Name != category.Name){
-                ViewBag.ErrorMessage = "Category is exist!";
+            }
+            else if (category1.Name != null)
+            {
+                if (cat.Count() >= 1  && category.Name != category1.Name)
+                {
+                    ViewBag.ErrorMessage = "Category is exist!";
+                }
             }
             return View(category);
         }
