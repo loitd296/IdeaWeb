@@ -1,45 +1,50 @@
-<title>Idea Record</title>
-    <div class="card">
-      <div class="card-header">
-        <h5 class="card-title mb-0">Idea Percent Record</h5>
-      </div>
-      <div style="margin-left: 20px;" ><a asp-controller ="storeowner" asp-action ="ExportExcel"><i class="fa-solid fa-file-excel" style="font-size: 30px;"></i></a></div>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
-      </script>
-      <div>
-        <canvas id="Idea Record1" width="400" ></canvas>
-      </div>
-      <script>
-        const labels1 = [@Html.Raw(ViewData["labels"])];
-        const data1 = {
-          labels: labels1,
-          datasets: [{
-            label: 'Idea',
-            backgroundColor: [@Html.Raw(ViewData["rgbs"])],
-            borderColor: 'rgb(255, 99, 132)',
-            data: [@ViewData["count"]],
-            barPercentage: 0.5,
-            barThickness: 80,
-          }]
-        };
-        const config1 = {
-          type: 'pie',
-          data: data1,
-          options: {
-            scales: {
-              yAxes: [{
-                ticks: {
-                  beginAtZero: true
-                }
-              }]
-            }
+<div>
+  <title>Idea Record</title>
+  <div class="card">
+    <div class="card-header">
+      <h5 class="card-title mb-0 text-center w-1.0">Idea Percent Record</h5>
+    </div>
+    <div style="margin-left: 20px">
+      <a asp-controller="storeowner" asp-action="ExportExcel"
+        ><i class="fa-solid fa-file-excel" style="font-size: 30px"></i
+      ></a>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <div>
+      <canvas id="Idea Record1" class="w-1.0 h-1.0"></canvas>
+    </div>
+    <script>
+      const labels1 = [@Html.Raw(ViewData["labels"])];
+      const data1 = {
+        labels: labels1,
+        datasets: [{
+          label: 'Idea',
+          backgroundColor: [@Html.Raw(ViewData["rgbs"])],
+          borderColor: 'rgb(255, 99, 132)',
+          data: [@ViewData["count"]],
+          barPercentage: 0.5,
+          barThickness: 80,
+        }]
+      };
+      const config1 = {
+        type: 'pie',
+        data: data1,
+        options: {
+          scales: {
+            yAxes: [{
+              ticks: {
+                beginAtZero: true
+              }
+            }]
           }
-        };
-      </script>
-      <script>
-        const myChart1 = new Chart(
-          document.getElementById('Idea Record1'),
-          config1
-        );
-      </script>
-
+        }
+      };
+    </script>
+    <script>
+      const myChart1 = new Chart(
+        document.getElementById("Idea Record1"),
+        config1
+      );
+    </script>
+  </div>
+</div>
