@@ -1,0 +1,20 @@
+@model List<ActionResult>
+@{
+    ViewData["Title"] = "Pages";
+}
+
+<h1>Pages</h1>
+<div style="display: grid">
+    <div style="width: 250; height: 300">
+        @Html.Partial("ChartNumber")
+    </div>
+    <div style="width: 250; height: 300">
+        @Html.Partial("ChartContribute")
+    </div>
+        <div style="width: 250; height: 300">
+        @Html.Partial("ChartPercent")
+    </div>
+</div>
+
+
+ 

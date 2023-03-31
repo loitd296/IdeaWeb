@@ -148,12 +148,12 @@ namespace IdeaWeb.Controllers
         {
             ViewBag.AlertMsg = "You need to create password for this user account";
             return View();
-        }   
+        }
         public IActionResult Thetermsandconditions()
         {
             return View();
         }
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(bool AgreeCheckbox, [Bind("id,name,phone,dob,email,password,flag,DepartmentId")] User user, String repassword)
@@ -481,6 +481,14 @@ namespace IdeaWeb.Controllers
             ViewData["DepartmentId"] = new SelectList(_context.Department, "Id", "Name");
             return View();
         }
+        public IActionResult Chart()
+        {
+            ChartNumber();
+            ChartPercent();
+            ChartContribute();
+            return View();
+        }
+
         public IActionResult ChartNumber()
         {
             ViewBag.Layout = "indexAdmin";
@@ -532,7 +540,6 @@ namespace IdeaWeb.Controllers
 
                 rgbs[i] = ("'rgb(" + red.ToString() + "," + green.ToString() + "," + blue.ToString() + ")'");
             }
-
 
             ViewData["rgbs"] = String.Join(",", rgbs);
             ViewData["labels"] = String.Format("'{0}'", String.Join("','", labels));

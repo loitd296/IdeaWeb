@@ -1,7 +1,6 @@
+<div id="myPartialView3">
 <title>Idea Record</title>
-<div class="row">
-  <div class="col-12 col-lg-10 col-xxl-12 d-flex">
-    <div class="card flex-fill">
+    <div class="card">
       <div class="card-header">
         <h5 class="card-title mb-0">Contribute Record</h5>
       </div>
@@ -9,12 +8,12 @@
       <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
       </script>
       <div>
-        <canvas id="Idea Record" width="400" ></canvas>
+        <canvas id="Idea Record3" width="400" ></canvas>
       </div>
       <script>
-        const labels = [@Html.Raw(ViewData["labels"])];
-        const data = {
-          labels: labels,
+        const labels3 = [@Html.Raw(ViewData["labels"])];
+        const data3 = {
+          labels: labels3,
           datasets: [{
             label: 'Contribute',
             backgroundColor: [@Html.Raw(ViewData["rgbs"])],
@@ -24,9 +23,9 @@
             barThickness: 80,
           }]
         };
-        const config = {
+        const config3 = {
           type: 'bar',
-          data: data,
+          data: data3,
           options: {
             scales: {
               yAxes: [{
@@ -39,11 +38,10 @@
         };
       </script>
       <script>
-        const myChart = new Chart(
-          document.getElementById('Idea Record'),
-          config
+        const myChart3 = new Chart(
+          document.getElementById('Idea Record3'),
+          config3
         );
       </script>
 
     </div>
-  </div>
