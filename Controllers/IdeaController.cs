@@ -271,7 +271,7 @@ namespace IdeaWeb.Controllers
                 ViewData["CategoryId"] = new SelectList(_context.Category.Where(c => c.Status == 1), "Id", "Name", idea.CategoryId);
                 return View(Editidea);
             }
-            if (Editidea.Name != null) 
+            if (Editidea.Name != null)
             {
                 var IdeaExists = _context.Idea.Where(i => i.Name == Editidea.Name && i.UserId == userId).ToList();
                 if (IdeaExists.Count() >= 1 && idea.Name != Editidea.Name)
@@ -389,7 +389,7 @@ namespace IdeaWeb.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UserCreateIdea(IFormFile image, IFormFile document, [Bind("Id,Name,Content,File,Image,CategoryId,CloseDateAcedamicId")] Idea idea)
+        public async Task<IActionResult> UserCreateIdea(bool AgreeCheckbox, IFormFile image, IFormFile document, [Bind("Id,Name,Content,File,Image,CategoryId,CloseDateAcedamicId")] Idea idea)
         {
 
             var closeDate = await _context.CloseDateAcedamic.FindAsync(idea.CloseDateAcedamicId);
@@ -414,7 +414,7 @@ namespace IdeaWeb.Controllers
             {
                 ModelState.AddModelError("Name", "Idea already exists");
             }
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && AgreeCheckbox == true)
             {
                 string wwwRootPath = _hostEnvironment.WebRootPath;
                 string fileName = Path.GetFileNameWithoutExtension(image.FileName);
@@ -449,11 +449,16 @@ namespace IdeaWeb.Controllers
                 }
                 return RedirectToAction(nameof(IdeaIndex));
             }
+            else if (AgreeCheckbox == false)
+            {
+                ViewBag.ErrorAgreementMessage = "Please agree with the terms and conditions.";
+            }
+
             ViewData["CloseDateAcedamicId"] = new SelectList(_context.CloseDateAcedamic, "Id", "Name", idea.CloseDateAcedamicId);
             ViewData["CategoryId"] = new SelectList(_context.Category.Where(d => d.Status == 1), "Id", "Name", idea.CategoryId);
             return View(idea);
         }
-        public async Task<IActionResult> UserViewIdea(int id,int pg = 1 )
+        public async Task<IActionResult> UserViewIdea(int id, int pg = 1)
         {
             var userId = HttpContext.Session.GetInt32("_ID").GetValueOrDefault();
             if (userId == 0)

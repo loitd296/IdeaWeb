@@ -113,10 +113,9 @@
                 </a>
               </li>
               <li>
-                <a class="dropdown">
-                  <span class="icon"><i class="mdi mdi-view-list"></i></span>
-                  <span class="menu-item-label">Statistics</span>
-                  <span class="icon"><i class="mdi mdi-plus"></i></span>
+                <a asp-area="" asp-controller="User" asp-action="Chart">
+                      <span class="icon"><i class="mdi mdi-view-list"></i></span>
+                      <span class="menu-item-label">Dashboard</span>
                 </a>
               @* <ul class="dropdown-container">
                 <li>
@@ -203,12 +202,12 @@
                 </li>
               </ul> *@
                   </li>
-                  <li class="--set-active-profile-html">
+                  @* <li class="--set-active-profile-html">
                     <a asp-area="" asp-controller="User" asp-action="ExportExcel">
                       <span class="icon"><i class="mdi mdi-table"></i></span>
                       <span class="menu-item-label">Export Excel</span>
                     </a>
-                  </li>
+                  </li> *@
           }
 
         }
