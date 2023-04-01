@@ -1,19 +1,44 @@
 @model List<ActionResult>
 @{
-    ViewData["Title"] = "Pages";
-}
+  ViewData["Title"] = "Pages";
+  var role = Context.Session.GetString("_Role") != null ? Context.Session.GetString("_Role") : null;
+  string message = "You do not have permission to access this page";
+  if (role == "Admin" || role == "Manager") { }
+  else if (role == "Staff" || role == null)
+  {
+    <script>
+            alert("@message");
+            window.location.href = "https://localhost:7188/User/login";
+    </script>
+  }
 
-<h1>Pages</h1>
-<div style="display: grid">
-    <div style="width: 250; height: 300">
-        @Html.Partial("ChartNumber")
-    </div>
-    <div style="width: 250; height: 300">
-        @Html.Partial("ChartContribute")
-    </div>
-        <div style="width: 250; height: 300">
-        @Html.Partial("ChartPercent")
-    </div>
+}
+<style>
+  .grid{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding: 10px;
+  }
+  .item1 {
+    grid-column: 1 / 3;
+  }
+  .h-1\.0{
+    height: 100%;
+  }
+</style>
+<h1>Dashboard</h1>
+<p style="margin-bottom: 15px;">
+    <a asp-area="" asp-controller="User" asp-action="ExportExcel" class="button green --jb-modal">Export Excel</a>
+    <span class="text-danger">@ViewBag.ErrorMessage</span>
+</p>
+<div class="grid">
+  @Html.Partial("ChartNumber")
+  @Html.Partial("ChartContribute")
+  <div class="item1">
+    @Html.Partial("ChartPercent")
+  </div>
+</div>
 </div>
 
 

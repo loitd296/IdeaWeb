@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using IdeaWeb.Data;
-
+// LAPTOP-GVPPC3IG\\MSSQLSERVER01 SQL cua Lap
 
  
 var builder = WebApplication.CreateBuilder(args);

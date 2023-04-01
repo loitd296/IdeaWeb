@@ -106,41 +106,40 @@
         @{
           if (role == "Manager")
           {
-                                                                <li class="--set-active-forms-html">
-                                                                  <a asp-area="" asp-controller="Category" asp-action="Index">
-                                                                    <span class="icon"><i class="mdi mdi-square-edit-outline"></i></span>
-                                                                    <span class="menu-item-label">Categories</span>
-                                                                  </a>
-                                                                </li>
-                                                                <li>
-                                                                  <a class="dropdown">
-                                                                    <span class="icon"><i class="mdi mdi-view-list"></i></span>
-                                                                    <span class="menu-item-label">Statistics</span>
-                                                                    <span class="icon"><i class="mdi mdi-plus"></i></span>
-                                                                  </a>
-                                                                  <ul class="dropdown-container">
-                                                                    <li>
-                                                                      <a href="/User/ChartNumber">
-                                                                        <i class="mdi mdi-chart-histogram">Idea for each department</i>
-                                                                      </a>
-                                                                    </li>
-                                                                    <li>
-                                                                      <a href="/User/ChartPercent">
-                                                                        <i class="mdi mdi-chart-pie">Percent idea of each department</i>
-                                                                      </a>
-                                                                    </li>
-                                                                    <li>
-                                                                      <a href="/User/ChartContribute">
-                                                                        <i class="mdi mdi-chart-histogram">Percent idea of each department</i>
-                                                                      </a>
-                                                                    </li>
-                                                                    <li>
-                                                                      <a href="/User/ExportExcel">
-                                                                        <i class="mdi mdi-file-excel">Export Exel</i>
-                                                                      </a>
-                                                                    </li>
-                                                                  </ul>
-                                                                </li>
+              <li class="--set-active-forms-html">
+                <a asp-area="" asp-controller="Category" asp-action="Index">
+                  <span class="icon"><i class="mdi mdi-square-edit-outline"></i></span>
+                  <span class="menu-item-label">Categories</span>
+                </a>
+              </li>
+              <li>
+                <a asp-area="" asp-controller="User" asp-action="Chart">
+                      <span class="icon"><i class="mdi mdi-view-list"></i></span>
+                      <span class="menu-item-label">Dashboard</span>
+                </a>
+              @* <ul class="dropdown-container">
+                <li>
+                  <a href="/User/ChartNumber">
+                    <i class="mdi mdi-chart-histogram">Idea for each department</i>
+                  </a>
+                </li>
+                <li>
+                  <a href="/User/ChartPercent">
+                    <i class="mdi mdi-chart-pie">Percent idea of each department</i>
+                  </a>
+                </li>
+                <li>
+                  <a href="/User/ChartContribute">
+                    <i class="mdi mdi-chart-histogram">Percent idea of each department</i>
+                  </a>
+                </li>
+                <li>
+                  <a href="/User/ExportExcel">
+                    <i class="mdi mdi-file-excel">Export Exel</i>
+                  </a>
+                </li>
+              </ul> *@
+                                                </li>
           }
           else
           {
@@ -169,41 +168,46 @@
                                                                   </a>
                                                                 </li>
 
-                                                                <li class="--set-active-profile-html">
-                                                                  <a asp-area="" asp-controller="Department" asp-action="Index">
-                                                                    <span class="icon"><i class="mdi mdi-table"></i></span>
-                                                                    <span class="menu-item-label">Department</span>
-                                                                  </a>
-                                                                </li>
-                                                                <li>
-                                                                  <a class="dropdown">
-                                                                    <span class="icon"><i class="mdi mdi-view-list"></i></span>
-                                                                    <span class="menu-item-label">Dashboard</span>
-                                                                    <span class="icon"><i class="mdi mdi-plus"></i></span>
-                                                                  </a>
-                                                                  <ul class="dropdown-container">
-                                                                    <li>
-                                                                      <a href="/User/ChartNumber">
-                                                                        <i class="mdi mdi-chart-histogram">Idea for each department</i>
-                                                                      </a>
-                                                                    </li>
-                                                                    <li>
-                                                                      <a href="/User/ChartPercent">
-                                                                        <i class="mdi mdi-chart-pie">Percent idea of each department</i>
-                                                                      </a>
-                                                                    </li>
-                                                                    <li>
-                                                                      <a href="/User/ChartContribute">
-                                                                        <i class="mdi mdi-chart-histogram">Percent idea of each department</i>
-                                                                      </a>
-                                                                    </li>
-                                                                    <li>
-                                                                      <a href="/User/ExportExcel">
-                                                                        <i class="mdi mdi-file-excel">Export Exel</i>
-                                                                      </a>
-                                                                    </li>
-                                                                  </ul>
-                                                                </li>
+                  <li class="--set-active-profile-html">
+                    <a asp-area="" asp-controller="Department" asp-action="Index">
+                      <span class="icon"><i class="mdi mdi-table"></i></span>
+                      <span class="menu-item-label">Department</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a asp-area="" asp-controller="User" asp-action="Chart">
+                      <span class="icon"><i class="mdi mdi-view-list"></i></span>
+                      <span class="menu-item-label">Dashboard</span>
+                    </a>
+              @* <ul class="dropdown-container">
+                <li>
+                  <a href="/User/ChartNumber">
+                    <i class="mdi mdi-chart-histogram">Idea for each department</i>
+                  </a>
+                </li>
+                <li>
+                  <a href="/User/ChartPercent">
+                    <i class="mdi mdi-chart-pie">Percent idea of each department</i>
+                  </a>
+                </li>
+                <li>
+                  <a href="/User/ChartContribute">
+                    <i class="mdi mdi-chart-histogram">Percent idea of each department</i>
+                  </a>
+                </li>
+                <li>
+                  <a href="/User/ExportExcel">
+                    <i class="mdi mdi-file-excel">Export Exel</i>
+                  </a>
+                </li>
+              </ul> *@
+                  </li>
+                  @* <li class="--set-active-profile-html">
+                    <a asp-area="" asp-controller="User" asp-action="ExportExcel">
+                      <span class="icon"><i class="mdi mdi-table"></i></span>
+                      <span class="menu-item-label">Export Excel</span>
+                    </a>
+                  </li> *@
           }
 
         }
