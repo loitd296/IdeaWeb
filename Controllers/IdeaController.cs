@@ -10,6 +10,7 @@ using IdeaWeb.Models;
 using System.IO.Compression;
 using System.Drawing;
 using System.Drawing.Imaging;
+using IdeaWeb.Untils;
 
 namespace IdeaWeb.Controllers
 {
@@ -398,7 +399,6 @@ namespace IdeaWeb.Controllers
                 return RedirectToAction(nameof(ErrorMessageForUser));
             }
             var userId = HttpContext.Session.GetInt32("_ID").GetValueOrDefault();
-
             var checkIdeaOwn = _context.Idea.Where(i => i.UserId == userId);
             var checkNameExist = checkIdeaOwn.Where(i => i.Name.Contains(idea.Name)).ToList();
             if (userId == 0)
@@ -416,6 +416,11 @@ namespace IdeaWeb.Controllers
             }
             if (ModelState.IsValid && AgreeCheckbox == true)
             {
+                Send send = new Send();
+                var subject = "A NEW IDEA";
+                
+                var department = _context.User.FirstOrDefault(u => u.id == userId).DepartmentId;
+                var list_QA = _context.User.Where(u => u.DepartmentId == department && u.userRoles.First().roleId == 2).ToList();
                 string wwwRootPath = _hostEnvironment.WebRootPath;
                 string fileName = Path.GetFileNameWithoutExtension(image.FileName);
                 string documentName = Path.GetFileName(document.FileName);
@@ -441,6 +446,11 @@ namespace IdeaWeb.Controllers
                 await _context.SaveChangesAsync();
                 var checkCat = _context.Category.Find(idea.CategoryId);
                 var ideaCheck = _context.Idea.Find(idea.Id);
+                string body = "https://localhost:7188/Idea/UserViewIdea/" + idea.Id;
+                foreach (var item in list_QA)
+                {
+                    send.SendEmail(item.email.ToString(), subject, body);
+                }
                 if (checkCat.Deleted_Status == 1)
                 {
                     _context.Idea.Remove(ideaCheck);
@@ -579,5 +589,6 @@ namespace IdeaWeb.Controllers
             }
             return View(results);
         }
+
     }
 }

@@ -215,7 +215,7 @@ namespace IdeaWeb.Controllers
             {
                 ViewBag.ErrorAgreementMessage = "Please agree with the terms and conditions.";
             }
-            ViewData["DepartmentId"] = new SelectList(_context.Department, "Id", "Name");
+            ViewData["DepartmentId"] = new SelectList(_context.Department.Where(D => D.Name != "Admin"), "Id", "Name");
 
             return View();
         }
@@ -478,7 +478,7 @@ namespace IdeaWeb.Controllers
         }
         public IActionResult Register()
         {
-            ViewData["DepartmentId"] = new SelectList(_context.Department, "Id", "Name");
+            ViewData["DepartmentId"] = new SelectList(_context.Department.Where(D => D.Name != "Admin"), "Id", "Name");
             return View();
         }
         public IActionResult Chart()
