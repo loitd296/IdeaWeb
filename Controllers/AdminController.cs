@@ -41,28 +41,64 @@ public class AdminController : Controller
     public async Task<IActionResult> CreateDefaultAdmin(string UserName, string Password)
     {
         if (UserName == "Admin" && Password == "admin@123")
-        {   
+        {
             Encode encode = new Encode();
-            Password = encode.encode(Password);
             Console.WriteLine(Password);
             if (!_context.Role.Any())
             {
                 _context.Role.Add(new Role { name = "Admin" });
                 _context.Role.Add(new Role { name = "Manager" });
                 _context.Role.Add(new Role { name = "Staff" });
-                _context.Department.Add(new Department { Name = "Department A" });
-                _context.User.Add(new User { 
-                    name ="Administrator",
+                _context.Department.Add(new Department { Name = "Admin" });
+                _context.Department.Add(new Department { Name = "IT" });
+                _context.Department.Add(new Department { Name = "Marketing" });
+                _context.Department.Add(new Department { Name = "Design" });
+                _context.User.Add(new User
+                {
+                    name = "Administrator",
                     dob = DateTime.Now,
-                    phone ="0",
-                    email="admin@gmail.com",
-                    password=Password,
+                    phone = "0",
+                    email = "admin@gmail.com",
+                    password = Password,
                     flag = 1,
                     DepartmentId = 1,
                 });
-                _context.UserRole.Add(new UserRole {userId = 1, roleId = 1});
+                _context.User.Add(new User
+                {
+                    name = "QA IT",
+                    dob = DateTime.Now,
+                    phone = "0",
+                    email = "cuongdpgcc200122@fpt.edu.vn",
+                    password = Password,
+                    flag = 1,
+                    DepartmentId = 2,
+                });
+                _context.User.Add(new User
+                {
+                    name = "QA Marketing",
+                    dob = DateTime.Now,
+                    phone = "0",
+                    email = "lapdzcutephomaique8888@gmail.com",
+                    password = Password,
+                    flag = 1,
+                    DepartmentId = 3,
+                });
+                _context.User.Add(new User
+                {
+                    name = "QA Design",
+                    dob = DateTime.Now,
+                    phone = "0",
+                    email = "hnmluanit@gmail.com",
+                    password = Password,
+                    flag = 1,
+                    DepartmentId = 4,
+                });
+                _context.UserRole.Add(new UserRole { userId = 1, roleId = 1 });
+                _context.UserRole.Add(new UserRole { userId = 2, roleId = 2 });
+                _context.UserRole.Add(new UserRole { userId = 3, roleId = 2 });
+                _context.UserRole.Add(new UserRole { userId = 4, roleId = 2 });
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Login","User");
+                return RedirectToAction("Login", "User");
             }
         }
         return View();
