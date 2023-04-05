@@ -212,7 +212,6 @@ namespace IdeaWeb.Controllers
             ViewBag.Layout = "indexAdmin";
             var category = await _context.Category.FindAsync(id);
             var IdeaHaveCategory = _context.Idea.Where(i => i.CategoryId == id).ToList();
-            Console.WriteLine("----------" + IdeaHaveCategory.Count());
             if (IdeaHaveCategory.Count() <= 0)
             {
                 _context.Category.Remove(category);

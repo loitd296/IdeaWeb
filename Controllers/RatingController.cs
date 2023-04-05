@@ -78,10 +78,9 @@ namespace IdeaWeb.Controllers
         [HttpPost]
         public async Task<IActionResult> AddLike(int id)
         {
-            Console.WriteLine(id);
+            
             //get session id of the user
             var userId = HttpContext.Session.GetInt32("_ID").GetValueOrDefault();
-            //var userId = 2;
             if (userId == 0)
             {
                 return RedirectToAction("Login", "User");

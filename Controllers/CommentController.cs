@@ -90,10 +90,6 @@ namespace IdeaWeb.Controllers
                 var email = user.email.ToString();
                 var subject = "A user commented on your idea " + idea.Name;
                 string body = subject.ToString()+ " on " + comment.Date_Upload + "\n\n" + "Click the link below to check it out: " + "\n" + "https://localhost:7188/Idea/UserViewIdea/" + ideaId;
-                Console.WriteLine("-------------------");
-                Console.WriteLine("-------------------"+email);
-                Console.WriteLine("-------------------"+subject);
-                Console.WriteLine("-------------------"+body);
                 send.SendEmail(email, subject, body);
                 return RedirectToAction("UserViewIdea", "Idea", new { id = ideaId });
             }

@@ -127,9 +127,6 @@ namespace IdeaWeb.Controllers
                     _context.Add(userRoles);
                     await _context.SaveChangesAsync();
                 }
-
-
-                Console.WriteLine(user.email);
                 var email = user.email.ToString();
                 var subject = "PLEASE CONFIRM YOUR EMAIL BY CLICK IN LINK";
                 string body = "https://localhost:7188/User/ConfirmAccount?email=" + email;
@@ -305,7 +302,6 @@ namespace IdeaWeb.Controllers
                     Send send = new Send();
                     _context.Update(user);
                     await _context.SaveChangesAsync();
-                    Console.WriteLine(user.email);
                     var email = user.email.ToString();
                     var subject = "PLEASE CONFIRM YOUR EMAIL BY CLICK IN LINK";
                     string body = "https://localhost:7188/User/ConfirmAccount?email=" + email;
@@ -437,9 +433,6 @@ namespace IdeaWeb.Controllers
         public IActionResult ChangePass(string email, string password, string repassword)
         {
             Encode encode = new Encode();
-            Console.WriteLine(email);
-            Console.WriteLine(password);
-            Console.WriteLine(repassword);
             var user = _context.User.FirstOrDefault(user => user.email == email);
             if (user != null)
             {
@@ -526,13 +519,7 @@ namespace IdeaWeb.Controllers
             string[] labels = new string[data.Count()];
             string[] count = new string[data.Count()];
             string[] rgbs = new string[data.Count()];
-            foreach (var item in data)
-            {
-                Console.WriteLine(item.Name);
-                Console.WriteLine(item.Percent);
-                Console.WriteLine(item.personCount);
-                Console.WriteLine(item.Count);
-            }
+
             for (int i = 0; i < data.Count(); i++)
             {
                 labels[i] = data[i].Name;
@@ -558,7 +545,6 @@ namespace IdeaWeb.Controllers
                 Percent = (double)0,
                 personCount = 0
             }).ToList();
-            Console.WriteLine(totalIdea);
             var data = _context.Idea.Include(s => s.User).ThenInclude(s => s.Department)
             .GroupBy(s => s.User.Department.Name)
             .Select(g => new
@@ -582,13 +568,7 @@ namespace IdeaWeb.Controllers
             string[] labels = new string[data.Count()];
             string[] count = new string[data.Count()];
             string[] rgbs = new string[data.Count()];
-            foreach (var item in data)
-            {
-                Console.WriteLine(item.Name);
-                Console.WriteLine(item.Percent);
-                Console.WriteLine(item.personCount);
-                Console.WriteLine(item.Count);
-            }
+
             for (int i = 0; i < data.Count(); i++)
             {
                 labels[i] = data[i].Name;
@@ -616,7 +596,6 @@ namespace IdeaWeb.Controllers
                 Percent = (double)0,
                 personCount = 0
             }).ToList();
-            Console.WriteLine(totalIdea);
             var data = _context.Idea.Include(s => s.User).ThenInclude(s => s.Department)
             .GroupBy(s => s.User.Department.Name)
             .Select(g => new
@@ -642,13 +621,7 @@ namespace IdeaWeb.Controllers
             string[] labels = new string[data.Count()];
             string[] count = new string[data.Count()];
             string[] rgbs = new string[data.Count()];
-            foreach (var item in data)
-            {
-                Console.WriteLine(item.Name);
-                Console.WriteLine(item.Percent);
-                Console.WriteLine(item.personCount);
-                Console.WriteLine(item.Count);
-            }
+
             for (int i = 0; i < data.Count(); i++)
             {
                 labels[i] = data[i].Name;
