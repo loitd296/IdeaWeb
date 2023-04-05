@@ -43,7 +43,7 @@ public class AdminController : Controller
         if (UserName == "Admin" && Password == "admin@123")
         {
             Encode encode = new Encode();
-            Console.WriteLine(Password);
+            Password = encode.encode(Password);
             if (!_context.Role.Any())
             {
                 _context.Role.Add(new Role { name = "Admin" });
