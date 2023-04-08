@@ -86,7 +86,7 @@ namespace IdeaWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(IFormFile image, IFormFile document, [Bind("Id,Name,Content,Like_Count,Dislike_Count,File,Image,Date_Upload,CloseDateAcedamicId,CategoryId,UserId")] Idea idea)
+        public async Task<IActionResult> Create(IFormFile image, IFormFile document, [Bind("Id,Name,Content,Like_Count,Dislike_Count,File,Image,Date_Upload,CloseDateAcedamicId,CategoryId,UserId")] Idea idea, int status)
         {
             ViewBag.Layout = "indexAdmin";
 
@@ -104,18 +104,6 @@ namespace IdeaWeb.Controllers
                 string extension = Path.GetExtension(image.FileName);
                 string image_Path = Path.Combine(wwwRootPath + "/Image/", fileName + extension);
                 string document_Path = Path.Combine(wwwRootPath + "/Document/", documentName);
-                // if (extension != ".jpg" || extension != ".jpeg" || extension != ".png" || extension != ".gif" || extension != ".bmp" || extension != "")
-                // {
-                //     ViewBag.ErrorMessage = "Your username or password is incorrect !";
-                // }
-                // else
-                // {
-
-                //     using (var fileStream = new FileStream(image_Path, FileMode.Create))
-                //     {
-                //         await image.CopyToAsync(fileStream);
-                //     }
-                // }
                 using (var fileStream = new FileStream(image_Path, FileMode.Create))
                 {
                     await image.CopyToAsync(fileStream);
@@ -126,6 +114,7 @@ namespace IdeaWeb.Controllers
                 }
                 idea.File = documentName;
                 idea.Image = fileName + extension;
+                idea.Status = status;
                 _context.Add(idea);
                 await _context.SaveChangesAsync();
                 var checkCat = _context.Category.Find(idea.CategoryId);
@@ -390,7 +379,7 @@ namespace IdeaWeb.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UserCreateIdea(bool AgreeCheckbox, IFormFile image, IFormFile document, [Bind("Id,Name,Content,File,Image,CategoryId,CloseDateAcedamicId")] Idea idea)
+        public async Task<IActionResult> UserCreateIdea(bool AgreeCheckbox, IFormFile image, IFormFile document, [Bind("Id,Name,Content,File,Image,CategoryId,CloseDateAcedamicId")] Idea idea, int status)
         {
 
             var closeDate = await _context.CloseDateAcedamic.FindAsync(idea.CloseDateAcedamicId);
@@ -438,6 +427,7 @@ namespace IdeaWeb.Controllers
                 }
                 idea.Like_Count = 0;
                 idea.Dislike_Count = 0;
+                idea.Status = status;
                 idea.Date_Upload = DateTime.Now;
                 idea.UserId = userId;
                 idea.File = documentName;

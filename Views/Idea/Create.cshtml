@@ -19,6 +19,10 @@
     <div class="col-md-4">
         <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <select name="status" style="margin-bottom:20px">
+              <option value=0><i class="fa-sharp fa-solid fa-eye"></i> Public</option>
+              <option value=1><i class="fa-solid fa-eye-slash"></i> Stay anonymous</option>
+            </select>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />

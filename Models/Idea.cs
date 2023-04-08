@@ -14,9 +14,10 @@ namespace IdeaWeb.Models
         [Required]
         public string? Name { get; set; }
         [Required]
-        public string? Content {get; set; }
+        public string? Content { get; set; }
         public int? Like_Count { get; set; }
         public int? Dislike_Count { get; set; }
+        public int? Status { get; set; }
         public string? File { get; set; }
         public string? Image { get; set; }
         [DataType(DataType.Date)]
@@ -32,6 +33,6 @@ namespace IdeaWeb.Models
         public ICollection<View>? View { get; set; }
         public int UserId { get; set; }
         public User? User { get; set; }
-       
+
     }
 }

@@ -42,8 +42,14 @@
                   </div>
                   <div class="col-lg-6 col-sm-5">
                     <div class="right-content">
-
-                      <span class="p-20 text-14">Author : @Html.DisplayFor(model => model.User.name)</span>
+                      @if (Model.Status == 0)
+                      {
+                        <span class="p-20 text-14">Author : @Html.DisplayFor(model => model.User.name)</span>
+                      }
+                      else
+                      {
+                        <span class="p-20 text-14">Anonymous author</span>
+                      }
                       <span class="p-20 text-14">Category : @Html.DisplayFor(model => model.Category.Name)</span>
                       <span class="p-20 text-14">Deparment : @Html.DisplayFor(model => model.User.Department.Name)
                       </span>

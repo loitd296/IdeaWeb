@@ -124,9 +124,20 @@
                                 <i class="fa-solid fa-eye"></i> @view_count
                               </li></span
                             >
-                            <span class="text-14 my-5px"
+                            @if (item.Status == 0)
+                              {
+                                 <span class="text-14 my-5px"
                               >@Html.DisplayFor(modelItem => item.User.name)</span
                             >
+                              }
+                              else
+                              {
+                                 <span class="text-14 my-5px"
+                              >Anonymous author</span
+                            >
+                              }
+                           
+                            
                             <span class="text-14 my-5px"
                               >@Html.DisplayFor(modelItem => item.Date_Upload)</span
                             >

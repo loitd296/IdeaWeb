@@ -10,6 +10,14 @@
     pager = ViewBag.Pager;
     pageNo = pager.CurrentPage;
   }
+   var role = Context.Session.GetString("_Role") != null ? Context.Session.GetString("_Role") : null;
+  string message = "You do not have permission to access this page";
+    if (role != "Admin"){
+     <script>
+        alert("@message");
+        window.location.href = "https://localhost:7188/User/login";
+    </script>
+  }
 }
 
 <form asp-controller="Idea" asp-action="Search" method="get">

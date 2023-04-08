@@ -13,7 +13,10 @@
           <form asp-action="UserCreateIdea" enctype="multipart/form-data">
 
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
+            <select name="status" style="margin-bottom:20px">
+              <option value=0><i class="fa-sharp fa-solid fa-eye"></i> Public</option>
+              <option value=1><i class="fa-solid fa-eye-slash"></i> Stay anonymous</option>
+            </select>
             <div class="form-group">
               <span class="text-danger">@ViewBag.ErrorMessage</span><br />
               <label asp-for="Name" class="control-label"></label>
@@ -45,10 +48,10 @@
               <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
             </div>
             <div class="form-group">
-                                <input type="checkbox" id="AgreeCheckbox" name="AgreeCheckbox" value="true" />
-                                <label class="control-label text-14">I agree with <a asp-controller="User" asp-action="Thetermsandconditions">the terms and conditions</a></label>
-                                <span class="text-danger">@ViewBag.ErrorAgreementMessage</span>
-                            </div>
+              <input type="checkbox" id="AgreeCheckbox" name="AgreeCheckbox" value="true" />
+              <label class="control-label text-14">I agree with <a asp-controller="User" asp-action="Thetermsandconditions">the terms and conditions</a></label>
+              <span class="text-danger">@ViewBag.ErrorAgreementMessage</span>
+            </div>
             <div class="form-group">
               <input type="submit" value="Create" class="btn btn-primary" />
             </div>
