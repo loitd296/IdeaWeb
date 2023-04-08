@@ -19,9 +19,9 @@
         labels: labels1,
         datasets: [{
           label: 'Idea',
-          backgroundColor: [@Html.Raw(ViewData["rgbs"])],
+          backgroundColor: [@Html.Raw(ViewData["Percent_Color"])],
           borderColor: 'rgb(255, 99, 132)',
-          data: [@ViewData["count"]],
+          data: [@ViewData["Percent"]],
           barPercentage: 0.5,
           barThickness: 80,
         }]

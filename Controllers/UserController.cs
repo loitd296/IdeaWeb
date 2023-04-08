@@ -528,7 +528,7 @@ namespace IdeaWeb.Controllers
                 rgbs[i] = ("'rgb(" + red.ToString() + "," + green.ToString() + "," + blue.ToString() + ")'");
             }
 
-            ViewData["rgbs"] = String.Join(",", rgbs);
+            ViewData["Number_Color"] = String.Join(",", rgbs);
             ViewData["labels"] = String.Format("'{0}'", String.Join("','", labels));
             ViewData["count"] = String.Join(",", count);
             return View();
@@ -579,9 +579,9 @@ namespace IdeaWeb.Controllers
                 rgbs[i] = ("'rgb(" + red.ToString() + "," + green.ToString() + "," + blue.ToString() + ")'");
             }
 
-            ViewData["rgbs"] = String.Join(",", rgbs);
+            ViewData["Percent_Color"] = String.Join(",", rgbs);
             ViewData["labels"] = String.Format("'{0}'", String.Join("','", labels));
-            ViewData["count"] = String.Join(",", count);
+            ViewData["Percent"] = String.Join(",", count);
             return View();
         }
         public IActionResult ChartContribute()
@@ -631,9 +631,9 @@ namespace IdeaWeb.Controllers
             }
 
 
-            ViewData["rgbs"] = String.Join(",", rgbs);
+            ViewData["Contribute_Color"] = String.Join(",", rgbs);
             ViewData["labels"] = String.Format("'{0}'", String.Join("','", labels));
-            ViewData["count"] = String.Join(",", count);
+            ViewData["Contribute"] = String.Join(",", count);
             return View();
         }
 
