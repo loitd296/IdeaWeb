@@ -406,7 +406,7 @@ namespace IdeaWeb.Controllers
             if (ModelState.IsValid && AgreeCheckbox == true)
             {
                 Send send = new Send();
-                var subject = "A NEW IDEA";
+                var subject = "NEW IDEA OF YOUR DEPARTMENT HAS BEEN POST";
                 
                 var department = _context.User.FirstOrDefault(u => u.id == userId).DepartmentId;
                 var list_QA = _context.User.Where(u => u.DepartmentId == department && u.userRoles.First().roleId == 2).ToList();
@@ -436,7 +436,7 @@ namespace IdeaWeb.Controllers
                 await _context.SaveChangesAsync();
                 var checkCat = _context.Category.Find(idea.CategoryId);
                 var ideaCheck = _context.Idea.Find(idea.Id);
-                string body = "https://localhost:7188/Idea/UserViewIdea/" + idea.Id;
+                string body = subject.ToString() + " , CLICK THE LINK BELOW TO CHECK IT OUT: " + "\n\n" + "https://ideaweb.azurewebsites.net/Idea/UserViewIdea/" + idea.Id;
                 foreach (var item in list_QA)
                 {
                     send.SendEmail(item.email.ToString(), subject, body);
