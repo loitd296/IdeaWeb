@@ -511,7 +511,7 @@ namespace IdeaWeb.Controllers
             {
                 data = _context.Idea.Include(i => i.CloseDateAcedamic).Include(i => i.Category).Include(i => i.View).Include(i => i.User).Skip(recSkip).Take(pager.PageSize).OrderByDescending(i => i.View.Count()).ToList();
             }
-            else
+            else if (query == "Lasted")
             {
                 data = _context.Idea.Include(i => i.CloseDateAcedamic).Include(i => i.Category).Include(i => i.View).Include(i => i.User).Skip(recSkip).Take(pager.PageSize).OrderByDescending(i => i.Date_Upload).ToList();
             }
