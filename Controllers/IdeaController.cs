@@ -545,13 +545,14 @@ namespace IdeaWeb.Controllers
             const int pageSize = 5;
             if (pg < 1)
                 pg = 1;
-            int recsCount = _context.Idea.Count();
+            int recsCount = _context.Idea.Where(d => d.Name.Contains(query)).Count();
             var pager = new Pager(recsCount, pg, pageSize);
             int recSkip = (pg - 1) * pageSize;
             this.ViewBag.Pager = pager;
             // Query the data source using Entity Framework
             var results = _context.Idea.Include(i => i.CloseDateAcedamic).Include(i => i.Category).Include(i => i.User).Where(d => d.Name.Contains(query)).Skip(recSkip).Take(pager.PageSize).ToList();
 
+            ViewBag.query = query;
             // Pass the results to the view
             if (results.Count() == 0)
             {

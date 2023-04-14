@@ -54,13 +54,14 @@ namespace IdeaWeb.Controllers
             const int pageSize = 5;
             if (pg < 1)
                 pg = 1;
-            int recsCount = _context.Idea.Count();
+            int recsCount = _context.UserRole.Include(u => u.user).ThenInclude(u => u.Department).Include(u => u.roles).Where(d => d.user.name.Contains(query)).Count();
             var pager = new Pager(recsCount, pg, pageSize);
             int recSkip = (pg - 1) * pageSize;
             this.ViewBag.Pager = pager;
             // Query the data source using Entity Framework
             var results = _context.UserRole.Include(u => u.user).ThenInclude(u => u.Department).Include(u => u.roles).Skip(recSkip).Take(pager.PageSize).Where(d => d.user.name.Contains(query)).ToList();
 
+            ViewBag.query = query;
             // Pass the results to the view
             if (results.Count() == 0)
             {

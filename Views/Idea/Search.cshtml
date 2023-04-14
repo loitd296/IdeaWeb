@@ -116,7 +116,7 @@
           @for (var pge = pager.StartPage; pge <= pager.EndPage; pge++)
           {
             <div class="button">
-            <a type="button" class="btn btn-info" asp-controller="Idea" asp-action="Search" asp-route-pg="@pge">@pge</a>
+            <a type="button" class="btn btn-info" href="/Idea/Search?query=@ViewBag.query&pg=@pge">@pge</a>
             </div>
           }
              </div>       

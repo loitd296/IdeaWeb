@@ -47,13 +47,14 @@ namespace IdeaWeb.Controllers
             const int pageSize = 5;
             if (pg < 1)
                 pg = 1;
-            int recsCount = _context.Idea.Count();
+            int recsCount = _context.Category.Where(d => d.Name.Contains(query)).Count();
             var pager = new Pager(recsCount, pg, pageSize);
             int recSkip = (pg - 1) * pageSize;
             this.ViewBag.Pager = pager;
             // Query the data source using Entity Framework
             var results = _context.Category.Skip(recSkip).Take(pager.PageSize).Where(d => d.Name.Contains(query)).ToList();
 
+            ViewBag.query = query;
             // Pass the results to the view
             if (results.Count() == 0)
             {
@@ -139,7 +140,7 @@ namespace IdeaWeb.Controllers
             ViewBag.Layout = "indexAdmin";
             var category = _secondContext.Category.FirstOrDefault(i => i.Id == category1.Id);
             var cat = _context.Category.Where(i => i.Name == category.Name).ToList();
-            
+
             //var check = cat.Any(n => n.Equals(category.Name));
             if (id != category1.Id)
             {
@@ -177,7 +178,7 @@ namespace IdeaWeb.Controllers
             }
             else if (category1.Name != null)
             {
-                if (cat.Count() >= 1  && category.Name != category1.Name)
+                if (cat.Count() >= 1 && category.Name != category1.Name)
                 {
                     ViewBag.ErrorMessage = "Category is exist!";
                 }

@@ -118,7 +118,7 @@
                     <div class="buttons">
           @for (var pge = pager.StartPage; pge <= pager.EndPage; pge++)
           {
-                              <a type="button" class="button active" style="color: black" asp-controller="User" asp-action="Index" asp-route-pg="@pge">@pge</a>
+                              <a type="button" class="button active" style="color: black" href="/User/Search?query=@ViewBag.query&pg=@pge">@pge</a>
           }
                     </div>
       }
