@@ -485,7 +485,7 @@ namespace IdeaWeb.Controllers
             var pager = new Pager(recsCount, pg, pageSize);
             int recSkip = (pg - 1) * pageSize;
             this.ViewBag.Pager = pager;
-            ViewBag.comment = _context.Comment.Include(c => c.user).Where(c => c.ideaId == id).Skip(recSkip).Take(pager.PageSize).OrderByDescending(p => p.Date_Upload).ToList();
+            ViewBag.comment = _context.Comment.Include(c => c.user).Where(c => c.ideaId == id).OrderByDescending(p => p.Date_Upload).Skip(recSkip).Take(pager.PageSize).ToList();
             ViewBag.commentCount = _context.Comment.Where(c => c.ideaId == id).Count();
             ViewBag.id = id;
             ViewBag.UserId = userId;
@@ -505,15 +505,15 @@ namespace IdeaWeb.Controllers
             var data = _context.Idea.ToList();
             if (query == "Oldest")
             {
-                data = _context.Idea.Include(i => i.CloseDateAcedamic).Include(i => i.Category).Include(i => i.View).Include(i => i.User).Skip(recSkip).Take(pager.PageSize).OrderBy(i => i.Date_Upload).ToList();
+                data = _context.Idea.Include(i => i.CloseDateAcedamic).Include(i => i.Category).Include(i => i.View).Include(i => i.User).OrderBy(i => i.Date_Upload).Skip(recSkip).Take(pager.PageSize).ToList();
             }
             else if (query == "MostView")
             {
-                data = _context.Idea.Include(i => i.CloseDateAcedamic).Include(i => i.Category).Include(i => i.View).Include(i => i.User).Skip(recSkip).Take(pager.PageSize).OrderByDescending(i => i.View.Count()).ToList();
+                data = _context.Idea.Include(i => i.CloseDateAcedamic).Include(i => i.Category).Include(i => i.View).Include(i => i.User).OrderByDescending(i => i.View.Count()).Skip(recSkip).Take(pager.PageSize).ToList();
             }
-            else if (query == "Lasted")
+            else 
             {
-                data = _context.Idea.Include(i => i.CloseDateAcedamic).Include(i => i.Category).Include(i => i.View).Include(i => i.User).Skip(recSkip).Take(pager.PageSize).OrderByDescending(i => i.Date_Upload).ToList();
+                data = _context.Idea.Include(i => i.CloseDateAcedamic).Include(i => i.Category).Include(i => i.View).Include(i => i.User).OrderByDescending(i => i.Date_Upload).Skip(recSkip).Take(pager.PageSize).ToList();
             }
             this.ViewBag.Pager = pager;
             ViewBag.commentCount = _context.Comment.ToList();
@@ -550,7 +550,7 @@ namespace IdeaWeb.Controllers
             int recSkip = (pg - 1) * pageSize;
             this.ViewBag.Pager = pager;
             // Query the data source using Entity Framework
-            var results = _context.Idea.Include(i => i.CloseDateAcedamic).Include(i => i.Category).Include(i => i.User).Skip(recSkip).Take(pager.PageSize).Where(d => d.Name.Contains(query)).ToList();
+            var results = _context.Idea.Include(i => i.CloseDateAcedamic).Include(i => i.Category).Include(i => i.User).Where(d => d.Name.Contains(query)).Skip(recSkip).Take(pager.PageSize).ToList();
 
             // Pass the results to the view
             if (results.Count() == 0)
@@ -564,7 +564,7 @@ namespace IdeaWeb.Controllers
             const int pageSize = 5;
             if (pg < 1)
                 pg = 1;
-            int recsCount = _context.Idea.Count();
+            int recsCount = _context.Idea.Include(i => i.Category).Include(i => i.User).OrderByDescending(p => p.Date_Upload).Where(d => d.Name.Contains(query)).Count();
             var pager = new Pager(recsCount, pg, pageSize);
             int recSkip = (pg - 1) * pageSize;
             this.ViewBag.Pager = pager;
@@ -573,6 +573,7 @@ namespace IdeaWeb.Controllers
             var results = _context.Idea.Include(i => i.Category).Include(i => i.User).OrderByDescending(p => p.Date_Upload).Skip(recSkip).Take(pager.PageSize).Where(d => d.Name.Contains(query)).ToList();
 
             // Pass the results to the view
+            ViewBag.query = query;
             if (results.Count() == 0)
             {
                 return RedirectToAction("IdeaIndex");

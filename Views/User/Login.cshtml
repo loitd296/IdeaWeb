@@ -1,3 +1,15 @@
+@{
+              var idUser = Context.Session.GetInt32("_ID").GetValueOrDefault();
+            if(idUser != 0){
+              <text>
+                <script>
+                    alert('You are logged in!');
+                    window.location.href = "/Idea/IdeaIndex";
+                </script>
+              </text> 
+            }
+              
+}
 <div class="container" style="padding: 150px 0px 90px 0px">
   <!-- Outer Row -->
   <div class="row justify-content-center">
