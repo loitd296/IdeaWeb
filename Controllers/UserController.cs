@@ -454,7 +454,7 @@ namespace IdeaWeb.Controllers
             }
             Send send = new Send();
             var subject = "RESET YOUR PASSWORD BY CLICK IN LINK";
-            string body = "Please click the link below to reset your password: " + "\n\n" + "https://ideaweb.azurewebsites.net/User/ConfirmAccount?email=" + email;;
+            string body = "Please click the link below to reset your password: " + "\n\n" + "https://ideaweb.azurewebsites.net/User/InputNewPassword?email=" + email;
             send.SendEmail(email, subject, body);
             return View();
         }

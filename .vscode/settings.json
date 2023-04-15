@@ -1,0 +1,5 @@
+{
+    "appService.preDeployTask": "publish-release",
+    "appService.deploySubpath": "bin\\Release\\net6.0\\publish",
+    "appService.defaultWebAppToDeploy": "undefined/subscriptions/1b995bbe-781b-45d0-ac00-002fed81e220/resourceGroups/ideaweb/providers/Microsoft.Web/sites/ideaweb"
+}
